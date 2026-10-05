@@ -1,0 +1,187 @@
+{
+  "palette": "olive",
+  "type": "editorial",
+  "layers": [
+    {
+      "type": "image",
+      "src": "cutout:wiki:Taylor_Swift",
+      "box": {
+        "x": 600,
+        "y": 260,
+        "w": 320,
+        "h": 440
+      },
+      "filter": "grayscale",
+      "fade": {
+        "bottom": 0.3
+      }
+    },
+    {
+      "type": "image",
+      "src": "cutout:wiki:Steven_Spielberg",
+      "box": {
+        "x": 780,
+        "y": 120,
+        "w": 440,
+        "h": 640
+      },
+      "filter": "grayscale",
+      "fade": {
+        "bottom": 0.25
+      }
+    },
+    {
+      "type": "image",
+      "src": "cutout:wiki:Oprah_Winfrey",
+      "box": {
+        "x": 640,
+        "y": 560,
+        "w": 420,
+        "h": 520
+      },
+      "filter": "grayscale",
+      "fade": {
+        "bottom": 0.3
+      }
+    },
+    {
+      "type": "ranked-bars",
+      "box": {
+        "x": 40,
+        "y": 40,
+        "w": 1020,
+        "h": 1340
+      },
+      "header": "2026 Net Worth",
+      "axis": true,
+      "format": {
+        "prefix": "$",
+        "scale": 1000000000.0
+      },
+      "bar": {
+        "shape": "rounded",
+        "thickness": 0.48
+      },
+      "items": [
+        {
+          "label": "Steven Spielberg",
+          "sub": "Director/Producer",
+          "value": 7.1
+        },
+        {
+          "label": "George Lucas",
+          "sub": "Director/Producer",
+          "value": 5.2
+        },
+        {
+          "label": "Michael Jordan",
+          "sub": "Athlete",
+          "value": 4.3
+        },
+        {
+          "label": "Vincent McMahon",
+          "sub": "Promoter/Executive",
+          "value": 3.6
+        },
+        {
+          "label": "Oprah Winfrey",
+          "sub": "Media Mogul/Host",
+          "value": 3.2
+        },
+        {
+          "label": "Jay-Z",
+          "sub": "Musician/Entrepreneur",
+          "value": 2.8
+        },
+        {
+          "label": "Taylor Swift",
+          "sub": "Musician",
+          "value": 2.0
+        },
+        {
+          "label": "Kim Kardashian",
+          "sub": "Media Personality",
+          "value": 1.9
+        },
+        {
+          "label": "Peter Jackson",
+          "sub": "Director/Producer",
+          "value": 1.9
+        },
+        {
+          "label": "Magic Johnson",
+          "sub": "Athlete",
+          "value": 1.6
+        },
+        {
+          "label": "Tiger Woods",
+          "sub": "Athlete",
+          "value": 1.5
+        },
+        {
+          "label": "Dick Wolf",
+          "sub": "Producer",
+          "value": 1.5
+        },
+        {
+          "label": "Tyler Perry",
+          "sub": "Writer/Director/Actor",
+          "value": 1.4
+        },
+        {
+          "label": "LeBron James",
+          "sub": "Athlete",
+          "value": 1.4
+        },
+        {
+          "label": "Bruce Springsteen",
+          "sub": "Musician",
+          "value": 1.2
+        },
+        {
+          "label": "Rihanna",
+          "sub": "Musician",
+          "value": 1.0
+        }
+      ]
+    }
+  ],
+  "title": {
+    "box": {
+      "x": 700,
+      "y": 1075,
+      "w": 420,
+      "h": 0
+    },
+    "align": "middle",
+    "frame": "ornate",
+    "lines": [
+      {
+        "text": "World's Richest",
+        "role": "kicker",
+        "size": 26,
+        "rules": true
+      },
+      {
+        "text": "Celebrity",
+        "size": 88,
+        "role": "display"
+      },
+      {
+        "text": "Billionaires",
+        "size": 88,
+        "role": "display"
+      },
+      {
+        "text": "2026",
+        "role": "kicker",
+        "size": 26,
+        "rules": true
+      }
+    ]
+  },
+  "footer": {
+    "source": "Forbes. Net worths are estimates as of Mar 1, 2026.",
+    "brand": "vivid charts"
+  }
+}

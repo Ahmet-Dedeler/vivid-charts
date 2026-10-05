@@ -1,0 +1,158 @@
+{
+  "palette": "pop",
+  "type": "retro",
+  "background": {
+    "gradient": [
+      "#eef0f2",
+      "#d6e7f3"
+    ]
+  },
+  "layers": [
+    {
+      "type": "bubble-chain",
+      "box": {
+        "x": 40,
+        "y": 40,
+        "w": 1120,
+        "h": 1330
+      },
+      "columns": 3,
+      "firstRow": 1,
+      "color": "#f2542d",
+      "duotone": [
+        "#2b0a02",
+        "#ff8a5c"
+      ],
+      "iconColor": "#1a22d6",
+      "labelColor": "#1a22d6",
+      "valueCaption": "Net Worth",
+      "format": {
+        "prefix": "$"
+      },
+      "items": [
+        {
+          "label": "Jay-Z",
+          "value": 2800000000.0,
+          "image": "cutout:wiki:Jay-Z",
+          "icons": [
+            "icon:ph:diamond-fill",
+            "icon:ph:diamond-fill",
+            "icon:ph:diamond-bold"
+          ]
+        },
+        {
+          "label": "Taylor Swift",
+          "value": 2000000000.0,
+          "image": "cutout:wiki:Taylor_Swift",
+          "icons": [
+            "icon:ph:butterfly-fill"
+          ]
+        },
+        {
+          "label": "Bruce Springsteen",
+          "value": 1200000000.0,
+          "image": "cutout:wiki:Bruce_Springsteen",
+          "icons": [
+            "icon:ph:star-fill"
+          ]
+        },
+        {
+          "label": "Beyoncé",
+          "value": 1000000000.0,
+          "image": "cutout:wiki:Beyoncé",
+          "icons": [
+            "icon:ph:diamond-fill",
+            "icon:ph:circle-bold"
+          ]
+        },
+        {
+          "label": "Rihanna",
+          "value": 1000000000.0,
+          "image": "cutout:wiki:Rihanna",
+          "icons": [
+            "icon:ph:drop-fill"
+          ]
+        },
+        {
+          "label": "Dr. Dre",
+          "value": 1000000000.0,
+          "image": "cutout:commons:Dr._Dre_2013.jpg",
+          "icons": [
+            "icon:ph:headphones-fill",
+            "icon:ph:vinyl-record-fill"
+          ]
+        },
+        {
+          "label": "Jimmy Buffett",
+          "value": 1000000000.0,
+          "image": "cutout:wiki:Jimmy_Buffett",
+          "icons": [
+            "icon:game-icons:cut-lemon",
+            "icon:ph:sun-fill"
+          ]
+        },
+        {
+          "label": "Madonna",
+          "value": 850000000.0,
+          "image": "cutout:wiki:Madonna",
+          "icons": [
+            "icon:ph:cross-fill",
+            "icon:ph:hand-fill"
+          ]
+        },
+        {
+          "label": "Selena Gomez",
+          "value": 700000000.0,
+          "image": "cutout:wiki:Selena_Gomez",
+          "icons": [
+            "icon:ph:heart-break-fill",
+            "icon:ph:heart-fill"
+          ]
+        },
+        {
+          "label": "Céline Dion",
+          "value": 570000000.0,
+          "image": "cutout:wiki:Celine_Dion",
+          "icons": [
+            "icon:ph:boat-fill",
+            "icon:ph:waves-bold"
+          ]
+        }
+      ]
+    }
+  ],
+  "title": {
+    "box": {
+      "x": 440,
+      "y": 80,
+      "w": 700,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "text": "RICHEST",
+        "role": "display",
+        "size": 104,
+        "fill": "#1a22d6"
+      },
+      {
+        "text": "MUSIC",
+        "role": "display",
+        "size": 104,
+        "fill": "#1a22d6"
+      },
+      {
+        "text": "ARTISTS",
+        "role": "display",
+        "size": 104,
+        "fill": "#1a22d6"
+      }
+    ]
+  },
+  "footer": {
+    "source": "Forbes. Data as of 2026.",
+    "brand": "vivid charts",
+    "color": "#4a54c9"
+  }
+}

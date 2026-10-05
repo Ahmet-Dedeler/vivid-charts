@@ -1,0 +1,306 @@
+{
+  "palette": "forest",
+  "type": "classic",
+  "background": {
+    "color": "#ece6d6",
+    "grain": 0.08
+  },
+  "title": {
+    "box": {
+      "x": 100,
+      "y": 50,
+      "w": 1000,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "text": "The World's Forests",
+        "role": "display",
+        "size": 112,
+        "family": "Abril Fatface",
+        "fill": "#3b2f1e"
+      },
+      {
+        "text": "Share of global forest area, 2025",
+        "role": "kicker",
+        "size": 30,
+        "fill": "#2e2a1f"
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "voronoi-circle",
+      "box": {
+        "x": 40,
+        "y": 270,
+        "w": 1120,
+        "h": 1080
+      },
+      "seed": 7,
+      "callout": "Over half of the world's forest area is held in just five countries.",
+      "groups": {
+        "am": {
+          "label": "Americas",
+          "color": "#3f9a2f"
+        },
+        "eu": {
+          "label": "Europe",
+          "color": "#5f8f45"
+        },
+        "me": {
+          "label": "Middle East",
+          "color": "#8f9a3a"
+        },
+        "af": {
+          "label": "Africa",
+          "color": "#7a7a35"
+        },
+        "ap": {
+          "label": "Asia-Pacific",
+          "color": "#2c5a22"
+        }
+      },
+      "items": [
+        {
+          "label": "Brazil",
+          "value": 11.7,
+          "group": "am",
+          "short": "BRA",
+          "flag": "br"
+        },
+        {
+          "label": "U.S.",
+          "value": 7.5,
+          "group": "am",
+          "short": "USA",
+          "flag": "us"
+        },
+        {
+          "label": "Canada",
+          "value": 8.9,
+          "group": "am",
+          "short": "CAN",
+          "flag": "ca"
+        },
+        {
+          "label": "Peru",
+          "value": 1.6,
+          "group": "am",
+          "short": "PER",
+          "flag": "pe"
+        },
+        {
+          "label": "Mexico",
+          "value": 1.6,
+          "group": "am",
+          "short": "MEX",
+          "flag": "mx"
+        },
+        {
+          "label": "Colombia",
+          "value": 1.4,
+          "group": "am",
+          "short": "COL",
+          "flag": "co"
+        },
+        {
+          "label": "Bolivia",
+          "value": 1.3,
+          "group": "am",
+          "short": "BOL",
+          "flag": "bo"
+        },
+        {
+          "label": "Venezuela",
+          "value": 1.1,
+          "group": "am",
+          "short": "VEN",
+          "flag": "ve"
+        },
+        {
+          "label": "Argentina",
+          "value": 1.1,
+          "group": "am",
+          "short": "ARG",
+          "flag": "ar"
+        },
+        {
+          "label": "Rest of Americas",
+          "value": 2.7,
+          "group": "am",
+          "short": "AM"
+        },
+        {
+          "label": "Rest of Europe",
+          "value": 4.2,
+          "group": "eu",
+          "short": "EU"
+        },
+        {
+          "label": "Sweden",
+          "value": 0.7,
+          "group": "eu",
+          "short": "SWE",
+          "flag": "se"
+        },
+        {
+          "label": "Middle East",
+          "value": 1.0,
+          "group": "me",
+          "short": "ME"
+        },
+        {
+          "label": "DR Congo",
+          "value": 3.4,
+          "group": "af",
+          "short": "COD",
+          "flag": "cd"
+        },
+        {
+          "label": "Angola",
+          "value": 1.5,
+          "group": "af",
+          "short": "AGO",
+          "flag": "ao"
+        },
+        {
+          "label": "Zambia",
+          "value": 1.1,
+          "group": "af",
+          "short": "ZMB",
+          "flag": "zm"
+        },
+        {
+          "label": "C. African Rep.",
+          "value": 1.1,
+          "group": "af",
+          "short": "CAF",
+          "flag": "cf"
+        },
+        {
+          "label": "Tanzania",
+          "value": 1.0,
+          "group": "af",
+          "short": "TZA",
+          "flag": "tz"
+        },
+        {
+          "label": "Mozambique",
+          "value": 0.8,
+          "group": "af",
+          "short": "MOZ",
+          "flag": "mz"
+        },
+        {
+          "label": "Ethiopia",
+          "value": 0.6,
+          "group": "af",
+          "short": "ETH",
+          "flag": "et"
+        },
+        {
+          "label": "South Africa",
+          "value": 0.6,
+          "group": "af",
+          "short": "ZAF",
+          "flag": "za"
+        },
+        {
+          "label": "Gabon",
+          "value": 0.6,
+          "group": "af",
+          "short": "GAB",
+          "flag": "ga"
+        },
+        {
+          "label": "Rest of Africa",
+          "value": 5.3,
+          "group": "af",
+          "short": "AF"
+        },
+        {
+          "label": "Russia",
+          "value": 20.1,
+          "group": "ap",
+          "short": "RUS",
+          "flag": "ru"
+        },
+        {
+          "label": "China",
+          "value": 5.5,
+          "group": "ap",
+          "short": "CHN",
+          "flag": "cn"
+        },
+        {
+          "label": "Australia",
+          "value": 3.2,
+          "group": "ap",
+          "short": "AUS",
+          "flag": "au"
+        },
+        {
+          "label": "Indonesia",
+          "value": 2.3,
+          "group": "ap",
+          "short": "IDN",
+          "flag": "id"
+        },
+        {
+          "label": "India",
+          "value": 1.8,
+          "group": "ap",
+          "short": "IND",
+          "flag": "in"
+        },
+        {
+          "label": "Papua New Guinea",
+          "value": 0.8,
+          "group": "ap",
+          "short": "PNG",
+          "flag": "pg"
+        },
+        {
+          "label": "Myanmar",
+          "value": 0.7,
+          "group": "ap",
+          "short": "MMR",
+          "flag": "mm"
+        },
+        {
+          "label": "Japan",
+          "value": 0.6,
+          "group": "ap",
+          "short": "JPN",
+          "flag": "jp"
+        },
+        {
+          "label": "Rest of Asia-Pac",
+          "value": 4.0,
+          "group": "ap",
+          "short": "AP"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "box": {
+        "x": 760,
+        "y": 1372,
+        "w": 380,
+        "h": 60
+      },
+      "value": "4.1B Hectares",
+      "label": "",
+      "size": 38,
+      "align": "end",
+      "color": "#2c5a22"
+    }
+  ],
+  "footer": {
+    "source": "UN Food and Agriculture Organization via Our World in Data. Numbers may not total 100 due to rounding.",
+    "brand": "vivid charts"
+  }
+}
