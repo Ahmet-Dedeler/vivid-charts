@@ -1,0 +1,274 @@
+{
+  "palette": "highlighter",
+  "type": "classic",
+  "background": {
+    "gradient": [
+      "#e9e9e9",
+      "#f6f6f6"
+    ]
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 70,
+      "w": 1080,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "runs": [
+          {
+            "text": "Wealthiest"
+          },
+          {
+            "text": "   vs   ",
+            "size": 40,
+            "family": "Barlow",
+            "weight": 500
+          },
+          {
+            "text": "Happiest"
+          }
+        ],
+        "role": "display",
+        "size": 96,
+        "family": "Playfair Display",
+        "weight": 900
+      },
+      {
+        "text": "GDP per capita (2026)  \u00b7  Happiness score",
+        "role": "kicker",
+        "size": 24,
+        "fill": "#6d6d6d"
+      }
+    ],
+    "dek": "Highlighted countries make **both** top-20 lists.",
+    "dekSize": 24
+  },
+  "layers": [
+    {
+      "type": "dual-ranking",
+      "box": {
+        "x": 40,
+        "y": 330,
+        "w": 1120,
+        "h": 1020
+      },
+      "highlight": "#ffd400",
+      "left": {
+        "unit": "USD",
+        "items": [
+          {
+            "label": "Liechtenstein",
+            "value": "$206K",
+            "flag": "li"
+          },
+          {
+            "label": "Singapore",
+            "value": "$162K",
+            "flag": "sg"
+          },
+          {
+            "label": "Luxembourg",
+            "value": "$155K",
+            "flag": "lu"
+          },
+          {
+            "label": "Ireland",
+            "value": "$151K",
+            "flag": "ie"
+          },
+          {
+            "label": "Macao",
+            "value": "$137K",
+            "flag": "mo"
+          },
+          {
+            "label": "Qatar",
+            "value": "$131K",
+            "flag": "qa"
+          },
+          {
+            "label": "Guyana",
+            "value": "$118K",
+            "flag": "gy"
+          },
+          {
+            "label": "Norway",
+            "value": "$110K",
+            "flag": "no"
+          },
+          {
+            "label": "Switzerland",
+            "value": "$100K",
+            "flag": "ch"
+          },
+          {
+            "label": "Brunei",
+            "value": "$97K",
+            "flag": "bn"
+          },
+          {
+            "label": "U.S.",
+            "value": "$93K",
+            "flag": "us"
+          },
+          {
+            "label": "UAE",
+            "value": "$90K",
+            "flag": "ae"
+          },
+          {
+            "label": "Taiwan",
+            "value": "$89K",
+            "flag": "tw"
+          },
+          {
+            "label": "Denmark",
+            "value": "$88K",
+            "flag": "dk"
+          },
+          {
+            "label": "Netherlands",
+            "value": "$86K",
+            "flag": "nl"
+          },
+          {
+            "label": "San Marino",
+            "value": "$85K",
+            "flag": "sm"
+          },
+          {
+            "label": "Iceland",
+            "value": "$82K",
+            "flag": "is"
+          },
+          {
+            "label": "Malta",
+            "value": "$82K",
+            "flag": "mt"
+          },
+          {
+            "label": "Hong Kong",
+            "value": "$82K",
+            "flag": "hk"
+          },
+          {
+            "label": "Belgium",
+            "value": "$78K",
+            "flag": "be"
+          }
+        ]
+      },
+      "right": {
+        "items": [
+          {
+            "label": "Finland",
+            "value": "7.74",
+            "flag": "fi"
+          },
+          {
+            "label": "Denmark",
+            "value": "7.52",
+            "flag": "dk"
+          },
+          {
+            "label": "Iceland",
+            "value": "7.52",
+            "flag": "is"
+          },
+          {
+            "label": "Sweden",
+            "value": "7.35",
+            "flag": "se"
+          },
+          {
+            "label": "Netherlands",
+            "value": "7.31",
+            "flag": "nl"
+          },
+          {
+            "label": "Costa Rica",
+            "value": "7.27",
+            "flag": "cr"
+          },
+          {
+            "label": "Norway",
+            "value": "7.26",
+            "flag": "no"
+          },
+          {
+            "label": "Israel",
+            "value": "7.23",
+            "flag": "il"
+          },
+          {
+            "label": "Luxembourg",
+            "value": "7.12",
+            "flag": "lu"
+          },
+          {
+            "label": "Mexico",
+            "value": "6.98",
+            "flag": "mx"
+          },
+          {
+            "label": "Australia",
+            "value": "6.97",
+            "flag": "au"
+          },
+          {
+            "label": "New Zealand",
+            "value": "6.95",
+            "flag": "nz"
+          },
+          {
+            "label": "Switzerland",
+            "value": "6.94",
+            "flag": "ch"
+          },
+          {
+            "label": "Belgium",
+            "value": "6.91",
+            "flag": "be"
+          },
+          {
+            "label": "Ireland",
+            "value": "6.89",
+            "flag": "ie"
+          },
+          {
+            "label": "Lithuania",
+            "value": "6.83",
+            "flag": "lt"
+          },
+          {
+            "label": "Austria",
+            "value": "6.81",
+            "flag": "at"
+          },
+          {
+            "label": "Canada",
+            "value": "6.80",
+            "flag": "ca"
+          },
+          {
+            "label": "Slovenia",
+            "value": "6.79",
+            "flag": "si"
+          },
+          {
+            "label": "Czechia",
+            "value": "6.78",
+            "flag": "cz"
+          }
+        ]
+      }
+    }
+  ],
+  "footer": {
+    "source": "International Monetary Fund (GDP per capita, PPP); World Happiness Report 2025.",
+    "brand": "vivid charts"
+  }
+}

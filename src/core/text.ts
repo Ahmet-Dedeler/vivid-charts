@@ -148,7 +148,7 @@ export function runs(list: Run[], x: number, y: number, base: TextStyle = {}, an
   let cx = anchor === 'middle' ? x - total / 2 : anchor === 'end' ? x - total : x;
   const parts: string[] = [];
   for (const run of list) {
-    const s = resolve({ ...base, ...run });
+    const s = resolve({ ...base, ...Object.fromEntries(Object.entries(run).filter(([, v]) => v !== undefined)) });
     const { d, width } = glyphPath(run.text, s, cx, y + (run.dy ?? 0) * s.size);
     if (d) parts.push(h('path', { d, ...paintAttrs(s) }));
     cx += width;
@@ -213,13 +213,13 @@ export function paragraph(
     for (let i = 0; i < line.length; i++) {
       const b = boldMask[cursor + i] ?? false;
       if (b !== curBold && cur) {
-        list.push(curBold ? { text: cur, weight: opts.boldWeight ?? 700, fill: opts.boldFill } : { text: cur });
+        list.push(curBold ? { text: cur, weight: opts.boldWeight ?? 700, ...(opts.boldFill ? { fill: opts.boldFill } : {}) } : { text: cur });
         cur = '';
       }
       curBold = b;
       cur += line[i];
     }
-    if (cur) list.push(curBold ? { text: cur, weight: opts.boldWeight ?? 700, fill: opts.boldFill } : { text: cur });
+    if (cur) list.push(curBold ? { text: cur, weight: opts.boldWeight ?? 700, ...(opts.boldFill ? { fill: opts.boldFill } : {}) } : { text: cur });
     cursor += line.length;
     // Skip the whitespace (or newline) that the wrap consumed between lines.
     while (cursor < plain.length && /\s/.test(plain[cursor])) cursor++;

@@ -9,7 +9,8 @@
  *   "wiki:Taylor_Swift"    lead image of a Wikipedia article (fetched + cached).
  *                          Check it: some articles lead with a signature or logo.
  *   "commons:File.jpg"     a specific Wikimedia Commons file
- *   "cutout:<any ref>"     the same image with the background removed (rembg via uvx)
+ *   "cutout:<any ref>"     the same image with the background removed (rembg via uvx), tuned for people
+ *   "cutout-object:<ref>"  background removal tuned for objects/products
  *   "https://..."          any remote image (fetched + cached, inlined as data URI)
  *   "./photo.jpg"          local file relative to the spec
  *
@@ -43,7 +44,7 @@ const MIME: Record<string, string> = {
 };
 
 export function isAssetRef(s: unknown): s is string {
-  return typeof s === 'string' && /^(cutout:|commons:|flag:|icon:|wiki:|https?:\/\/|\.{0,2}\/|file:|data:image)/.test(s) && !/\s/.test(s.slice(0, 8));
+  return typeof s === 'string' && /^(cutout:|cutout-object:|commons:|flag:|icon:|wiki:|https?:\/\/|\.{0,2}\/|file:|data:image)/.test(s) && !/\s/.test(s.slice(0, 8));
 }
 
 function toDataUri(buf: Buffer, mime: string) {
@@ -129,10 +130,10 @@ export function searchIcons(query: string, limit = 40): string[] {
  * pick a model (default u2net_human_seg, best for people; use isnet-general-use
  * for objects).
  */
-async function cutout(inner: string): Promise<Buffer> {
+async function cutout(inner: string, modelOverride?: string): Promise<Buffer> {
   const src = await loadAsset(inner);
   const buf = Buffer.from(src.split(',')[1], 'base64');
-  const model = process.env.VIVID_REMBG_MODEL ?? 'u2net_human_seg';
+  const model = modelOverride ?? process.env.VIVID_REMBG_MODEL ?? 'u2net_human_seg';
   fs.mkdirSync(cacheDir, { recursive: true });
   const key = crypto.createHash('sha1').update(`${model}:`).update(buf).digest('hex');
   const out = path.join(cacheDir, `cutout-${key}.png`);
@@ -168,6 +169,8 @@ export async function loadAsset(ref: string): Promise<string> {
   let uri = resolveSync(ref);
   if (uri) {
     // already resolved
+  } else if (ref.startsWith('cutout-object:')) {
+    uri = toDataUri(await cutout(ref.slice(14), 'isnet-general-use'), 'image/png');
   } else if (ref.startsWith('cutout:')) {
     uri = toDataUri(await cutout(ref.slice(7)), 'image/png');
   } else if (ref.startsWith('commons:')) {

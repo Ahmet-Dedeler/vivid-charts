@@ -139,9 +139,14 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
   });
 
   if (t.dek) {
-    const dekStyle: TextStyle = { ...type.body, size: t.dekSize ?? 24, fill: pal.ink };
+    const dekStyle: TextStyle = { ...type.body, size: t.dekSize ?? 24, fill: t.dekColor ?? pal.ink };
     y += 18;
-    const p = paragraph(t.dek, ax, y + (dekStyle.size ?? 24), t.dekWidth ?? box.w, dekStyle, { anchor: align, lineHeight: 1.32, boldWeight: 700 });
+    const dw = t.dekWidth ?? box.w;
+    const p = paragraph(t.dek, ax, y + (dekStyle.size ?? 24), dw, dekStyle, { anchor: align, lineHeight: 1.32, boldWeight: 700 });
+    if (t.dekPanel) {
+      const px = align === 'middle' ? ax - dw / 2 : align === 'end' ? ax - dw : ax;
+      parts.push(h('path', { d: rectPath(px - 18, y - 4, dw + 36, p.height + 26, 10), fill: t.dekPanel }));
+    }
     parts.push(p.svg);
     y += p.height;
   }
@@ -153,7 +158,8 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
   if (t.frame === 'ornate') frame += ornateFrame({ x: box.x - 40, y: box.y - 48, w: box.w + 80, h: bottom - box.y + 72 }, frameColor, t.panel ?? pal.bg);
   if (t.frame === 'box') frame += h('path', { d: rectPath(box.x - 28, box.y - 32, box.w + 56, bottom - box.y + 44, 16), fill: 'none', stroke: frameColor, strokeWidth: 3 });
   if (t.frame === 'rule') frame += h('path', { d: `M${box.x},${bottom}H${box.x + box.w}`, stroke: frameColor, strokeWidth: 3 });
-  return g({ class: 'title' }, frame, ...parts);
+  const textGroup = t.shadow ? g({ filter: ctx.defs.shadow({ dy: 2, blur: 14, color: '#000', opacity: 0.6 }) }, ...parts) : parts.join('');
+  return g({ class: 'title' }, frame, textGroup);
 }
 
 function stripLine(line: TitleSpec["lines"][number]): TextStyle {

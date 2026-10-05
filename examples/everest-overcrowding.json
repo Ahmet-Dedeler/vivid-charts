@@ -1,0 +1,320 @@
+{
+  "palette": "alpine",
+  "type": "impact",
+  "background": {
+    "gradient": [
+      "#1d5fc8",
+      "#5d97e0",
+      "#e9f1fb"
+    ],
+    "image": "commons:Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg",
+    "imageBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 1250
+    },
+    "imageFade": "bottom",
+    "imageOpacity": 0.95,
+    "grain": 0.03,
+    "glow": "#0d3f8f",
+    "glowAt": [
+      0.15,
+      0.2
+    ]
+  },
+  "title": {
+    "box": {
+      "x": 90,
+      "y": 80,
+      "w": 520,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "The Rise of",
+        "role": "note",
+        "size": 34,
+        "fill": "#ffffff",
+        "italic": true,
+        "weight": 600
+      },
+      {
+        "runs": [
+          {
+            "text": "OVERCROWDING"
+          },
+          {
+            "text": " on",
+            "size": 34
+          }
+        ],
+        "role": "display",
+        "size": 82,
+        "fill": "#ffffff",
+        "family": "Barlow Condensed",
+        "weight": 800
+      },
+      {
+        "text": "EVEREST",
+        "role": "display",
+        "size": 150,
+        "fill": "#ffffff",
+        "family": "Barlow Condensed",
+        "weight": 800
+      }
+    ],
+    "dek": "Mt. Everest used to be a two-season mountain. Now it's a two-week one, summited by **seven times** as many people.",
+    "dekWidth": 470,
+    "dekSize": 26,
+    "dekColor": "#ffffff",
+    "shadow": true,
+    "dekPanel": "rgba(13,40,95,0.62)"
+  },
+  "layers": [
+    {
+      "type": "stacked-columns",
+      "box": {
+        "x": 60,
+        "y": 160,
+        "w": 1100,
+        "h": 1240
+      },
+      "categories": [
+        "1995",
+        "1996",
+        "1997",
+        "1998",
+        "1999",
+        "2000",
+        "2001",
+        "2002",
+        "2003",
+        "2004",
+        "2005",
+        "2006",
+        "2007",
+        "2008",
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "max": 1600,
+      "ticks": [
+        500,
+        1000,
+        1500
+      ],
+      "tickSuffix": "People",
+      "partLabel": "Summits",
+      "series": [
+        {
+          "label": "Visitor",
+          "sublabel": "attempts",
+          "color": "#1e90ff",
+          "values": [
+            248,
+            337,
+            337,
+            271,
+            222,
+            406,
+            371,
+            237,
+            492,
+            394,
+            480,
+            492,
+            595,
+            402,
+            492,
+            467,
+            457,
+            521,
+            492,
+            403,
+            518,
+            454,
+            547,
+            575,
+            585,
+            31,
+            460,
+            394,
+            513,
+            495,
+            584
+          ],
+          "part": [
+            154,
+            209,
+            209,
+            168,
+            138,
+            252,
+            230,
+            147,
+            305,
+            244,
+            298,
+            305,
+            369,
+            249,
+            305,
+            290,
+            283,
+            323,
+            305,
+            250,
+            321,
+            281,
+            339,
+            356,
+            363,
+            19,
+            285,
+            244,
+            318,
+            307,
+            362
+          ]
+        },
+        {
+          "label": "Worker",
+          "sublabel": "attempts",
+          "color": "#f5b700",
+          "values": [
+            152,
+            199,
+            203,
+            163,
+            133,
+            253,
+            233,
+            195,
+            356,
+            274,
+            400,
+            398,
+            511,
+            317,
+            408,
+            448,
+            497,
+            521,
+            560,
+            305,
+            449,
+            485,
+            561,
+            668,
+            686,
+            33,
+            591,
+            641,
+            743,
+            792,
+            943
+          ],
+          "part": [
+            84,
+            109,
+            112,
+            90,
+            73,
+            139,
+            128,
+            107,
+            196,
+            151,
+            220,
+            219,
+            281,
+            174,
+            224,
+            246,
+            273,
+            287,
+            308,
+            168,
+            247,
+            267,
+            309,
+            367,
+            377,
+            18,
+            325,
+            353,
+            409,
+            436,
+            519
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "index": 25,
+          "label": "Closed for Covid"
+        }
+      ],
+      "bubbles": {
+        "label": "Death",
+        "sublabel": "count",
+        "values": [
+          4,
+          15,
+          9,
+          4,
+          4,
+          2,
+          5,
+          3,
+          4,
+          7,
+          6,
+          11,
+          7,
+          1,
+          5,
+          3,
+          4,
+          10,
+          8,
+          17,
+          14,
+          5,
+          6,
+          5,
+          11,
+          null,
+          5,
+          3,
+          18,
+          8,
+          4
+        ],
+        "color": "#e0105a",
+        "height": 120
+      }
+    }
+  ],
+  "footer": {
+    "source": "The Himalayan Database. Values approximated for this demo from a published chart; visitors are clients and independent climbers, workers are hired staff, mostly Nepali.",
+    "brand": "vivid charts",
+    "color": "#29436b"
+  }
+}

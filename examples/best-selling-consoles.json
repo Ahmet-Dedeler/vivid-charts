@@ -1,0 +1,174 @@
+{
+  "palette": "electric",
+  "type": "modern",
+  "background": {
+    "gradient": [
+      "#141b2d",
+      "#0b0f17"
+    ],
+    "glow": "#3b2fff",
+    "glowAt": [
+      0.8,
+      0.1
+    ]
+  },
+  "title": {
+    "box": {
+      "x": 64,
+      "y": 64,
+      "w": 1070,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "Best-Selling Consoles",
+        "role": "display",
+        "size": 92,
+        "fill": "#ffffff"
+      },
+      {
+        "text": "of all time, sized by units sold",
+        "role": "kicker",
+        "size": 30,
+        "fill": "#9aa6b8"
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "legend",
+      "box": {
+        "x": 64,
+        "y": 270,
+        "w": 700,
+        "h": 40
+      },
+      "direction": "row",
+      "swatch": "square",
+      "size": 22,
+      "items": [
+        {
+          "label": "Home",
+          "color": "#1d9bf0"
+        },
+        {
+          "label": "Handheld",
+          "color": "#ff4d6d"
+        },
+        {
+          "label": "Hybrid",
+          "color": "#ffc233"
+        }
+      ]
+    },
+    {
+      "type": "sized-tiles",
+      "box": {
+        "x": 70,
+        "y": 340,
+        "w": 1060,
+        "h": 1010
+      },
+      "perRow": 5,
+      "shelfColor": "#3a2a20",
+      "format": {
+        "suffix": "M",
+        "decimals": 0
+      },
+      "categories": {
+        "Home": "#1d9bf0",
+        "Handheld": "#ff4d6d",
+        "Hybrid": "#ffc233"
+      },
+      "gloss": false,
+      "items": [
+        {
+          "label": "PlayStation 2",
+          "sub": "Sony \u00b7 2000",
+          "value": 160,
+          "image": "cutout-object:wiki:PlayStation_2",
+          "category": "Home",
+          "tag": "2000"
+        },
+        {
+          "label": "Nintendo DS",
+          "sub": "Nintendo \u00b7 2004",
+          "value": 154,
+          "image": "cutout-object:wiki:Nintendo_DS",
+          "category": "Handheld",
+          "tag": "2004"
+        },
+        {
+          "label": "Nintendo Switch",
+          "sub": "Nintendo \u00b7 2017",
+          "value": 152,
+          "image": "cutout-object:commons:Nintendo-Switch-Console-Docked-wJoyConRB.jpg",
+          "category": "Hybrid",
+          "tag": "2017"
+        },
+        {
+          "label": "Game Boy",
+          "sub": "Nintendo \u00b7 1989",
+          "value": 119,
+          "image": "cutout-object:wiki:Game_Boy",
+          "category": "Handheld",
+          "tag": "1989"
+        },
+        {
+          "label": "PlayStation 4",
+          "sub": "Sony \u00b7 2013",
+          "value": 117,
+          "image": "cutout-object:wiki:PlayStation_4",
+          "category": "Home",
+          "tag": "2013"
+        },
+        {
+          "label": "PlayStation",
+          "sub": "Sony \u00b7 1994",
+          "value": 102,
+          "image": "cutout-object:commons:PSX-Console-wController.jpg",
+          "category": "Home",
+          "tag": "1994"
+        },
+        {
+          "label": "Wii",
+          "sub": "Nintendo \u00b7 2006",
+          "value": 102,
+          "image": "cutout-object:commons:Wii-console.jpg",
+          "category": "Home",
+          "tag": "2006"
+        },
+        {
+          "label": "PlayStation 3",
+          "sub": "Sony \u00b7 2006",
+          "value": 87,
+          "image": "cutout-object:wiki:PlayStation_3",
+          "category": "Home",
+          "tag": "2006"
+        },
+        {
+          "label": "Xbox 360",
+          "sub": "Microsoft \u00b7 2005",
+          "value": 84,
+          "image": "cutout-object:commons:Xbox-360-Pro-wController.jpg",
+          "category": "Home",
+          "tag": "2005"
+        },
+        {
+          "label": "Game Boy Advance",
+          "sub": "Nintendo \u00b7 2001",
+          "value": 82,
+          "image": "cutout-object:wiki:Game_Boy_Advance",
+          "category": "Handheld",
+          "tag": "2001"
+        }
+      ],
+      "fit": "contain"
+    }
+  ],
+  "footer": {
+    "source": "Company reports, compiled by Wikipedia (lifetime units, as of 2025).",
+    "brand": "vivid charts",
+    "color": "#9aa6b8"
+  }
+}

@@ -187,7 +187,7 @@ function render(l: VoronoiCircleLayer, box: Box, ctx: Ctx): string {
   if (l.callout) {
     // Put the callout under the biggest cell's label.
     const leaves = root.leaves();
-    const big = leaves.reduce((a: any, b: any) => (area(b.polygon) > area(a.polygon) ? b : a));
+    const big: any = leaves.reduce((a: any, b: any) => (area(b.polygon) > area(a.polygon) ? b : a));
     const c = centroid(big.polygon);
     const ir = inradius(big.polygon, c);
     const ns: TextStyle = { ...type.note, size: Math.min(28, ir * 0.13), fill: '#fff' };

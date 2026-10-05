@@ -1,0 +1,160 @@
+{
+  "palette": "atlas",
+  "type": "impact",
+  "background": {
+    "color": "#111111"
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 60,
+      "w": 900,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "Where GDP Per Capita is Highest",
+        "role": "display",
+        "family": "Libre Caslon Text",
+        "italic": true,
+        "weight": 400,
+        "size": 56,
+        "fill": "#f5f5f0"
+      },
+      {
+        "text": "IN THE 50 STATES",
+        "role": "display",
+        "size": 120,
+        "fill": "#f5f5f0"
+      }
+    ],
+    "dekColor": "#cfcfc8",
+    "dekSize": 26
+  },
+  "layers": [
+    {
+      "type": "map",
+      "map": "us-states",
+      "box": {
+        "x": 30,
+        "y": 390,
+        "w": 930,
+        "h": 720
+      },
+      "labels": true,
+      "values": {
+        "AK": 97000,
+        "WA": 108000,
+        "OR": 77000,
+        "CA": 103000,
+        "NV": 83000,
+        "ID": 64000,
+        "MT": 69000,
+        "WY": 88000,
+        "UT": 85000,
+        "AZ": 75000,
+        "CO": 93000,
+        "NM": 69000,
+        "ND": 101000,
+        "SD": 83000,
+        "NE": 94000,
+        "KS": 78000,
+        "OK": 64000,
+        "TX": 88000,
+        "MN": 88000,
+        "IA": 82000,
+        "MO": 72000,
+        "AR": 61000,
+        "LA": 71000,
+        "WI": 76000,
+        "IL": 90000,
+        "MI": 70000,
+        "IN": 75000,
+        "OH": 78000,
+        "KY": 64000,
+        "TN": 77000,
+        "MS": 54000,
+        "AL": 63000,
+        "GA": 79000,
+        "FL": 74000,
+        "SC": 65000,
+        "NC": 76000,
+        "VA": 86000,
+        "WV": 60000,
+        "PA": 77000,
+        "NY": 116000,
+        "ME": 70000,
+        "NH": 85000,
+        "VT": 72000,
+        "MA": 109000,
+        "RI": 72000,
+        "CT": 97000,
+        "NJ": 89000,
+        "DE": 106000,
+        "MD": 87000,
+        "DC": 267000,
+        "HI": 82000
+      },
+      "steps": [
+        65000,
+        76000,
+        88000,
+        100000
+      ],
+      "colors": [
+        "#0b52e3",
+        "#3f78e8",
+        "#82a9f2",
+        "#c3d6fb",
+        "#ffffff"
+      ],
+      "stroke": "#111111",
+      "strokeWidth": 1.2,
+      "format": {
+        "prefix": "$",
+        "decimals": 0
+      },
+      "legend": {
+        "title": "GDP PER CAPITA (2024)",
+        "x": 620,
+        "y": 290,
+        "w": 500,
+        "h": 30,
+        "orientation": "horizontal"
+      },
+      "tags": [
+        {
+          "key": "MS",
+          "label": "Lowest",
+          "dx": 40,
+          "dy": 190
+        },
+        {
+          "key": "NY",
+          "label": "Highest*",
+          "dx": -60,
+          "dy": -30
+        }
+      ]
+    },
+    {
+      "type": "annotation",
+      "box": {
+        "x": 60,
+        "y": 1200,
+        "w": 700,
+        "h": 80
+      },
+      "text": "*Washington, D.C. tops everything at **$267K**, but it's a city, not a state.",
+      "color": "#f5f5f0",
+      "style": {
+        "size": 24
+      }
+    }
+  ],
+  "footer": {
+    "source": "U.S. Bureau of Economic Analysis, U.S. Census Bureau.",
+    "brand": "vivid charts",
+    "color": "#a7a7a0"
+  }
+}

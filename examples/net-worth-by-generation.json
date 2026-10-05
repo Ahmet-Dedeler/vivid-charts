@@ -1,0 +1,95 @@
+{
+  "palette": "civic",
+  "type": "impact",
+  "title": {
+    "box": {
+      "x": 64,
+      "y": 60,
+      "w": 1070,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "AMERICA'S NET WORTH",
+        "role": "kicker",
+        "size": 44,
+        "tracking": 0.32,
+        "weight": 500,
+        "family": "Barlow"
+      },
+      {
+        "runs": [
+          {
+            "text": "by Generation "
+          },
+          {
+            "text": "2026",
+            "size": 70,
+            "family": "Barlow",
+            "weight": 400
+          }
+        ],
+        "role": "display",
+        "size": 150,
+        "family": "Anton"
+      }
+    ],
+    "frame": "rule",
+    "frameColor": "#1b1b1b"
+  },
+  "layers": [
+    {
+      "type": "flow-split",
+      "box": {
+        "x": 64,
+        "y": 360,
+        "w": 1080,
+        "h": 980
+      },
+      "leftTitle": "Share of U.S. households",
+      "rightTitle": "Share of U.S. net worth",
+      "items": [
+        {
+          "label": "Silent Gen & older",
+          "sublabel": "Born before 1946",
+          "left": 7,
+          "right": 11,
+          "rightExtra": "$19.8T",
+          "color": "#7d8794",
+          "image": "icon:fluent-emoji-flat:old-man"
+        },
+        {
+          "label": "Baby Boomers",
+          "sublabel": "1946 – 1964",
+          "left": 30,
+          "right": 52,
+          "rightExtra": "$97.4T",
+          "color": "#2a7d2e",
+          "image": "icon:fluent-emoji-flat:old-woman"
+        },
+        {
+          "label": "Generation X",
+          "sublabel": "1965 – 1980",
+          "left": 26,
+          "right": 26,
+          "rightExtra": "$47.7T",
+          "color": "#25a7c4",
+          "image": "icon:fluent-emoji-flat:man"
+        },
+        {
+          "label": "Millennials + Gen Z",
+          "sublabel": "1981 or later",
+          "left": 37,
+          "right": 11,
+          "rightExtra": "$20.8T",
+          "color": "#d9534f",
+          "image": "icon:fluent-emoji-flat:woman"
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "source": "Federal Reserve, Distributional Financial Accounts (DFA), Q2 2026. Households assigned by birth year of the reference person.",
+    "brand": "vivid charts"
+  }
+}

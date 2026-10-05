@@ -66,11 +66,16 @@ export interface TitleSpec {
   dek?: string;
   dekWidth?: number;
   dekSize?: number;
+  dekColor?: string;
+  /** Translucent panel behind the dek (e.g. "rgba(10,30,70,0.55)") for busy photo backgrounds. */
+  dekPanel?: string;
   /** Draw an ornamental frame around the lockup. */
   frame?: 'none' | 'ornate' | 'box' | 'rule';
   frameColor?: string;
   /** Solid panel behind the lockup. */
   panel?: string;
+  /** Soft dark shadow behind all title text, for legibility over photos. */
+  shadow?: boolean;
 }
 
 export interface FooterSpec {
