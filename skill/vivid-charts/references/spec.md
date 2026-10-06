@@ -32,7 +32,8 @@ behind title text over photos), `dekPanel` (translucent box behind the dek),
 `TitleLine`: `text` or `runs` (mixed styles), `role: display | kicker |
 label | body | note | number`, `size`, `family`, `weight`, `italic`,
 `fill`, `tracking` (em), `upper`, `fit` (scale to box width), `align`,
-`rules` (lines either side), `flank: sparkle | dot` + `flankColor` (ornaments
+`rules` (lines either side), `effect: { type: neon | extrude | outline |
+gradient | image | shadow, color, colors, depth, image }`, `flank: sparkle | dot` + `flankColor` (ornaments
 either side), `highlight` (color behind), `gap` (px after),
 `stretch` (horizontal scale, e.g. 0.8 to condense Bodoni Moda into a tight editorial title).
 Lines auto-shrink to the box width.
@@ -57,7 +58,7 @@ smaller unit) unless `value.style: "plain"`.
 ## Image references
 `wiki:Article_Title` · `commons:File_Name.jpg` (1600px) · `cutout:<ref>` (people) ·
 `cutout-object:<ref>` (objects) · `flag:xx` (ISO-2) · `icon:<set>:<name>`
-(sets: `ph`, `game-icons`, `fluent-emoji-flat`) · `https://…` · `./local.png`.
+(sets: `ph`, `simple-icons` (brand logos), `game-icons`, `fluent-emoji-flat`) · `https://…` · `./local.png`.
 
 ## Built-in layers
 
@@ -161,6 +162,48 @@ English name. US keys: postal code or name.
 `shelfColor`, `gloss`, `fit: cover | contain`, `pack` (pack by real width),
 `overlap`, `rows: [4, 3, 3]` (items per shelf). Object AREA ∝ value for any
 aspect ratio; shelves size to their content.
+
+### treemap
+`items: [{ label, value, group, short, flag, logo, display, sub, color, image,
+note, muted, place }]`, `groups: { key: { label, color, image, texture } }`,
+`format`, `gap`, `groupGap`, `edgeLabels`, `numberRole`, `textColor`, `shade`.
+
+### area-time
+`x: []`, `series: [{ label, values, color, icon, labelAt }]`, `offset: none |
+wiggle | expand`, `order`, `format`, `events: [{ at, label, text }]`, `yTitle`,
+`ticks`, `endValues`, `startValues`, `labelEvery`, `outline`, `notes: [{ at,
+y, text, width, color }]`, `glow`.
+
+### bubble-pack
+`items: [{ label, value, group, flag, logo, display, caption, note, color,
+rank }]`, `groups`, `format`, `padding`, `shading`, `ring`.
+
+### slope
+`items: [{ label, left, right, group, flag, color }]`, `leftTitle`,
+`rightTitle`, `groups`, `format`, `axes: [0.3, 0.7]`, `min`, `max`,
+`titleSize`, `lineWidth`, `note: { text, x, y, width }`.
+
+### bump
+`periods: []`, `ranks: [[key…]…]`, `entities: { key: { label, color, logo,
+short } }`, `values: [{ key: '$648B' }…]`, `sideLabels`, `badge`.
+
+### radial-bars
+`items: [{ label, value, category, color, display }]`, `categories`,
+`format`, `startAngle`, `endAngle`, `inner`, `sort`, `scale: linear | sqrt`,
+`cap`, `center`, `cx`, `cy`.
+
+### dumbbell
+`items: [{ label, a, b }]`, `aLabel`, `bLabel`, `aColor`, `bColor`,
+`orientation: vertical | horizontal`, `format`, `max`, `ticks`, `xTitle`,
+`yTitle`, `note`.
+
+### stacked-bars
+`series: [{ label, color }]`, `rows: [{ label, sub, icon, flag, values }]`,
+`normalize`, `format`, `labelWidth`, `thickness`, `radius`, `sortBy`.
+
+### tile-map
+`values: { key: number }`, `layout: 'us' | { key: [col, row] }`, `format`,
+`positive`, `negative`, `refValue`, `cells`, `cellColor`, `labelSize`.
 
 ### pictogram
 `parts: [{ label, value, color }]` or `groups: [{ label, value, color, icon

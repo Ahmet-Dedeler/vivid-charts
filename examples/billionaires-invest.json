@@ -1,0 +1,217 @@
+{
+  "palette": {
+    "name": "poster",
+    "bg": "#f6ead4",
+    "ink": "#1a1410",
+    "muted": "#6b5a48"
+  },
+  "type": {
+    "preset": "editorial",
+    "display": {
+      "family": "DM Serif Display",
+      "weight": 400
+    }
+  },
+  "background": {
+    "gradient": [
+      "#f8eedb",
+      "#f1e2c6"
+    ],
+    "grain": 0.06
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 56,
+      "w": 1080,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "runs": [
+          {
+            "text": "How "
+          },
+          {
+            "text": "Billionaires",
+            "highlight": null
+          },
+          {
+            "text": " Plan to Invest in 2026"
+          }
+        ],
+        "role": "display",
+        "size": 62,
+        "family": "DM Serif Display"
+      }
+    ],
+    "dek": "Share of billionaires planning to change their exposure to each asset class in the next 12 months",
+    "dekSize": 22
+  },
+  "layers": [
+    {
+      "type": "stacked-bars",
+      "box": {
+        "x": 40,
+        "y": 230,
+        "w": 1120,
+        "h": 1130
+      },
+      "labelWidth": 300,
+      "series": [
+        {
+          "label": "Increase exposure",
+          "color": "#e8571f"
+        },
+        {
+          "label": "Keep the same",
+          "color": "#f2c458"
+        },
+        {
+          "label": "Decrease exposure",
+          "color": "#5b1430"
+        }
+      ],
+      "rows": [
+        {
+          "label": "Private equity",
+          "icon": "icon:ph:briefcase-fill",
+          "values": [
+            49,
+            31,
+            20
+          ],
+          "sub": "Direct investments"
+        },
+        {
+          "label": "Equities",
+          "icon": "icon:ph:chart-line-up-fill",
+          "values": [
+            43,
+            50,
+            7
+          ],
+          "sub": "Developed markets"
+        },
+        {
+          "label": "Hedge funds",
+          "icon": "icon:ph:shield-check-fill",
+          "values": [
+            43,
+            39,
+            18
+          ]
+        },
+        {
+          "label": "Equities",
+          "icon": "icon:ph:chart-line-up-fill",
+          "values": [
+            42,
+            56,
+            2
+          ],
+          "sub": "Emerging markets"
+        },
+        {
+          "label": "Private equity",
+          "icon": "icon:ph:briefcase-fill",
+          "values": [
+            37,
+            35,
+            28
+          ],
+          "sub": "Funds / funds of funds"
+        },
+        {
+          "label": "Infrastructure",
+          "icon": "icon:ph:bridge-fill",
+          "values": [
+            35,
+            60,
+            5
+          ]
+        },
+        {
+          "label": "Private debt",
+          "icon": "icon:ph:hand-coins-fill",
+          "values": [
+            33,
+            45,
+            22
+          ]
+        },
+        {
+          "label": "Real estate",
+          "icon": "icon:ph:house-line-fill",
+          "values": [
+            33,
+            45,
+            21
+          ]
+        },
+        {
+          "label": "Gold / precious metals",
+          "icon": "icon:ph:diamond-fill",
+          "values": [
+            32,
+            64,
+            3
+          ]
+        },
+        {
+          "label": "Art and antiques",
+          "icon": "icon:ph:paint-brush-fill",
+          "values": [
+            27,
+            65,
+            8
+          ]
+        },
+        {
+          "label": "Fixed income",
+          "icon": "icon:ph:bank-fill",
+          "values": [
+            26,
+            52,
+            22
+          ],
+          "sub": "Developed markets"
+        },
+        {
+          "label": "Fixed income",
+          "icon": "icon:ph:bank-fill",
+          "values": [
+            19,
+            66,
+            15
+          ],
+          "sub": "Emerging markets"
+        },
+        {
+          "label": "Cash",
+          "icon": "icon:ph:money-fill",
+          "values": [
+            19,
+            64,
+            17
+          ]
+        },
+        {
+          "label": "Commodities",
+          "icon": "icon:game-icons:barrel",
+          "values": [
+            10,
+            83,
+            8
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "source": "UBS Billionaire Ambitions Report 2025 (survey of billionaires).",
+    "note": "Figures may not add to 100% due to rounding.",
+    "brand": "vivid charts"
+  }
+}

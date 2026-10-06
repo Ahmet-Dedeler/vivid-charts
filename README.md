@@ -13,14 +13,17 @@ Click any poster for its spec.
 | | | |
 |---|---|---|
 | <a href="examples/celebrity-billionaires.json"><img src="docs/gallery/celebrity-billionaires.jpg" width="280" alt="Celebrity billionaires"></a><br>Celebrity billionaires | <a href="examples/richest-music-artists.json"><img src="docs/gallery/richest-music-artists.jpg" width="280" alt="Richest music artists"></a><br>Richest music artists | <a href="examples/worlds-forests.json"><img src="docs/gallery/worlds-forests.jpg" width="280" alt="World's forests"></a><br>World's forests |
-| <a href="examples/everest-overcrowding.json"><img src="docs/gallery/everest-overcrowding.jpg" width="280" alt="Everest overcrowding"></a><br>Everest overcrowding | <a href="examples/richest-person-every-year.json"><img src="docs/gallery/richest-person-every-year.jpg" width="280" alt="Richest person every year"></a><br>Richest person every year | <a href="examples/us-gdp-per-capita.json"><img src="docs/gallery/us-gdp-per-capita.jpg" width="280" alt="GDP per capita by state"></a><br>GDP per capita by state |
+| <a href="examples/everest-overcrowding.json"><img src="docs/gallery/everest-overcrowding.jpg" width="280" alt="Everest overcrowding"></a><br>Everest overcrowding | <a href="examples/richest-person-every-year.json"><img src="docs/gallery/richest-person-every-year.jpg" width="280" alt="Richest person every year"></a><br>Richest person every year | <a href="examples/us-gdp-per-capita.json"><img src="docs/gallery/us-gdp-per-capita.jpg" width="280" alt="GDP per capita, USA + Canada"></a><br>GDP per capita, USA + Canada |
+| <a href="examples/billionaires-by-country.json"><img src="docs/gallery/billionaires-by-country.jpg" width="280" alt="Billionaires by country"></a><br>Billionaires by country | <a href="examples/us-electricity-mix.json"><img src="docs/gallery/us-electricity-mix.jpg" width="280" alt="40 years of U.S. electricity"></a><br>40 years of U.S. electricity | <a href="examples/household-net-worth.json"><img src="docs/gallery/household-net-worth.jpg" width="280" alt="Household net worth"></a><br>Household net worth |
+| <a href="examples/gold-producers.json"><img src="docs/gallery/gold-producers.jpg" width="280" alt="Gold producers 2010 vs 2025"></a><br>Gold producers 2010 vs 2025 | <a href="examples/top-companies-bump.json"><img src="docs/gallery/top-companies-bump.jpg" width="280" alt="Top 10 companies by revenue"></a><br>Top 10 companies by revenue | <a href="examples/critical-minerals.json"><img src="docs/gallery/critical-minerals.jpg" width="280" alt="Critical mineral prices"></a><br>Critical mineral prices |
 | <a href="examples/net-worth-by-generation.json"><img src="docs/gallery/net-worth-by-generation.jpg" width="280" alt="Net worth by generation"></a><br>Net worth by generation | <a href="examples/wealthiest-vs-happiest.json"><img src="docs/gallery/wealthiest-vs-happiest.jpg" width="280" alt="Wealthiest vs happiest"></a><br>Wealthiest vs happiest | <a href="examples/best-selling-consoles.json"><img src="docs/gallery/best-selling-consoles.jpg" width="280" alt="Best-selling consoles"></a><br>Best-selling consoles |
+| <a href="examples/net-worth-by-age.json"><img src="docs/gallery/net-worth-by-age.jpg" width="280" alt="Mean vs median net worth"></a><br>Mean vs median net worth | <a href="examples/billionaires-invest.json"><img src="docs/gallery/billionaires-invest.jpg" width="280" alt="How billionaires invest"></a><br>How billionaires invest | <a href="examples/us-population-change.json"><img src="docs/gallery/us-population-change.jpg" width="280" alt="U.S. population change"></a><br>U.S. population change |
 
 ## Why
 
 Most charts on the internet look like the same demo. Recharts default, a legend nobody reads, a white background, 7 random colors. They're technically fine and nobody remembers them.
 
-Visual Capitalist keeps doing the opposite. They've drawn "the richest person in the world" like 50 different ways and almost every one works. I went through a bunch of their recent pieces to figure out why (the teardown is in [`skill/vivid-charts/references/design-principles.md`](skill/vivid-charts/references/design-principles.md)). The short version: each one is a poster about one idea, not a chart. The photos carry data, the palette comes from the topic, and the title is designed instead of typed.
+Visual Capitalist keeps doing the opposite. They've drawn "the richest person in the world" like 50 different ways and almost every one works. I went through ~120 of their recent pieces to figure out why (the teardown is in [`skill/vivid-charts/references/design-principles.md`](skill/vivid-charts/references/design-principles.md)). The short version: each one is a poster about one idea, not a chart. The photos carry data, the palette comes from the topic, and the title is designed instead of typed.
 
 There was nothing that let an AI agent do that. There are chart libraries (generic), infographic template tools (concept cards, not data), and image-gen skills (pretty, but the numbers are made up). So this is two things:
 
@@ -77,6 +80,8 @@ Then ask for things like "make a Visual Capitalist style poster of the 15 bigges
 }
 ```
 
+Title lines can carry the topic with `effect`: neon, 3D extrude, image-filled letters (soil, gold), gradient, outline, hard shadow. Brand logos come bundled (`icon:simple-icons:apple`).
+
 Images are just strings: `wiki:Article_Title`, `commons:File.jpg`, `cutout:<ref>`, `cutout-object:<ref>`, `flag:us`, `icon:ph:diamond-fill`, URLs, local files.
 
 Full reference: [`skill/vivid-charts/references/spec.md`](skill/vivid-charts/references/spec.md).
@@ -95,6 +100,15 @@ Full reference: [`skill/vivid-charts/references/spec.md`](skill/vivid-charts/ref
 | `dual-ranking` | overlap between two top-N lists | [wealthiest vs happiest](examples/wealthiest-vs-happiest.json) |
 | `sized-tiles` | objects as bars, on shelves | [best-selling consoles](examples/best-selling-consoles.json) |
 | `pictogram` | countable units, "1 in N" | |
+| `treemap` | part-to-whole with exact numbers, grouped | [billionaires by country](examples/billionaires-by-country.json) |
+| `area-time` | stacked area / streamgraph with event pins | [U.S. electricity mix](examples/us-electricity-mix.json) |
+| `bubble-pack` | big vs small, with flags/logos | [household net worth](examples/household-net-worth.json) |
+| `slope` | before → after | [gold producers](examples/gold-producers.json) |
+| `bump` | rank over time with logo badges | [top companies](examples/top-companies-bump.json) |
+| `radial-bars` | dramatic range as a fan | [critical minerals](examples/critical-minerals.json) |
+| `dumbbell` | mean vs median, A vs B | [net worth by age](examples/net-worth-by-age.json) |
+| `stacked-bars` | 100% rows, survey splits | [billionaires invest](examples/billionaires-invest.json) |
+| `tile-map` | grid cartogram, squares sized by value | [population change](examples/us-population-change.json) |
 
 When none of them fit, draw your own with an `svg` layer or `registerChart()`. The catalogue is a starting point.
 

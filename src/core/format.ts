@@ -48,8 +48,12 @@ export function parts(value: number, opts: FormatOptions = {}): { prefix: string
       }
     }
   }
-  const dec = opts.decimals ?? (unit ? (Math.abs(n) < 100 ? 1 : 0) : smartDecimals(n));
+  // Whole numbers (counts) never get a fake ".0".
+  const whole = Math.abs(n - Math.round(n)) < 1e-9;
+  const dec = opts.decimals ?? (whole ? 0 : unit ? (Math.abs(n) < 100 ? 1 : 0) : smartDecimals(n));
   let num = n.toFixed(dec);
+  // Small unit values keep a second decimal when it carries information ($1.18M vs $1.22M).
+  if (opts.decimals === undefined && unit && !whole && Math.abs(n) < 10) num = String(Number(n.toFixed(2)));
   if (!unit && Math.abs(n) >= 1000) num = Number(num).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
   return { prefix: opts.prefix ?? '', num, unit, suffix: opts.suffix ?? '' };
 }

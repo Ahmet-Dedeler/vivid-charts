@@ -147,3 +147,56 @@ a thin curved arrow or a bracket. They state the insight, not the method.
 
 **Hierarchy check.** Squint: you should see (1) the title word, (2) the hero
 image / biggest mark, (3) the top value, in that order.
+
+
+## Round two: 106 more pieces (net worth, billionaires, energy, trade, maps)
+
+A second pass over ~106 recent graphics (search results for net worth,
+billionaires, richest, ranked, mapped, charted, energy, population). What
+kept showing up, roughly by frequency:
+
+**Forms**
+1. **Treemaps** for part-to-whole with real numbers: billionaires by country,
+   diesel and fertilizer exporters, vehicle producers, airlines, a country's
+   top companies. Big serif number top-left, name in caps, flag, a second
+   value at the tile bottom, region labels rotated on the outer edges, a
+   muted "Other" tile. The title often sits *inside* the biggest tile.
+2. **Streamgraphs / stacked areas** for history: 250 years of energy,
+   equity markets since 2011, two centuries of economic power. Event pins
+   on the top edge ("1973 / First Oil Shock"), icons in discs inside layers,
+   start/end values outside with colored pointers.
+3. **Packed bubbles** with logos or flags: household net worth, revenue per
+   employee, international investors, ultra-wealthy by country.
+4. **Ranked bars dressed up**: portraits riding bars, rank circles, flags,
+   logos instead of names, gradient bars on dark backgrounds, neon for
+   energy/tech.
+5. **Slope and bump charts** for change: gold producers 2010→2025, top 10
+   companies year by year with logo badges and S-curves.
+6. **Fans and rings**: radial bars for price changes, a 30-city fan, donut
+   rings per country for energy shares.
+7. **Maps**: labelled choropleths with HIGHEST/LOWEST tags and inset
+   circles, tile-grid cartograms with squares sized by value, spike maps for
+   counts, numbered pins, zoom circles over Europe.
+8. **Mean vs median**: dumbbells and twin columns, because skew is the story
+   in any wealth data.
+9. **100% stacked rows** for survey splits and energy mixes per country.
+
+**Moves**
+- **The title is an illustration.** FERTILIZER in soil texture, ELECTRICITY in
+  neon, MINERAL in brushed metal, GAS PRICES as a retro sign, ice-cream script,
+  flags inside letters. Use `effect` on title lines (neon, extrude, image,
+  gradient, outline, shadow).
+- **The chart lives inside an object.** Oil exporters as Voronoi cells inside
+  an oil barrel; Big Tech market caps inside a Bitcoin; turnout as filling
+  ballot boxes; ultra-rich growth as skyscrapers; drones over a pie.
+- **Logos replace names** whenever the items are brands (bundled Simple
+  Icons: `icon:simple-icons:<brand>`).
+- **One average/benchmark marker**: "U.S. Avg. $4.48" gauge, "OECD average
+  461" line, "U.S. Average $9.7K" box.
+- **Palette by mood**: dark + neon for tech/energy/AI; cream paper and serif
+  for history/wealth/finance; bright sky/pink gradients for consumer topics;
+  earthy browns for commodities.
+- **Rank discs, flags, logos, portraits** turn a list into a cast of
+  characters. Every row has an identity mark.
+- **Everything labelled**, including tiny map regions (callout columns,
+  inset circles). Legends only for categories, as a small row of chips.

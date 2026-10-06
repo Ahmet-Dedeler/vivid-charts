@@ -1,0 +1,267 @@
+{
+  "palette": {
+    "name": "poster",
+    "bg": "#4a2a14",
+    "ink": "#f6e7c8",
+    "muted": "#d9c49a",
+    "rule": "#6b4527"
+  },
+  "type": {
+    "preset": "impact",
+    "display": {
+      "family": "Oswald",
+      "weight": 500
+    }
+  },
+  "background": {
+    "gradient": [
+      "#5a3518",
+      "#3a200d"
+    ],
+    "grain": 0.09
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 56,
+      "w": 1080,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "text": "LARGEST GOLD PRODUCERS",
+        "role": "display",
+        "size": 92,
+        "family": "Oswald",
+        "weight": 500,
+        "fill": "#f3d27a",
+        "stretch": 0.8,
+        "effect": {
+          "type": "gradient",
+          "colors": [
+            "#fff1b8",
+            "#f3c94f",
+            "#b07a17",
+            "#f6d77a"
+          ],
+          "angle": 90
+        }
+      }
+    ],
+    "dek": "Tonnes of gold mined, top 15 countries in each year",
+    "dekSize": 22,
+    "dekColor": "#e9d5ad"
+  },
+  "layers": [
+    {
+      "type": "legend",
+      "box": {
+        "x": 330,
+        "y": 222,
+        "w": 700,
+        "h": 30
+      },
+      "direction": "row",
+      "swatch": "pill",
+      "size": 17,
+      "items": [
+        {
+          "label": "Asia",
+          "color": "#f06a2a"
+        },
+        {
+          "label": "Americas",
+          "color": "#f3d27a"
+        },
+        {
+          "label": "Africa",
+          "color": "#c99be8"
+        },
+        {
+          "label": "Oceania",
+          "color": "#5cc4a0"
+        },
+        {
+          "label": "Europe",
+          "color": "#8fb2f2"
+        }
+      ]
+    },
+    {
+      "type": "slope",
+      "box": {
+        "x": 40,
+        "y": 290,
+        "w": 1120,
+        "h": 1060
+      },
+      "leftTitle": "2010",
+      "rightTitle": "2025",
+      "titleSize": 58,
+      "axes": [
+        0.3,
+        0.68
+      ],
+      "min": 40,
+      "max": 395,
+      "groups": {
+        "asia": {
+          "color": "#f06a2a"
+        },
+        "am": {
+          "color": "#f3d27a"
+        },
+        "af": {
+          "color": "#c99be8"
+        },
+        "oce": {
+          "color": "#5cc4a0"
+        },
+        "eu": {
+          "color": "#8fb2f2"
+        }
+      },
+      "items": [
+        {
+          "label": "China",
+          "left": 351,
+          "right": 384,
+          "group": "asia",
+          "flag": "cn"
+        },
+        {
+          "label": "Australia",
+          "left": 257,
+          "right": 293,
+          "group": "oce",
+          "flag": "au"
+        },
+        {
+          "label": "U.S.",
+          "left": 231,
+          "right": 157,
+          "group": "am",
+          "flag": "us"
+        },
+        {
+          "label": "South Africa",
+          "left": 210,
+          "right": 99,
+          "group": "af",
+          "flag": "za"
+        },
+        {
+          "label": "Russia",
+          "left": 203,
+          "right": 345,
+          "group": "eu",
+          "flag": "ru"
+        },
+        {
+          "label": "Peru",
+          "left": 185,
+          "right": 209,
+          "group": "am",
+          "flag": "pe"
+        },
+        {
+          "label": "Indonesia",
+          "left": 132,
+          "right": 104,
+          "group": "asia",
+          "flag": "id"
+        },
+        {
+          "label": "Canada",
+          "left": 102,
+          "right": 213,
+          "group": "am",
+          "flag": "ca"
+        },
+        {
+          "label": "Ghana",
+          "left": 94,
+          "right": 187,
+          "group": "af",
+          "flag": "gh"
+        },
+        {
+          "label": "Mexico",
+          "left": 79,
+          "right": 114,
+          "group": "am",
+          "flag": "mx"
+        },
+        {
+          "label": "Brazil",
+          "left": 72,
+          "right": 87,
+          "group": "am",
+          "flag": "br"
+        },
+        {
+          "label": "Papua New Guinea",
+          "left": 70,
+          "right": null,
+          "group": "oce",
+          "flag": "pg"
+        },
+        {
+          "label": "Uzbekistan",
+          "left": 69,
+          "right": 125,
+          "group": "asia",
+          "flag": "uz"
+        },
+        {
+          "label": "Argentina",
+          "left": 64,
+          "right": null,
+          "group": "am",
+          "flag": "ar"
+        },
+        {
+          "label": "Tanzania",
+          "left": 47,
+          "right": null,
+          "group": "af",
+          "flag": "tz"
+        },
+        {
+          "label": "Burkina Faso",
+          "left": null,
+          "right": 94,
+          "group": "af",
+          "flag": "bf"
+        },
+        {
+          "label": "Mali",
+          "left": null,
+          "right": 83,
+          "group": "af",
+          "flag": "ml"
+        },
+        {
+          "label": "Kazakhstan",
+          "left": null,
+          "right": 82,
+          "group": "asia",
+          "flag": "kz"
+        }
+      ],
+      "note": {
+        "text": "BRICS and aligned nations have increased their share of global gold output from **38% to 50%**.",
+        "x": 470,
+        "y": 520,
+        "width": 250
+      }
+    }
+  ],
+  "footer": {
+    "source": "World Gold Council.",
+    "brand": "vivid charts",
+    "color": "#d9c49a",
+    "brandColor": "#f3d27a"
+  }
+}

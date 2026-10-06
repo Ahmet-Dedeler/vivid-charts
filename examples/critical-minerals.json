@@ -1,0 +1,252 @@
+{
+  "palette": {
+    "name": "electric",
+    "bg": "#141518",
+    "bg2": "#202227",
+    "ink": "#f2f2f2",
+    "muted": "#a8a8a8"
+  },
+  "type": "modern",
+  "background": {
+    "gradient": [
+      "#26282d",
+      "#141518"
+    ],
+    "grain": 0.08
+  },
+  "title": {
+    "box": {
+      "x": 56,
+      "y": 60,
+      "w": 620,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "Critical Mineral",
+        "role": "display",
+        "size": 66,
+        "family": "Inter",
+        "weight": 700,
+        "fill": "#ffffff",
+        "gap": 0
+      },
+      {
+        "text": "Price Changes",
+        "role": "display",
+        "size": 66,
+        "family": "Inter",
+        "weight": 400,
+        "fill": "#ffffff",
+        "gap": 16
+      },
+      {
+        "text": "SINCE 2025",
+        "role": "kicker",
+        "size": 24,
+        "fill": "#7ee8ff",
+        "tracking": 0.2
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "legend",
+      "box": {
+        "x": 56,
+        "y": 330,
+        "w": 600,
+        "h": 90
+      },
+      "swatch": "square",
+      "size": 19,
+      "items": [
+        {
+          "label": "Strategic minor minerals",
+          "color": "#9df21c"
+        },
+        {
+          "label": "Base and alloy metals",
+          "color": "#7ee8ff"
+        },
+        {
+          "label": "Battery materials",
+          "color": "#e6e6e6"
+        },
+        {
+          "label": "Magnet rare earths",
+          "color": "#a77bff"
+        }
+      ]
+    },
+    {
+      "type": "radial-bars",
+      "box": {
+        "x": 40,
+        "y": 360,
+        "w": 1120,
+        "h": 1000
+      },
+      "cx": 560,
+      "cy": 930,
+      "inner": 0.34,
+      "startAngle": 30,
+      "endAngle": 350,
+      "cap": 260,
+      "format": {
+        "suffix": "%"
+      },
+      "categories": {
+        "s": "#9df21c",
+        "base": "#7ee8ff",
+        "b": "#e6e6e6",
+        "m": "#a77bff"
+      },
+      "items": [
+        {
+          "label": "Tungsten",
+          "value": 622,
+          "category": "s"
+        },
+        {
+          "label": "Tantalum",
+          "value": 196,
+          "category": "s"
+        },
+        {
+          "label": "Cobalt",
+          "value": 134,
+          "category": "b"
+        },
+        {
+          "label": "Neodymium",
+          "value": 116,
+          "category": "m"
+        },
+        {
+          "label": "Lithium",
+          "value": 108,
+          "category": "b"
+        },
+        {
+          "label": "Praseodymium",
+          "value": 107,
+          "category": "m"
+        },
+        {
+          "label": "Indium",
+          "value": 102,
+          "category": "s"
+        },
+        {
+          "label": "Bismuth",
+          "value": 95,
+          "category": "s"
+        },
+        {
+          "label": "Tin",
+          "value": 65,
+          "category": "base"
+        },
+        {
+          "label": "Chromium",
+          "value": 53,
+          "category": "base"
+        },
+        {
+          "label": "Copper",
+          "value": 44,
+          "category": "base"
+        },
+        {
+          "label": "PPA",
+          "value": 42,
+          "category": "b"
+        },
+        {
+          "label": "Aluminium",
+          "value": 39,
+          "category": "base"
+        },
+        {
+          "label": "Terbium",
+          "value": 37,
+          "category": "m"
+        },
+        {
+          "label": "Molybdenum",
+          "value": 34,
+          "category": "base"
+        },
+        {
+          "label": "Vanadium",
+          "value": 25,
+          "category": "base"
+        },
+        {
+          "label": "Tellurium",
+          "value": 24,
+          "category": "s"
+        },
+        {
+          "label": "Zinc",
+          "value": 23,
+          "category": "base"
+        },
+        {
+          "label": "Antimony",
+          "value": 19,
+          "category": "s"
+        },
+        {
+          "label": "Manganese",
+          "value": 16,
+          "category": "b"
+        },
+        {
+          "label": "Nickel",
+          "value": 16,
+          "category": "b"
+        },
+        {
+          "label": "Germanium",
+          "value": 14,
+          "category": "s"
+        },
+        {
+          "label": "Dysprosium",
+          "value": 10,
+          "category": "m"
+        },
+        {
+          "label": "Titanium",
+          "value": 10,
+          "category": "s"
+        },
+        {
+          "label": "Graphite",
+          "value": 5,
+          "category": "b"
+        },
+        {
+          "label": "Gallium",
+          "value": 3,
+          "category": "s"
+        },
+        {
+          "label": "Lead",
+          "value": 1,
+          "category": "base"
+        }
+      ],
+      "center": "China's export controls and strong demand for **tungsten**, used in cutting tools, aerospace and defence, drove prices up **622%**."
+    }
+  ],
+  "footer": {
+    "source": "IEA Global Critical Minerals Outlook 2026, via Visual Capitalist/Elements. Jan 2025 \u2013 Apr 2026.",
+    "note": "Tungsten's bar is capped for legibility; its label shows the real value. PPA = purified phosphoric acid.",
+    "brand": "vivid charts",
+    "color": "#a8a8a8",
+    "brandColor": "#ffffff"
+  }
+}

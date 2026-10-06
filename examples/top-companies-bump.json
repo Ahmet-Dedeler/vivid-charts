@@ -1,0 +1,252 @@
+{
+  "palette": {
+    "name": "highlighter",
+    "bg": "#f3f3f1",
+    "ink": "#111111"
+  },
+  "type": {
+    "preset": "impact",
+    "display": {
+      "family": "Anton"
+    }
+  },
+  "background": {
+    "color": "#f3f3f1",
+    "grain": 0.05
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 50,
+      "w": 1080,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "TOP 10",
+        "role": "kicker",
+        "size": 30,
+        "weight": 700,
+        "gap": 4
+      },
+      {
+        "runs": [
+          {
+            "text": "FORTUNE GLOBAL 500",
+            "fill": "#111"
+          }
+        ],
+        "role": "display",
+        "size": 92,
+        "family": "Anton",
+        "effect": {
+          "type": "extrude",
+          "color": "#f2b400",
+          "depth": 6
+        },
+        "gap": 26
+      },
+      {
+        "text": "The world's largest companies by revenue, 2020\u20132024 rankings",
+        "role": "label",
+        "size": 24,
+        "weight": 500
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "bump",
+      "box": {
+        "x": 30,
+        "y": 250,
+        "w": 1140,
+        "h": 1110
+      },
+      "periods": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "ranks": [
+        [
+          "walmart",
+          "sinopec",
+          "stategrid",
+          "cnpc",
+          "shell",
+          "aramco",
+          "vw",
+          "bp",
+          "amazon",
+          "toyota"
+        ],
+        [
+          "walmart",
+          "stategrid",
+          "amazon",
+          "cnpc",
+          "sinopec",
+          "apple",
+          "cvs",
+          "uh",
+          "toyota",
+          "vw"
+        ],
+        [
+          "walmart",
+          "amazon",
+          "stategrid",
+          "cnpc",
+          "sinopec",
+          "aramco",
+          "apple",
+          "vw",
+          "cscec",
+          "cvs"
+        ],
+        [
+          "walmart",
+          "aramco",
+          "stategrid",
+          "amazon",
+          "cnpc",
+          "sinopec",
+          "exxon",
+          "apple",
+          "shell",
+          "uh"
+        ],
+        [
+          "walmart",
+          "amazon",
+          "stategrid",
+          "aramco",
+          "sinopec",
+          "cnpc",
+          "apple",
+          "uh",
+          "brk",
+          "cvs"
+        ]
+      ],
+      "entities": {
+        "walmart": {
+          "label": "Walmart",
+          "color": "#0071ce",
+          "logo": "icon:simple-icons:walmart"
+        },
+        "amazon": {
+          "label": "Amazon",
+          "color": "#ff9900",
+          "logo": "icon:simple-icons:amazon"
+        },
+        "stategrid": {
+          "label": "State Grid",
+          "color": "#0d7d6c",
+          "short": "SGCC"
+        },
+        "sinopec": {
+          "label": "Sinopec",
+          "color": "#1aa39a",
+          "short": "SNP"
+        },
+        "cnpc": {
+          "label": "CNPC",
+          "color": "#c8102e",
+          "short": "CNPC"
+        },
+        "aramco": {
+          "label": "Saudi Aramco",
+          "color": "#00a3e0",
+          "short": "ARMC"
+        },
+        "shell": {
+          "label": "Shell",
+          "color": "#f2c200",
+          "logo": "icon:simple-icons:shell"
+        },
+        "vw": {
+          "label": "Volkswagen",
+          "color": "#0b2a5c",
+          "logo": "icon:simple-icons:volkswagen"
+        },
+        "bp": {
+          "label": "BP",
+          "color": "#26a443",
+          "short": "bp"
+        },
+        "toyota": {
+          "label": "Toyota",
+          "color": "#d50000",
+          "logo": "icon:simple-icons:toyota"
+        },
+        "apple": {
+          "label": "Apple",
+          "color": "#4cb35f",
+          "logo": "icon:simple-icons:apple"
+        },
+        "cvs": {
+          "label": "CVS Health",
+          "color": "#e3196a",
+          "short": "CVS"
+        },
+        "uh": {
+          "label": "UnitedHealth",
+          "color": "#1e3a96",
+          "short": "UNH"
+        },
+        "cscec": {
+          "label": "China State Constr.",
+          "color": "#7a2bb5",
+          "short": "CSCEC"
+        },
+        "exxon": {
+          "label": "ExxonMobil",
+          "color": "#d6157d",
+          "short": "XOM"
+        },
+        "brk": {
+          "label": "Berkshire Hathaway",
+          "color": "#3a36a8",
+          "short": "BRK"
+        }
+      },
+      "values": [
+        {
+          "walmart": "$524B",
+          "sinopec": "$407B",
+          "stategrid": "$384B",
+          "cnpc": "$379B",
+          "shell": "$352B",
+          "aramco": "$330B",
+          "vw": "$283B",
+          "bp": "$283B",
+          "amazon": "$281B",
+          "toyota": "$275B"
+        },
+        {},
+        {},
+        {},
+        {
+          "walmart": "$648B",
+          "amazon": "$575B",
+          "stategrid": "$546B",
+          "aramco": "$495B",
+          "sinopec": "$430B",
+          "cnpc": "$429B",
+          "apple": "$383B",
+          "uh": "$372B",
+          "brk": "$364B",
+          "cvs": "$358B"
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "source": "Fortune Global 500 (2020\u20132024 lists). Rankings by total revenue in each company's fiscal year.",
+    "brand": "vivid charts"
+  }
+}

@@ -56,7 +56,7 @@ run downloads a model (~170 MB); results are cached in `~/.cache/vivid-charts`.
    (`references/qa-checklist.md`). Expect 2–4 iterations. This is where
    "fine" becomes "great".
 
-## 2. The twelve moves that make it look alive
+## 2. The thirteen moves that make it look alive
 
 These are distilled from studying dozens of Visual Capitalist pieces. Use as
 many as fit; the best pieces use 6–8.
@@ -76,17 +76,23 @@ many as fit; the best pieces use 6–8.
    ("ˢ7.1ʙ"), the unit smaller than the digits. The engine does this for you.
 7. **A title lockup, not a title.** Mixed sizes and weights in one block:
    kicker / GIANT WORD / small year, or "The Rise of / OVERCROWDING on /
-   EVEREST". Sometimes framed (ornate label, rule, panel).
+   EVEREST". Sometimes framed (ornate label, rule, panel). The lettering can
+   carry the topic: `effect` neon for energy/tech, `image` fill (soil, gold,
+   metal), `extrude` 3D, `gradient`.
 8. **Say the insight in words.** One italic note with a curved arrow ("Five
    months after buying Twitter, Musk became the most-followed person"), a
    bracket grouping related rows, a "LOWEST/HIGHEST" tag.
 9. **Shape carries meaning.** Area = value (sqrt-scaled circles/tiles), a
    snake for continuity, a split column for mismatch, a ring for a whole.
-10. **Identity marks.** Flags, logos, small topical icons orbiting a portrait
-    (diamonds for Jay-Z, butterflies for Taylor Swift).
-11. **Depth, lightly.** Soft shadows under objects, a glow behind the title,
+10. **Identity marks.** Flags, logos (`icon:simple-icons:<brand>`), rank
+    discs, small topical icons orbiting a portrait (diamonds for Jay-Z,
+    butterflies for Taylor Swift). Brands get logos, not names.
+11. **Put the chart inside an object** when the topic has one: Voronoi cells
+    in an oil barrel, a donut behind a coin, bars as skyscrapers or filling
+    ballot boxes (draw the object as an `svg`/`image` layer, then the chart).
+12. **Depth, lightly.** Soft shadows under objects, a glow behind the title,
     columns that rise *into* a photo. Never 3D charts.
-12. **Respect the reader.** Source line, notes on methodology, honest scales
+13. **Respect the reader.** Source line, notes on methodology, honest scales
     (bars start at zero; circle *area* encodes value).
 
 ## 3. Writing the spec
@@ -140,6 +146,15 @@ catalogue is a starting point, not a cage.
 | Does A track B? Two top-N lists | `dual-ranking` | Wealthiest vs happiest |
 | Ranking of objects/brands | `sized-tiles` | Best-selling albums, consoles |
 | "1 in N", small counts | `pictogram` | Child deaths per 1,000 |
+| Part-to-whole with exact numbers, 10–60 parts | `treemap` | Billionaires by country |
+| A mix changing over decades | `area-time` (stacked or `wiggle` stream) | 40 years of U.S. electricity |
+| Big-vs-small countries/brands | `bubble-pack` | Household net worth by country |
+| Before → after, two years | `slope` | Gold producers 2010 vs 2025 |
+| Who overtook whom, year by year | `bump` | Top 10 companies by revenue |
+| Dramatic range with outliers | `radial-bars` | Critical mineral price changes |
+| Mean vs median, A vs B per category | `dumbbell` | Net worth by age |
+| Survey splits, mixes per row | `stacked-bars` | How billionaires plan to invest |
+| State values where area misleads | `tile-map` | U.S. population change to 2040 |
 
 Full catalogue with when-to-use, variations and composition notes:
 `references/forms.md`.
@@ -182,4 +197,4 @@ Full catalogue with when-to-use, variations and composition notes:
 - `references/spec.md` — every layer and option
 - `references/palettes-and-type.md` — palettes, type presets, pairing rules
 - `references/qa-checklist.md` — the render-look-fix loop
-- `examples/` in the repo — nine complete specs that reproduce the gallery
+- `examples/` in the repo — complete specs that reproduce the gallery

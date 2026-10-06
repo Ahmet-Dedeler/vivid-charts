@@ -1,0 +1,251 @@
+{
+  "palette": "civic",
+  "type": {
+    "preset": "modern",
+    "display": {
+      "family": "Archivo Black"
+    }
+  },
+  "background": {
+    "color": "#eef0ee",
+    "grain": 0.05,
+    "pattern": "dots",
+    "patternColor": "rgba(0,0,0,0.03)"
+  },
+  "title": {
+    "box": {
+      "x": 56,
+      "y": 56,
+      "w": 520,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "Household",
+        "role": "display",
+        "size": 76,
+        "family": "Archivo Black",
+        "gap": 0
+      },
+      {
+        "text": "Net Worth",
+        "role": "display",
+        "size": 76,
+        "family": "Archivo Black",
+        "gap": 8
+      },
+      {
+        "text": "BY COUNTRY",
+        "role": "kicker",
+        "size": 26,
+        "weight": 600,
+        "tracking": 0.1
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "legend",
+      "box": {
+        "x": 56,
+        "y": 300,
+        "w": 300,
+        "h": 120
+      },
+      "swatch": "circle",
+      "size": 20,
+      "items": [
+        {
+          "label": "North America",
+          "color": "#1f4fd6"
+        },
+        {
+          "label": "Asia-Pacific",
+          "color": "#d9261c"
+        },
+        {
+          "label": "Europe",
+          "color": "#e08a14"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "box": {
+        "x": 880,
+        "y": 60,
+        "w": 260,
+        "h": 80
+      },
+      "value": "$570T",
+      "label": "WORLD TOTAL",
+      "size": 50,
+      "align": "end",
+      "color": "#111"
+    },
+    {
+      "type": "bubble-pack",
+      "box": {
+        "x": 40,
+        "y": 160,
+        "w": 1120,
+        "h": 1200
+      },
+      "padding": 7,
+      "format": {
+        "prefix": "$"
+      },
+      "groups": {
+        "na": {
+          "color": "#1f4fd6"
+        },
+        "ap": {
+          "color": "#d9261c"
+        },
+        "eu": {
+          "color": "#e08a14"
+        }
+      },
+      "items": [
+        {
+          "label": "U.S.",
+          "value": 175000000000000.0,
+          "group": "na",
+          "flag": "us",
+          "caption": "2025 household net worth (USD)",
+          "note": "The U.S. holds **30%** of global household net worth, driven by equity values."
+        },
+        {
+          "label": "Canada",
+          "value": 13000000000000.0,
+          "group": "na",
+          "flag": "ca"
+        },
+        {
+          "label": "Mexico",
+          "value": 5400000000000.0,
+          "group": "na",
+          "flag": "mx"
+        },
+        {
+          "label": "China",
+          "value": 75000000000000.0,
+          "group": "ap",
+          "flag": "cn"
+        },
+        {
+          "label": "Japan",
+          "value": 22000000000000.0,
+          "group": "ap",
+          "flag": "jp"
+        },
+        {
+          "label": "Australia",
+          "value": 12000000000000.0,
+          "group": "ap",
+          "flag": "au"
+        },
+        {
+          "label": "S. Korea",
+          "value": 10000000000000.0,
+          "group": "ap",
+          "flag": "kr"
+        },
+        {
+          "label": "Germany",
+          "value": 23000000000000.0,
+          "group": "eu",
+          "flag": "de"
+        },
+        {
+          "label": "France",
+          "value": 16000000000000.0,
+          "group": "eu",
+          "flag": "fr"
+        },
+        {
+          "label": "UK",
+          "value": 15000000000000.0,
+          "group": "eu",
+          "flag": "gb"
+        },
+        {
+          "label": "Italy",
+          "value": 13000000000000.0,
+          "group": "eu",
+          "flag": "it"
+        },
+        {
+          "label": "Spain",
+          "value": 11000000000000.0,
+          "group": "eu",
+          "flag": "es"
+        },
+        {
+          "label": "Netherlands",
+          "value": 6400000000000.0,
+          "group": "eu",
+          "flag": "nl"
+        },
+        {
+          "label": "Belgium",
+          "value": 3900000000000.0,
+          "group": "eu",
+          "flag": "be"
+        },
+        {
+          "label": "Sweden",
+          "value": 2900000000000.0,
+          "group": "eu",
+          "flag": "se"
+        },
+        {
+          "label": "Austria",
+          "value": 2500000000000.0,
+          "group": "eu",
+          "flag": "at"
+        },
+        {
+          "label": "Denmark",
+          "value": 2100000000000.0,
+          "group": "eu",
+          "flag": "dk"
+        },
+        {
+          "label": "Poland",
+          "value": 1800000000000.0,
+          "group": "eu",
+          "flag": "pl"
+        },
+        {
+          "label": "Ireland",
+          "value": 1500000000000.0,
+          "group": "eu",
+          "flag": "ie"
+        },
+        {
+          "label": "Portugal",
+          "value": 1100000000000.0,
+          "group": "eu",
+          "flag": "pt"
+        },
+        {
+          "label": "Czechia",
+          "value": 1100000000000.0,
+          "group": "eu",
+          "flag": "cz"
+        },
+        {
+          "label": "Finland",
+          "value": 900000000000.0,
+          "group": "eu",
+          "flag": "fi"
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "source": "McKinsey & Company analysis of country government data. Figures at market exchange rates, nominal values.",
+    "brand": "vivid charts"
+  }
+}

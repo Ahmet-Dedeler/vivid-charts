@@ -1,0 +1,413 @@
+{
+  "palette": "poster",
+  "type": {
+    "preset": "editorial",
+    "display": {
+      "family": "Libre Caslon Text",
+      "weight": 700
+    },
+    "number": {
+      "family": "Libre Caslon Text",
+      "weight": 700,
+      "italic": false
+    }
+  },
+  "background": {
+    "color": "#f2ead6",
+    "grain": 0.05
+  },
+  "layers": [
+    {
+      "type": "treemap",
+      "box": {
+        "x": 30,
+        "y": 30,
+        "w": 1140,
+        "h": 1330
+      },
+      "gap": 2,
+      "groupGap": 7,
+      "groups": {
+        "am": {
+          "label": "Americas",
+          "color": "#2160dd"
+        },
+        "ap": {
+          "label": "Asia-Pacific",
+          "color": "#ef5e47"
+        },
+        "eu": {
+          "label": "Europe",
+          "color": "#3fae74"
+        },
+        "me": {
+          "label": "Middle East & Africa",
+          "color": "#7a4bb8"
+        },
+        "oth": {
+          "label": "Other",
+          "color": "#c9bfa0"
+        }
+      },
+      "items": [
+        {
+          "label": "United States",
+          "value": 924,
+          "group": "am",
+          "flag": "us",
+          "short": "USA",
+          "sub": "$6.9T",
+          "image": "cutout:wiki:Elon_Musk",
+          "note": "**Elon Musk** ($726B). SpaceX's valuation has reached as high as $800B in recent secondary sales, and a 2026 IPO could make Musk the world's first trillionaire.",
+          "place": "bottom"
+        },
+        {
+          "label": "Brazil",
+          "value": 47,
+          "group": "am",
+          "flag": "br",
+          "short": "BRA",
+          "sub": "$126B"
+        },
+        {
+          "label": "Canada",
+          "value": 47,
+          "group": "am",
+          "flag": "ca",
+          "short": "CAN",
+          "sub": "$211B"
+        },
+        {
+          "label": "Mexico",
+          "value": 22,
+          "group": "am",
+          "flag": "mx",
+          "short": "MEX",
+          "sub": "$167B"
+        },
+        {
+          "label": "Argentina",
+          "value": 5,
+          "group": "am",
+          "flag": "ar",
+          "short": "ARG"
+        },
+        {
+          "label": "Chile",
+          "value": 5,
+          "group": "am",
+          "flag": "cl",
+          "short": "CHL"
+        },
+        {
+          "label": "Colombia",
+          "value": 1,
+          "group": "am",
+          "flag": "co",
+          "short": "COL"
+        },
+        {
+          "label": "Peru",
+          "value": 1,
+          "group": "am",
+          "flag": "pe",
+          "short": "PER"
+        },
+        {
+          "label": "China",
+          "value": 470,
+          "group": "ap",
+          "flag": "cn",
+          "short": "CHN",
+          "sub": "$1.8T",
+          "note": "**Zhong Shanshan** ($69.4B), founder of bottled-water giant Nongfu Spring, is China's richest person."
+        },
+        {
+          "label": "India",
+          "value": 188,
+          "group": "ap",
+          "flag": "in",
+          "short": "IND",
+          "sub": "$888B"
+        },
+        {
+          "label": "Hong Kong",
+          "value": 76,
+          "group": "ap",
+          "flag": "hk",
+          "short": "HKG",
+          "sub": "$328B"
+        },
+        {
+          "label": "Singapore",
+          "value": 55,
+          "group": "ap",
+          "flag": "sg",
+          "short": "SGP",
+          "sub": "$259B"
+        },
+        {
+          "label": "Taiwan",
+          "value": 51,
+          "group": "ap",
+          "flag": "tw",
+          "short": "TWN",
+          "sub": "$164B"
+        },
+        {
+          "label": "Australia",
+          "value": 43,
+          "group": "ap",
+          "flag": "au",
+          "short": "AUS",
+          "sub": "$213B"
+        },
+        {
+          "label": "Japan",
+          "value": 41,
+          "group": "ap",
+          "flag": "jp",
+          "short": "JPN",
+          "sub": "$179B"
+        },
+        {
+          "label": "South Korea",
+          "value": 31,
+          "group": "ap",
+          "flag": "kr",
+          "short": "KOR",
+          "sub": "$88B"
+        },
+        {
+          "label": "Indonesia",
+          "value": 27,
+          "group": "ap",
+          "flag": "id",
+          "short": "IDN",
+          "sub": "$156B"
+        },
+        {
+          "label": "Thailand",
+          "value": 25,
+          "group": "ap",
+          "flag": "th",
+          "short": "THA",
+          "sub": "$94B"
+        },
+        {
+          "label": "Philippines",
+          "value": 15,
+          "group": "ap",
+          "flag": "ph",
+          "short": "PHL"
+        },
+        {
+          "label": "Malaysia",
+          "value": 14,
+          "group": "ap",
+          "flag": "my",
+          "short": "MYS"
+        },
+        {
+          "label": "Germany",
+          "value": 156,
+          "group": "eu",
+          "flag": "de",
+          "short": "DEU",
+          "sub": "$692B"
+        },
+        {
+          "label": "UK",
+          "value": 91,
+          "group": "eu",
+          "flag": "gb",
+          "short": "GBR",
+          "sub": "$456B"
+        },
+        {
+          "label": "Switzerland",
+          "value": 84,
+          "group": "eu",
+          "flag": "ch",
+          "short": "CHE",
+          "sub": "$518B"
+        },
+        {
+          "label": "Italy",
+          "value": 61,
+          "group": "eu",
+          "flag": "it",
+          "short": "ITA",
+          "sub": "$197B"
+        },
+        {
+          "label": "France",
+          "value": 46,
+          "group": "eu",
+          "flag": "fr",
+          "short": "FRA",
+          "sub": "$509B"
+        },
+        {
+          "label": "Spain",
+          "value": 32,
+          "group": "eu",
+          "flag": "es",
+          "short": "ESP",
+          "sub": "$213B"
+        },
+        {
+          "label": "Sweden",
+          "value": 31,
+          "group": "eu",
+          "flag": "se",
+          "short": "SWE",
+          "sub": "$132B"
+        },
+        {
+          "label": "Norway",
+          "value": 11,
+          "group": "eu",
+          "flag": "no",
+          "short": "NOR"
+        },
+        {
+          "label": "Austria",
+          "value": 8,
+          "group": "eu",
+          "flag": "at",
+          "short": "AUT"
+        },
+        {
+          "label": "Netherlands",
+          "value": 8,
+          "group": "eu",
+          "flag": "nl",
+          "short": "NLD"
+        },
+        {
+          "label": "Denmark",
+          "value": 8,
+          "group": "eu",
+          "flag": "dk",
+          "short": "DNK"
+        },
+        {
+          "label": "Finland",
+          "value": 7,
+          "group": "eu",
+          "flag": "fi",
+          "short": "FIN"
+        },
+        {
+          "label": "Ireland",
+          "value": 4,
+          "group": "eu",
+          "flag": "ie",
+          "short": "IRL"
+        },
+        {
+          "label": "Israel",
+          "value": 36,
+          "group": "me",
+          "flag": "il",
+          "short": "ISR",
+          "sub": "$108B"
+        },
+        {
+          "label": "Saudi Arabia",
+          "value": 19,
+          "group": "me",
+          "flag": "sa",
+          "short": "SAU",
+          "sub": "$81B"
+        },
+        {
+          "label": "UAE",
+          "value": 19,
+          "group": "me",
+          "flag": "ae",
+          "short": "UAE",
+          "sub": "$169B"
+        },
+        {
+          "label": "South Africa",
+          "value": 7,
+          "group": "me",
+          "flag": "za",
+          "short": "ZAF"
+        },
+        {
+          "label": "Egypt",
+          "value": 4,
+          "group": "me",
+          "flag": "eg",
+          "short": "EGY"
+        },
+        {
+          "label": "Nigeria",
+          "value": 4,
+          "group": "me",
+          "flag": "ng",
+          "short": "NGA"
+        },
+        {
+          "label": "Lebanon",
+          "value": 2,
+          "group": "me",
+          "flag": "lb",
+          "short": "LBN"
+        },
+        {
+          "label": "Other",
+          "value": 193,
+          "group": "oth",
+          "muted": true
+        }
+      ]
+    }
+  ],
+  "title": {
+    "box": {
+      "x": 64,
+      "y": 66,
+      "w": 440,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "NUMBER OF",
+        "role": "display",
+        "size": 58,
+        "family": "Libre Caslon Text",
+        "weight": 700,
+        "stretch": 0.9,
+        "gap": 0,
+        "fill": "#111"
+      },
+      {
+        "text": "BILLIONAIRES",
+        "role": "display",
+        "size": 66,
+        "family": "Libre Caslon Text",
+        "weight": 700,
+        "stretch": 0.82,
+        "gap": 10,
+        "fill": "#111"
+      },
+      {
+        "text": "BY COUNTRY IN 2025",
+        "role": "kicker",
+        "size": 20,
+        "fill": "#111",
+        "align": "end",
+        "tracking": 0.14
+      }
+    ]
+  },
+  "footer": {
+    "source": "UBS/PwC Billionaires database. The UBS database tracks billionaires across 47 markets; some countries excluded.",
+    "note": "Big number = billionaires; second line = their cumulative wealth (USD).",
+    "brand": "vivid charts"
+  }
+}

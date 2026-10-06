@@ -103,6 +103,60 @@ cutouts, `shelf: "wood" | "line" | "none"`, `gloss`.
 background; legend row of categories under the title.
 → `best-selling-consoles.json`
 
+## treemap — part-to-whole with real numbers
+**Use for** 10–60 parts in 2–8 groups when absolute values matter.
+**Options** `groups` {label, color, image, texture}, `edgeLabels`, `gap`,
+`groupGap`, `numberRole`, item `sub`, `short`, `flag`, `logo`, `muted`
+("Other"), `image` + `note` (portrait callout), `place: 'bottom'`.
+**Recipe** put the title inside the largest tile and move that tile's number
+to the bottom (`place: 'bottom'`); a serif number face; one portrait callout.
+→ `billionaires-by-country.json`
+
+## area-time — stacked area / streamgraph with events
+**Use for** a mix over 15–250 periods. `offset: 'wiggle'` for a stream,
+`'expand'` for 100%.
+**Options** `series` {label, values, color, icon}, `events` [{at, label,
+text}], `notes`, `endValues`, `startValues`, `yTitle`, `labelEvery`.
+**Recipe** real series data (Our World in Data CSVs are perfect), 4–7 event
+pins with dates checked, icons in the biggest layers.
+→ `us-electricity-mix.json`
+
+## bubble-pack — big vs small, with identity
+**Use for** 8–40 countries/brands where the size contrast is the story.
+**Options** `groups`, item `flag`/`logo`/`caption`/`note`/`rank`, `padding`,
+`shading`. → `household-net-worth.json`
+
+## slope — before → after
+**Use for** two points in time, ≤20 items; one-sided items fade out.
+**Options** `leftTitle`, `rightTitle`, `groups`, `axes`, `min`/`max`, `note`.
+→ `gold-producers.json`
+
+## bump — rank over time
+**Use for** top 5–12 over 4–8 periods; brand logos in badges.
+**Options** `periods`, `ranks` (keys per period), `entities` {label, color,
+logo, short}, `values`. → `top-companies-bump.json`
+
+## radial-bars — dramatic range as a fan
+**Use for** 15–40 values with one or two outliers. Always print values.
+**Options** `startAngle`, `endAngle`, `inner`, `cap`, `scale`, `categories`,
+`center`, `cx`/`cy`. → `critical-minerals.json`
+
+## dumbbell — the gap between two numbers
+**Use for** mean vs median, A vs B per category.
+**Options** `items` {label, a, b}, `aLabel`, `bLabel`, colors, `orientation`,
+`note`. → `net-worth-by-age.json`
+
+## stacked-bars — 100% rows
+**Use for** survey splits, mixes per country.
+**Options** `series`, `rows` {label, sub, icon, flag, values}, `normalize`,
+`sortBy`, `labelWidth`. → `billionaires-invest.json`
+
+## tile-map — grid cartogram, squares sized by value
+**Use for** state/country values where land area would mislead; signed values
+(growth/decline). Built-in `layout: 'us'`, or pass `{key: [col, row]}`.
+**Options** `values`, `positive`, `negative`, `refValue`, `cells`.
+→ `us-population-change.json`
+
 ## pictogram — countable units
 **Use for** "1 in 5", per-1,000 counts, small integers, two-quantity
 comparisons (`groups`).
@@ -128,7 +182,8 @@ comparisons (`groups`).
 The catalogue covers the most common stories, not all of them. When none
 fits, design a custom form and draw it in an `svg` layer or a registered
 renderer (`registerChart(type, (layer, box, ctx) => svgString)`). Ideas the
-pros use: radial bars around a portrait, isometric stacks of coins, a
+pros use: a chart clipped inside an object (Voronoi in an oil barrel,
+donut behind a coin), radial bars around a portrait, isometric stacks of coins, a
 thermometer, a tree whose branches are categories, a skyline of buildings
 sized by value, money piles, a race track, a clock face for time-of-day
 data. Keep the twelve moves.

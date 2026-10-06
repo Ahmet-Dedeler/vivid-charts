@@ -114,7 +114,7 @@ export function iconBody(ref: string): { body: string; w: number; h: number } {
 export function searchIcons(query: string, limit = 40): string[] {
   const out: string[] = [];
   const q = query.toLowerCase();
-  for (const prefix of ['ph', 'game-icons', 'fluent-emoji-flat']) {
+  for (const prefix of ['ph', 'simple-icons', 'game-icons', 'fluent-emoji-flat']) {
     const set = loadIconSet(prefix);
     for (const name of Object.keys(set.icons)) {
       if (name.includes(q)) out.push(`icon:${prefix}:${name}`);

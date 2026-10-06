@@ -44,6 +44,8 @@ const STEM_TO_FAMILY: Record<string, string> = {
   PlayfairDisplay: 'Playfair Display',
   RozhaOne: 'Rozha One',
   Shrikhand: 'Shrikhand',
+  NotoSansSymbols: 'Noto Sans Symbols',
+  NotoSansSymbols2: 'Noto Sans Symbols 2',
   ZillaSlab: 'Zilla Slab',
 };
 
@@ -64,7 +66,7 @@ function ensureBundled() {
   const dir = findFontsDir();
   if (!dir) return;
   for (const file of fs.readdirSync(dir)) {
-    const m = file.match(/^([A-Za-z]+)-(\d{3})(i?)\.(ttf|otf)$/);
+    const m = file.match(/^([A-Za-z0-9]+)-(\d{3})(i?)\.(ttf|otf)$/);
     if (!m) continue;
     const family = STEM_TO_FAMILY[m[1]] ?? m[1];
     addFace(family, { weight: Number(m[2]), italic: m[3] === 'i', file: path.join(dir, file) });

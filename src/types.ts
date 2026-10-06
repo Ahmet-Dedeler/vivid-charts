@@ -58,6 +58,16 @@ export interface TitleLine extends TextStyle {
   highlight?: string;
   /** Horizontal scale, e.g. 0.82 to condense a wide display face. */
   stretch?: number;
+  /**
+   * Lettering effect:
+   *  neon     – glowing tube letters (color = glow)
+   *  extrude  – 3D block letters (depth px, color = side color)
+   *  outline  – hollow letters (color = stroke)
+   *  gradient – vertical gradient fill (colors)
+   *  image    – letters filled with a photo/texture (image ref: soil, gold, metal…)
+   *  shadow   – hard offset drop shadow (color, depth)
+   */
+  effect?: { type: 'neon' | 'extrude' | 'outline' | 'gradient' | 'image' | 'shadow'; color?: string; colors?: string[]; depth?: number; image?: string; angle?: number };
   /** Small ornament on both sides of the line (sparkle ✦ or dot). Centered lines only. */
   flank?: 'sparkle' | 'dot';
   flankColor?: string;

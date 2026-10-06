@@ -6,7 +6,7 @@
  * thing generic chart libraries get wrong.
  */
 import { palette } from './core/color.js';
-import { isDark, alpha, mix } from './core/color.js';
+import { isDark, alpha, mix, darken, lighten } from './core/color.js';
 import { Defs } from './core/defs.js';
 import { arrow, image, icon } from './core/draw.js';
 import { headBox } from './core/assets.js';
@@ -45,6 +45,7 @@ export function renderPosterSVG(spec: PosterSpec): string {
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">` +
     ctx.defs.toString() +
+    (textMasks.length ? `<defs>${textMasks.splice(0).join('')}</defs>` : '') +
     bg +
     layers +
     title +
@@ -129,7 +130,8 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
       const x0 = lineAlign === 'middle' ? lx - w / 2 : lineAlign === 'end' ? lx - w : lx;
       parts.push(h('rect', { x: x0 - size * 0.15, y: y - cap - size * 0.12, width: w + size * 0.3, height: cap + size * 0.28, fill: line.highlight, rx: size * 0.08 }));
     }
-    const lineSvg = runs(list, lx, y, style, lineAlign);
+    let lineSvg = runs(list, lx, y, style, lineAlign);
+    if (line.effect) lineSvg = letterEffect(line.effect, list, lx, y, style, lineAlign, w / stretch, cap, ctx);
     // Condense around the anchor point so alignment is preserved.
     parts.push(stretch === 1 ? lineSvg : h('g', { transform: `translate(${lx},0) scale(${stretch},1) translate(${-lx},0)` }, lineSvg));
     if (line.flank) {
@@ -183,9 +185,73 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
 }
 
 function stripLine(line: TitleSpec["lines"][number]): TextStyle {
-  const { text: _t, runs: _r, role: _ro, fit: _f, gap: _g, align: _a, rules: _ru, highlight: _h, stretch: _s, flank: _fl, flankColor: _fc, ...rest } = line;
+  const { text: _t, runs: _r, role: _ro, fit: _f, gap: _g, align: _a, rules: _ru, highlight: _h, stretch: _s, flank: _fl, flankColor: _fc, effect: _ef, ...rest } = line;
   return rest as TextStyle;
 }
+
+/** Lettering effects for title lines. Text is already vector paths, so every effect is plain SVG. */
+function letterEffect(
+  e: NonNullable<TitleSpec['lines'][number]['effect']>,
+  list: Run[],
+  x: number,
+  y: number,
+  style: TextStyle,
+  anchor: 'start' | 'middle' | 'end',
+  w: number,
+  cap: number,
+  ctx: Ctx,
+): string {
+  const { defs } = ctx;
+  const base = runs(list, x, y, style, anchor);
+  const x0 = anchor === 'middle' ? x - w / 2 : anchor === 'end' ? x - w : x;
+  const size = style.size ?? 60;
+  const recolor = (fill: string, extra: TextStyle = {}) => runs(list.map((r) => ({ ...r, fill })), x, y, { ...style, fill, ...extra }, anchor);
+  switch (e.type) {
+    case 'neon': {
+      const glow = e.color ?? '#ff3df2';
+      const blur = defs.glow(glow, size * 0.18);
+      return h('g', {}, h('g', { filter: blur }, recolor(glow, { stroke: glow, strokeWidth: size * 0.05 })), recolor('#ffffff', { stroke: glow, strokeWidth: size * 0.02 }));
+    }
+    case 'extrude': {
+      const depth = e.depth ?? Math.round(size * 0.08);
+      const side = e.color ?? darken(style.fill ?? '#000', 0.35);
+      const layers: string[] = [];
+      for (let d = depth; d > 0; d--) layers.push(h('g', { transform: `translate(${d * 0.7},${d})` }, recolor(side)));
+      return h('g', {}, ...layers, base);
+    }
+    case 'shadow': {
+      const depth = e.depth ?? Math.round(size * 0.06);
+      return h('g', {}, h('g', { transform: `translate(${depth},${depth})` }, recolor(e.color ?? '#000000')), base);
+    }
+    case 'outline':
+      return recolor('none', { stroke: e.color ?? style.fill, strokeWidth: Math.max(1.5, size * 0.03) });
+    case 'gradient': {
+      const cs = e.colors ?? [lighten(style.fill ?? '#888', 0.25), darken(style.fill ?? '#888', 0.2)];
+      const g = defs.linear(cs.map((c, i) => [i / (cs.length - 1), c]), e.angle ?? 90);
+      // Gradient in user space across the line's box.
+      return h('g', { mask: textMask(base, ctx, x0, y - cap, w, cap * 1.35) }, h('rect', { x: x0 - 4, y: y - cap - size * 0.12, width: w + 8, height: cap + size * 0.35, fill: g }));
+    }
+    case 'image': {
+      const mk = textMask(recolor('#ffffff'), ctx, x0, y - cap, w, cap * 1.35);
+      return h('g', {}, h('g', { filter: defs.shadow({ dy: size * 0.04, blur: size * 0.06, opacity: 0.45 }) }, h('g', { mask: mk }, image(e.image, x0 - 6, y - cap - size * 0.15, w + 12, cap + size * 0.4))));
+    }
+  }
+  return base;
+}
+
+let maskSeq = 0;
+function textMask(markup: string, ctx: Ctx, x: number, y: number, w: number, hh: number): string {
+  void ctx;
+  void x;
+  void y;
+  void w;
+  void hh;
+  const id = `tm${maskSeq++}`;
+  // White text on black = visible where the letters are.
+  textMasks.push(`<mask id="${id}" maskUnits="userSpaceOnUse">${markup.replace(/fill="[^"]*"/g, 'fill="#ffffff"')}</mask>`);
+  return `url(#${id})`;
+}
+const textMasks: string[] = [];
 
 /** Victorian-label frame: double line with notched, scalloped corners. */
 function ornateFrame(b: Box, color: string, fill: string): string {

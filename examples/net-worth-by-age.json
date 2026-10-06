@@ -1,0 +1,103 @@
+{
+  "palette": {
+    "name": "olive",
+    "bg": "#f4ecdc",
+    "ink": "#3d2a14",
+    "muted": "#7a6448"
+  },
+  "type": {
+    "preset": "classic",
+    "display": {
+      "family": "Libre Caslon Text",
+      "weight": 700
+    }
+  },
+  "background": {
+    "color": "#f4ecdc",
+    "grain": 0.06
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 64,
+      "w": 1080,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "text": "AMERICAN FAMILY NET WORTH BY AGE",
+        "role": "display",
+        "size": 46,
+        "family": "Libre Caslon Text",
+        "weight": 700,
+        "fill": "#b5822d",
+        "tracking": 0.02
+      }
+    ],
+    "dek": "The average family is a millionaire by 55. The **median** family never gets close.",
+    "dekSize": 24
+  },
+  "layers": [
+    {
+      "type": "dumbbell",
+      "box": {
+        "x": 60,
+        "y": 220,
+        "w": 1080,
+        "h": 1100
+      },
+      "aLabel": "Average",
+      "bLabel": "Median",
+      "aColor": "#e0a43c",
+      "bColor": "#a8742a",
+      "format": {
+        "prefix": "$"
+      },
+      "max": 1400000,
+      "xTitle": "Age of reference person (years)",
+      "note": {
+        "text": "The gap is skew: a few very rich families pull the **average** up, while the **median** family in its 60s holds about $213K.",
+        "x": 160,
+        "y": 330,
+        "width": 360
+      },
+      "items": [
+        {
+          "label": "Under 35",
+          "a": 76300,
+          "b": 13900
+        },
+        {
+          "label": "35\u201344",
+          "a": 436200,
+          "b": 91300
+        },
+        {
+          "label": "45\u201354",
+          "a": 833200,
+          "b": 168600
+        },
+        {
+          "label": "55\u201364",
+          "a": 1180000,
+          "b": 212500
+        },
+        {
+          "label": "65\u201374",
+          "a": 1220000,
+          "b": 266400
+        },
+        {
+          "label": "75+",
+          "a": 977600,
+          "b": 254800
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "source": "Federal Reserve, Survey of Consumer Finances 2019 (2019 dollars).",
+    "brand": "vivid charts"
+  }
+}

@@ -220,6 +220,25 @@ export class Defs {
     return `url(#${pid})`;
   }
 
+  /** Wide soft glow (neon), with a generous filter region so the blur never shows a box edge. */
+  glow(color: string, blur = 12, opacity = 0.95): string {
+    const key = `glow:${color}:${blur}:${opacity}`;
+    const fid = this.add(
+      key,
+      (fid) =>
+        h(
+          'filter',
+          { id: fid, x: '-60%', y: '-150%', width: '220%', height: '400%' },
+          h('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: blur, result: 'b1' }),
+          h('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: blur * 0.35, result: 'b2' }),
+          h('feComponentTransfer', { in: 'b1', result: 'b1o' }, h('feFuncA', { type: 'linear', slope: opacity })),
+          h('feMerge', {}, h('feMergeNode', { in: 'b1o' }), h('feMergeNode', { in: 'b2' })),
+        ),
+      'f',
+    );
+    return `url(#${fid})`;
+  }
+
   /** Soft drop shadow. */
   shadow(opts: { dx?: number; dy?: number; blur?: number; color?: string; opacity?: number } = {}): string {
     const { dx = 0, dy = 4, blur = 8, color = '#000', opacity = 0.25 } = opts;

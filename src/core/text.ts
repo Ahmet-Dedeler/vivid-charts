@@ -54,12 +54,36 @@ function pathData(path: { commands: { type: string; x?: number; y?: number; x1?:
  * opentype's GSUB support is partial and throws on some fonts (e.g. Playfair
  * italic). Fall back to plain cmap lookup, which is all a poster needs.
  */
-function glyphsOf(font: ReturnType<typeof getFont>, str: string) {
+type Font = ReturnType<typeof getFont>;
+type Shaped = { g: ReturnType<Font['charToGlyph']>; f: Font };
+
+/** Fonts tried, in order, for characters the requested face lacks (★, →, ✓, ⚑…). */
+const FALLBACKS = ['Barlow', 'Inter', 'Noto Sans Symbols 2', 'Noto Sans Symbols'];
+
+/**
+ * Glyphs for a string, each tagged with the font it came from. Uses the
+ * font's shaping (kerning, ligatures) when every character is covered, and
+ * per-character fallback fonts otherwise. opentype's GSUB support is partial
+ * and throws on some fonts, so that path is guarded too.
+ */
+function glyphsOf(font: Font, str: string, weight = 400, italic = false): Shaped[] {
+  let shaped: Shaped[] | undefined;
   try {
-    return font.stringToGlyphs(str);
+    shaped = font.stringToGlyphs(str).map((g) => ({ g, f: font }));
   } catch {
-    return Array.from(str).map((ch) => font.charToGlyph(ch));
+    shaped = undefined;
   }
+  if (shaped && shaped.every((s) => s.g.index !== 0)) return shaped;
+  return Array.from(str).map((ch) => {
+    const g = font.charToGlyph(ch);
+    if (g.index !== 0 || /\s/.test(ch)) return { g, f: font };
+    for (const fam of FALLBACKS) {
+      const f = getFont(fam, weight, italic);
+      const fg = f.charToGlyph(ch);
+      if (fg.index !== 0) return { g: fg, f };
+    }
+    return { g, f: font };
+  });
 }
 
 const DEFAULT: Required<Pick<TextStyle, 'family' | 'weight' | 'italic' | 'size' | 'tracking' | 'fill'>> = {
@@ -84,12 +108,13 @@ export function measure(text: string, style: TextStyle = {}): number {
   const s = resolve(style);
   const str = prep(text, s);
   const font = getFont(s.family, s.weight, s.italic);
-  const scale = s.size / font.unitsPerEm;
-  const glyphs = glyphsOf(font, str);
+  const glyphs = glyphsOf(font, str, s.weight, s.italic);
   let w = 0;
   for (let i = 0; i < glyphs.length; i++) {
-    w += (glyphs[i].advanceWidth ?? 0) * scale;
-    if (i < glyphs.length - 1) w += font.getKerningValue(glyphs[i], glyphs[i + 1]) * scale + s.tracking * s.size;
+    const { g, f } = glyphs[i];
+    const scale = s.size / f.unitsPerEm;
+    w += (g.advanceWidth ?? 0) * scale;
+    if (i < glyphs.length - 1) w += (glyphs[i + 1].f === f ? f.getKerningValue(g, glyphs[i + 1].g) * scale : 0) + s.tracking * s.size;
   }
   return w;
 }
@@ -110,15 +135,15 @@ export function capHeight(style: TextStyle = {}): number {
 /** Path data for one style, starting at the baseline point (x, y). */
 function glyphPath(text: string, s: ReturnType<typeof resolve>, x: number, y: number): { d: string; width: number } {
   const font = getFont(s.family, s.weight, s.italic);
-  const scale = s.size / font.unitsPerEm;
-  const glyphs = glyphsOf(font, prep(text, s));
+  const glyphs = glyphsOf(font, prep(text, s), s.weight, s.italic);
   let cx = x;
   let d = '';
   for (let i = 0; i < glyphs.length; i++) {
-    const glyph = glyphs[i];
-    d += pathData(glyph.getPath(cx, y, s.size));
-    cx += (glyph.advanceWidth ?? 0) * scale;
-    if (i < glyphs.length - 1) cx += font.getKerningValue(glyph, glyphs[i + 1]) * scale + s.tracking * s.size;
+    const { g, f } = glyphs[i];
+    const scale = s.size / f.unitsPerEm;
+    d += pathData(g.getPath(cx, y, s.size));
+    cx += (g.advanceWidth ?? 0) * scale;
+    if (i < glyphs.length - 1) cx += (glyphs[i + 1].f === f ? f.getKerningValue(g, glyphs[i + 1].g) * scale : 0) + s.tracking * s.size;
   }
   return { d, width: cx - x };
 }
@@ -243,15 +268,15 @@ export function fitSize(str: string, maxWidth: number, style: TextStyle, max: nu
 export function arcText(str: string, cx: number, cy: number, radius: number, angle: number, style: TextStyle = {}, flip = false): string {
   const s = resolve(style);
   const font = getFont(s.family, s.weight, s.italic);
-  const scale = s.size / font.unitsPerEm;
-  const glyphs = glyphsOf(font, prep(str, s));
+  const glyphs = glyphsOf(font, prep(str, s), s.weight, s.italic);
   const total = measure(str, style);
   const r = flip ? radius + capHeight(style) : radius;
   const dir = flip ? -1 : 1;
   let along = -total / 2;
   const parts: string[] = [];
   for (let i = 0; i < glyphs.length; i++) {
-    const glyph = glyphs[i];
+    const { g: glyph, f } = glyphs[i];
+    const scale = s.size / f.unitsPerEm;
     const adv = (glyph.advanceWidth ?? 0) * scale;
     const mid = along + adv / 2;
     const theta = ((angle * Math.PI) / 180) + (dir * mid) / r;
@@ -261,7 +286,7 @@ export function arcText(str: string, cx: number, cy: number, radius: number, ang
     const d = pathData(glyph.getPath(-adv / 2, 0, s.size));
     if (d) parts.push(h('path', { d, transform: `translate(${r2(px)},${r2(py)}) rotate(${r2(rot)})`, ...paintAttrs(s) }));
     along += adv;
-    if (i < glyphs.length - 1) along += font.getKerningValue(glyph, glyphs[i + 1]) * scale + s.tracking * s.size;
+    if (i < glyphs.length - 1) along += (glyphs[i + 1].f === f ? f.getKerningValue(glyph, glyphs[i + 1].g) * scale : 0) + s.tracking * s.size;
   }
   return h('g', { class: 'vt' }, `<title>${esc(str)}</title>`, ...parts);
 }

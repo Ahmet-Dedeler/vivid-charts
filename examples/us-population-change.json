@@ -1,0 +1,180 @@
+{
+  "palette": {
+    "name": "poster",
+    "bg": "#efecd2",
+    "ink": "#1d1d16",
+    "muted": "#5a5a48"
+  },
+  "type": {
+    "preset": "classic",
+    "display": {
+      "family": "Libre Caslon Text",
+      "weight": 700
+    }
+  },
+  "background": {
+    "color": "#efecd2",
+    "grain": 0.08
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 50,
+      "w": 1080,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "text": "★  THE UNITED STATES  ★",
+        "role": "kicker",
+        "size": 24,
+        "rules": true,
+        "weight": 600,
+        "tracking": 0.12,
+        "gap": 14
+      },
+      {
+        "text": "POPULATION CHANGE",
+        "role": "display",
+        "size": 84,
+        "family": "Libre Caslon Text",
+        "weight": 700,
+        "stretch": 0.86,
+        "effect": {
+          "type": "shadow",
+          "color": "#c9c39a",
+          "depth": 5
+        }
+      },
+      {
+        "text": "Projected net change, 2025–2040",
+        "role": "label",
+        "size": 24,
+        "weight": 500
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "legend",
+      "box": {
+        "x": 440,
+        "y": 262,
+        "w": 400,
+        "h": 30
+      },
+      "direction": "row",
+      "swatch": "square",
+      "size": 20,
+      "items": [
+        {
+          "label": "Decline",
+          "color": "#ee6c1f"
+        },
+        {
+          "label": "Growth",
+          "color": "#3d9a4a"
+        }
+      ]
+    },
+    {
+      "type": "tile-map",
+      "box": {
+        "x": 30,
+        "y": 330,
+        "w": 1140,
+        "h": 900
+      },
+      "values": {
+        "WA": 968000,
+        "ID": 489000,
+        "MT": 125000,
+        "ND": 100000,
+        "MN": 271000,
+        "IL": -650000,
+        "MI": -184000,
+        "NY": -457000,
+        "MA": 279000,
+        "WI": 29000,
+        "VT": -12000,
+        "NH": 42000,
+        "ME": 42000,
+        "OR": 196000,
+        "NV": 483000,
+        "WY": 2200.0,
+        "SD": 100000,
+        "IA": 63000,
+        "IN": 232000,
+        "OH": -122000,
+        "PA": -185000,
+        "NJ": 410000,
+        "CT": -396,
+        "RI": 16000,
+        "CA": -145000,
+        "UT": 773000,
+        "CO": 768000,
+        "NE": 120000,
+        "MO": 45000,
+        "KY": 85000,
+        "WV": -148000,
+        "VA": 507000,
+        "MD": 192000,
+        "DE": 141000,
+        "AZ": 1100000.0,
+        "NM": -36000,
+        "KS": 8800.0,
+        "AR": 100000,
+        "TN": 792000,
+        "NC": 1500000.0,
+        "SC": 895000,
+        "DC": 45000,
+        "OK": 251000,
+        "LA": -154000,
+        "MS": -139000,
+        "AL": 220000,
+        "GA": 1300000.0,
+        "TX": 6600000.0,
+        "FL": 4600000.0,
+        "AK": -8800.0,
+        "HI": -20000
+      },
+      "format": {},
+      "positive": "#3d9a4a",
+      "negative": "#ee6c1f",
+      "refValue": 1500000
+    },
+    {
+      "type": "stat",
+      "box": {
+        "x": 360,
+        "y": 1240,
+        "w": 300,
+        "h": 80
+      },
+      "value": "21.5M",
+      "label": "U.S. overall net change",
+      "size": 56,
+      "color": "#1d1d16"
+    },
+    {
+      "type": "annotation",
+      "box": {
+        "x": 640,
+        "y": 1230,
+        "w": 320,
+        "h": 90
+      },
+      "text": "Texas and Florida account for more than **half** of all U.S. population growth to 2040.",
+      "align": "middle",
+      "style": {
+        "italic": false,
+        "size": 21
+      }
+    }
+  ],
+  "footer": {
+    "source": "University of Virginia Weldon Cooper Center for Public Service; U.S. Census Bureau. National population projections released July 2026.",
+    "brand": "vivid charts"
+  }
+}
