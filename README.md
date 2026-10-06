@@ -6,6 +6,16 @@ Poster-grade data visualization for humans and AI agents. You write a JSON spec,
 
 Every poster above is one JSON file in [`examples/`](examples) rendered with one command. No Figma, no hand editing.
 
+## Gallery
+
+Click any poster for its spec.
+
+| | | |
+|---|---|---|
+| <a href="examples/celebrity-billionaires.json"><img src="docs/gallery/celebrity-billionaires.jpg" width="280" alt="Celebrity billionaires"></a><br>Celebrity billionaires | <a href="examples/richest-music-artists.json"><img src="docs/gallery/richest-music-artists.jpg" width="280" alt="Richest music artists"></a><br>Richest music artists | <a href="examples/worlds-forests.json"><img src="docs/gallery/worlds-forests.jpg" width="280" alt="World's forests"></a><br>World's forests |
+| <a href="examples/everest-overcrowding.json"><img src="docs/gallery/everest-overcrowding.jpg" width="280" alt="Everest overcrowding"></a><br>Everest overcrowding | <a href="examples/richest-person-every-year.json"><img src="docs/gallery/richest-person-every-year.jpg" width="280" alt="Richest person every year"></a><br>Richest person every year | <a href="examples/us-gdp-per-capita.json"><img src="docs/gallery/us-gdp-per-capita.jpg" width="280" alt="GDP per capita by state"></a><br>GDP per capita by state |
+| <a href="examples/net-worth-by-generation.json"><img src="docs/gallery/net-worth-by-generation.jpg" width="280" alt="Net worth by generation"></a><br>Net worth by generation | <a href="examples/wealthiest-vs-happiest.json"><img src="docs/gallery/wealthiest-vs-happiest.jpg" width="280" alt="Wealthiest vs happiest"></a><br>Wealthiest vs happiest | <a href="examples/best-selling-consoles.json"><img src="docs/gallery/best-selling-consoles.jpg" width="280" alt="Best-selling consoles"></a><br>Best-selling consoles |
+
 ## Why
 
 Most charts on the internet look like the same demo. Recharts default, a legend nobody reads, a white background, 7 random colors. They're technically fine and nobody remembers them.
