@@ -31,6 +31,8 @@ export interface StackedColumnsLayer extends LayerBase {
   series: StackSeries[];
   /** Label every nth category on the x axis. */
   labelEvery?: number;
+  /** Inline series labels beside the first column (default true). Set false and add a legend layer when early columns are empty. */
+  seriesLabels?: boolean;
   max?: number;
   ticks?: number[];
   tickSuffix?: string;
@@ -108,10 +110,12 @@ function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
   // Inline series labels at the left, aligned with the first column's segments.
   const firstIdx = l.series[0].values.findIndex((v) => v != null);
   let acc = 0;
-  l.series.forEach((se, si) => {
+  if (l.seriesLabels !== false) l.series.forEach((se, si) => {
     const v = se.values[firstIdx] ?? 0;
     const mid = y(acc + v / 2);
     acc += v;
+    // A label beside a zero-height segment would point at nothing and stack on its neighbours.
+    if (!v) return;
     const ls: TextStyle = { ...type.label, size: 30, fill: colors[si], weight: 800, upper: true };
     const ss: TextStyle = { ...type.label, size: 26, fill: pal.ink, weight: 700 };
     parts.push(text(se.label, plot.x - 24, mid - 2, ls, 'end'));
@@ -138,9 +142,12 @@ function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
   parts.push(h('path', { d: `M${plot.x},${axisY}H${plot.x + plot.w}`, stroke: pal.ink, strokeWidth: 2 }));
   const xs: TextStyle = { ...type.label, size: 26, weight: 800, fill: pal.ink };
   const every = l.labelEvery ?? 5;
+  // Always label the last column; drop the regular label just before it if the two would collide.
+  const lastRegular = Math.floor((n - 1) / every) * every;
+  const dropRegular = lastRegular !== n - 1 && n - 1 - lastRegular < every * 0.6 ? lastRegular : -1;
   l.categories.forEach((c, i) => {
     const cx = plot.x + colW * (i + 0.5);
-    if (i % every === 0 || i === n - 1) {
+    if ((i % every === 0 && i !== dropRegular) || i === n - 1) {
       parts.push(h('path', { d: `M${cx},${axisY + bubbleH}v10`, stroke: pal.ink, strokeWidth: 2 }));
       parts.push(text(c, cx, axisY + bubbleH + 40, xs, 'middle'));
     }
