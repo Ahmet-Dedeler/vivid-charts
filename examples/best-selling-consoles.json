@@ -1,36 +1,48 @@
 {
-  "palette": "electric",
-  "type": "modern",
+  "palette": "highlighter",
+  "type": "impact",
   "background": {
     "gradient": [
-      "#141b2d",
-      "#0b0f17"
+      "#ecebe8",
+      "#f6f5f2"
     ],
-    "glow": "#3b2fff",
-    "glowAt": [
-      0.8,
-      0.1
-    ]
+    "grain": 0.06,
+    "pattern": "dots",
+    "patternColor": "rgba(0,0,0,0.035)"
   },
   "title": {
     "box": {
-      "x": 64,
-      "y": 64,
-      "w": 1070,
+      "x": 56,
+      "y": 56,
+      "w": 640,
       "h": 0
     },
     "lines": [
       {
-        "text": "Best-Selling Consoles",
-        "role": "display",
-        "size": 92,
-        "fill": "#ffffff"
+        "text": "1989\u20132017",
+        "role": "note",
+        "size": 30,
+        "italic": true,
+        "weight": 600,
+        "fill": "#151a3a",
+        "align": "end",
+        "gap": 6
       },
       {
-        "text": "of all time, sized by units sold",
-        "role": "kicker",
-        "size": 30,
-        "fill": "#9aa6b8"
+        "text": "BEST-SELLING CONSOLES",
+        "role": "display",
+        "size": 66,
+        "family": "Archivo Black",
+        "fill": "#151a3a",
+        "gap": 10
+      },
+      {
+        "text": "OF ALL TIME",
+        "role": "display",
+        "size": 44,
+        "family": "Archivo Black",
+        "fill": "#1f44d1",
+        "align": "end"
       }
     ]
   },
@@ -38,47 +50,73 @@
     {
       "type": "legend",
       "box": {
-        "x": 64,
-        "y": 270,
-        "w": 700,
-        "h": 40
+        "x": 56,
+        "y": 236,
+        "w": 640,
+        "h": 30
       },
       "direction": "row",
       "swatch": "square",
-      "size": 22,
+      "size": 20,
       "items": [
         {
           "label": "Home",
-          "color": "#1d9bf0"
+          "color": "#1d6fe0"
         },
         {
           "label": "Handheld",
-          "color": "#ff4d6d"
+          "color": "#e8336b"
         },
         {
           "label": "Hybrid",
-          "color": "#ffc233"
+          "color": "#f0a020"
         }
       ]
     },
     {
+      "type": "svg",
+      "box": {
+        "x": 760,
+        "y": 140,
+        "w": 0,
+        "h": 0
+      },
+      "markup": "<rect x=\"0\" y=\"16\" width=\"44\" height=\"44\" fill=\"none\" stroke=\"#151a3a\" stroke-width=\"2.5\"/><rect x=\"18\" y=\"0\" width=\"44\" height=\"44\" fill=\"none\" stroke=\"#151a3a\" stroke-width=\"2\" stroke-dasharray=\"4 4\"/>"
+    },
+    {
+      "type": "text",
+      "box": {
+        "x": 838,
+        "y": 140,
+        "w": 300,
+        "h": 80
+      },
+      "text": "**Sized by lifetime units sold**\nArea of each console is proportional to sales",
+      "style": {
+        "family": "Barlow Condensed",
+        "weight": 500,
+        "size": 20,
+        "fill": "#151a3a"
+      },
+      "lineHeight": 1.15
+    },
+    {
       "type": "sized-tiles",
       "box": {
-        "x": 70,
-        "y": 340,
-        "w": 1060,
-        "h": 1010
+        "x": 50,
+        "y": 290,
+        "w": 1100,
+        "h": 1100
       },
-      "perRow": 5,
-      "shelfColor": "#3a2a20",
+      "shelfColor": "#8a5a2e",
       "format": {
         "suffix": "M",
         "decimals": 0
       },
       "categories": {
-        "Home": "#1d9bf0",
-        "Handheld": "#ff4d6d",
-        "Hybrid": "#ffc233"
+        "Home": "#1d6fe0",
+        "Handheld": "#e8336b",
+        "Hybrid": "#f0a020"
       },
       "gloss": false,
       "items": [
@@ -163,12 +201,19 @@
           "tag": "2001"
         }
       ],
-      "fit": "contain"
+      "fit": "contain",
+      "pack": true,
+      "overlap": 0.04,
+      "rows": [
+        4,
+        3,
+        3
+      ]
     }
   ],
   "footer": {
     "source": "Company reports, compiled by Wikipedia (lifetime units, as of 2025).",
-    "brand": "vivid charts",
-    "color": "#9aa6b8"
+    "note": "Console photos from Wikimedia Commons (CC BY-SA, Evan-Amos and others).",
+    "brand": "vivid charts"
   }
 }

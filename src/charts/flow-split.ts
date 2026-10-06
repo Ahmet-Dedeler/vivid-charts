@@ -9,7 +9,7 @@
 import { alpha, mix } from '../core/color.js';
 import { avatar } from '../core/draw.js';
 import { h, r2, rectPath } from '../core/svg.js';
-import { capHeight, measure, text, runs, type TextStyle } from '../core/text.js';
+import { capHeight, measure, measureRuns, text, runs, type TextStyle } from '../core/text.js';
 import { editorial } from '../core/format.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
@@ -28,6 +28,8 @@ export interface FlowItem {
 export interface FlowSplitLayer extends LayerBase {
   type: 'flow-split';
   items: FlowItem[];
+  /** Dark total tab under the right column, e.g. { label: 'All U.S. households', value: '$185.7T' }. */
+  total?: { label: string; value: string };
   leftTitle?: string;
   rightTitle?: string;
   gap?: number;
@@ -43,7 +45,8 @@ function render(l: FlowSplitLayer, box: Box, ctx: Ctx): string {
   const colW = l.columnWidth ?? 110;
   const titleH = l.leftTitle || l.rightTitle ? 100 : 0;
   const top = box.y + titleH;
-  const usableH = box.h - titleH - gap * (items.length - 1);
+  const totalH = l.total ? 80 : 0;
+  const usableH = box.h - titleH - totalH - gap * (items.length - 1);
   const leftTotal = items.reduce((s, i) => s + i.left, 0);
   const rightTotal = items.reduce((s, i) => s + i.right, 0);
   const pctW = 150;
@@ -131,6 +134,17 @@ function render(l: FlowSplitLayer, box: Box, ctx: Ctx): string {
       parts.push(runs(editorial(it.rightExtra, es), lx + sw + 40, y, es));
     }
   });
+  if (l.total) {
+    const ls: TextStyle = { ...type.label, size: 26, fill: '#fff', weight: 700 };
+    const vs: TextStyle = { ...type.number, size: 50, fill: '#fff', italic: false };
+    const vr = editorial(l.total.value, vs);
+    const w = measure(l.total.label, ls) + measureRuns(vr, vs) + 60;
+    const ty = top + usableH + gap * (items.length - 1) + 22;
+    const tx = xR;
+    parts.push(h('path', { d: rectPath(tx, ty, w, 62, [4, 4, 0, 0]), fill: pal.ink }));
+    parts.push(text(l.total.label, tx + 20, ty + 31 + capHeight(ls) / 2, ls));
+    parts.push(runs(vr, tx + w - 20, ty + 31 + capHeight(vs) / 2, vs, 'end'));
+  }
   return parts.join('');
 }
 

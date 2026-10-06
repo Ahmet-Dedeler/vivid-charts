@@ -5,7 +5,7 @@
  * The "Wealthiest vs Happiest Countries" form. Works for any "does A track
  * B?" comparison: richest vs most generous, biggest vs fastest growing.
  */
-import { alpha, mix } from '../core/color.js';
+import { alpha } from '../core/color.js';
 import { flag } from '../core/draw.js';
 import { h } from '../core/svg.js';
 import { capHeight, measure, text, runs, type TextStyle } from '../core/text.js';
@@ -44,27 +44,30 @@ function render(l: DualRankingLayer, box: Box, ctx: Ctx): string {
       const on = match.has(it.label);
       const bx = bleedLeft ? 0 : x0;
       const bw = bleedLeft ? x0 + half : ctx.width - x0;
-      // Zebra rows fading out toward the outer edge, a highlighter band for matches.
-      const fill = on ? hl : i % 2 ? defs.linear([[0, alpha('#000', bleedLeft ? 0 : 0.05)], [1, alpha('#000', bleedLeft ? 0.05 : 0)]], 0) : 'none';
+      // Matches get the highlighter; other rows alternate white and a light gray, fading toward the outer edge.
+      const zebra = i % 2 ? alpha('#ffffff', 0.92) : alpha('#000000', 0.035);
+      const fill = on ? hl : zebra;
       parts.push(h('rect', { x: bx, y: y + 1, width: bw - (bleedLeft ? 4 : 0), height: rowH - 2, fill, filter: on ? defs.shadow({ dy: 2, blur: 4, opacity: 0.15 }) : undefined }));
       const cy = y + rowH / 2;
       const size = Math.min(34, rowH * 0.5);
       const rs: TextStyle = { ...type.body, size: size * 0.85, fill: pal.ink };
       const ls: TextStyle = { ...type.body, size, fill: pal.ink, weight: on ? 700 : 400 };
+      const ns: TextStyle = { ...ls, size: size * 0.55, fill: alpha(pal.ink, 0.45), weight: 500 };
       const vs: TextStyle = { ...type.body, size, fill: pal.ink, weight: on ? 600 : 400 };
       const fr = size * 0.62;
       parts.push(text(String(i + 1), x0 + 36, cy + capHeight(rs) / 2, rs, 'end'));
       if (it.flag) parts.push(flag(defs, it.flag, x0 + 36 + fr + 26, cy, fr));
       parts.push(text(it.label, x0 + 36 + fr * 2 + 46, cy + capHeight(ls) / 2, ls));
-      if (it.note) parts.push(text(it.note, x0 + 36 + fr * 2 + 52 + measure(it.label, ls), cy + capHeight(ls) / 2, { ...ls, size: size * 0.6, fill: pal.muted, weight: 500 }));
+      if (it.note) parts.push(text(it.note, x0 + 36 + fr * 2 + 52 + measure(it.label, ls), cy + capHeight(ls) / 2, ns));
       const vx = x0 + half - 70;
       parts.push(runs(editorial(it.value, vs, { style: 'plain' }), vx, cy + capHeight(vs) / 2, vs, 'end'));
-      if (i === 0 && list.unit) parts.push(text(list.unit, vx + 6, cy + capHeight(vs) / 2, { ...vs, size: size * 0.6, fill: pal.muted }));
+      if (i === 0 && list.unit) parts.push(text(list.unit, vx + 6, cy + capHeight(vs) / 2, ns));
     });
   };
   side(l.left, box.x, true);
   side(l.right, box.x + half, false);
-  parts.push(h('rect', { x: box.x + half - 2, y: box.y, width: 4, height: box.h, fill: mix(pal.bg, '#fff', 0.6) }));
+  // Thin divider with a soft shadow, like two printed sheets side by side.
+  parts.push(h('rect', { x: box.x + half - 1, y: box.y, width: 2, height: box.h, fill: alpha('#000', 0.08) }));
   return parts.join('');
 }
 

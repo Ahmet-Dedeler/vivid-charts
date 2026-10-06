@@ -26,22 +26,24 @@ grayscale | duotone` + `imageFade: top | bottom`.
 `box`, `align: start | middle | end`, `lines: TitleLine[]`, `dek` (supports
 `**bold**`), `dekWidth`, `dekSize`, `dekColor`, `frame: ornate | box | rule`,
 `frameColor`, `panel` (fill color behind the lockup), `shadow` (soft shadow
-behind title text over photos), `dekPanel` (translucent box behind the dek).
+behind title text over photos), `dekPanel` (translucent box behind the dek),
+`dekRule` (rule color between title and dek).
 
 `TitleLine`: `text` or `runs` (mixed styles), `role: display | kicker |
 label | body | note | number`, `size`, `family`, `weight`, `italic`,
 `fill`, `tracking` (em), `upper`, `fit` (scale to box width), `align`,
-`rules` (lines either side), `highlight` (color behind), `gap` (px after),
+`rules` (lines either side), `flank: sparkle | dot` + `flankColor` (ornaments
+either side), `highlight` (color behind), `gap` (px after),
 `stretch` (horizontal scale, e.g. 0.8 to condense Bodoni Moda into a tight editorial title).
 Lines auto-shrink to the box width.
 
 ### footer
-`source`, `note`, `brand` (text wordmark), `logo` (image ref), `color`,
-`height`, `strip: { color, text, textColor }`.
+`source`, `note`, `brand` (text wordmark), `brandColor`, `logo` (image ref),
+`color`, `strip: { color, text, textColor }`. Bottom-anchored: long notes grow upward.
 
 ## Text styles
 `{ family, weight, italic, size, tracking, fill, upper, opacity, stroke,
-strokeWidth }`. Bundled families: Bodoni Moda, Barlow, Barlow Condensed, Oswald, Anton,
+strokeWidth }`. Bundled families: Bodoni Moda, Rozha One, Barlow, Barlow Condensed, Oswald, Anton,
 Bebas Neue, Archivo Black, Inter, Playfair Display, DM Serif Display, Abril
 Fatface, Libre Caslon Text, Zilla Slab, Shrikhand, Bungee, Caveat. Add more
 with `registerFont(family, file, weight, italic)`.
@@ -53,14 +55,16 @@ Pass raw values (7100000000) and `prefix: "$"` → "$7.1B". Or pass `display:
 smaller unit) unless `value.style: "plain"`.
 
 ## Image references
-`wiki:Article_Title` · `commons:File_Name.jpg` · `cutout:<ref>` (people) ·
+`wiki:Article_Title` · `commons:File_Name.jpg` (1600px) · `cutout:<ref>` (people) ·
 `cutout-object:<ref>` (objects) · `flag:xx` (ISO-2) · `icon:<set>:<name>`
 (sets: `ph`, `game-icons`, `fluent-emoji-flat`) · `https://…` · `./local.png`.
 
 ## Built-in layers
 
 ### image
-`src`, `fit: cover | contain`, `focus: top | center | bottom`, `filter:
+`src`, `head: { x, y, size }` (place a cutout by its detected head instead of
+`box`, great for photo collages), `until` + `untilFade` (fade out toward a canvas y),
+`fit: cover | contain`, `focus: top | center | bottom`, `filter:
 grayscale | duotone | none`, `duotone: [dark, light]`, `fade: { left, right,
 top, bottom }` (fractions), `shape: rect | circle`, `radius`, `shadow`.
 
@@ -97,12 +101,14 @@ logo, highlight, note }]`, `sort: desc | asc | none`, `max`, `format`,
 | tip | none`, `avatarRing`, `avatarFilter: grayscale | duotone`, `bar: {
 shape: rounded | pill | flat | tab, thickness (0–1), fill: solid | gradient |
 ramp | hatch | guilloche | glass, color, track, shadow, zebra }`, `value: {
-position: outside | inside, size, color, style, family }`, `header`, `axis`,
+position: outside | inside, size, color, style, family, grow }` (`grow`: label
+size scales with value), `header`, `axis: true | 'shadow'`,
 `bleed`, `categories: {name: color}`, `labelSize`, `labelColor`, `subColor`,
 `highlightColor`.
 
 ### bubble-chain
-`items: [{ label, value, display, image, icons[], color, sublabel }]`,
+`items: [{ label, value, display, image, icons[], color, sublabel }]` (icons are
+refs or `{ icon, angle, size, distance, rotate }`; they straddle the rim),
 `columns`, `firstRow`, `format`, `color`, `photo: duotone | grayscale |
 color`, `duotone: [dark, light]`, `connector: metaball | capsule | none`,
 `iconColor`, `iconCount`, `labelColor`, `valueColor`, `valueCaption`,
@@ -119,27 +125,31 @@ the silhouette and drawn as white-outlined stickers. Give it a tall canvas
 ### voronoi-circle
 `items: [{ label, value, group, flag, short, display }]`, `groups: { key:
 { label, color, image } }`, `format`, `ring`, `texture`, `border`,
-`borderWidth`, `groupGap`, `seed`, `callout`, `shape: circle | square`.
+`borderWidth`, `groupGap`, `seed`, `callout`, `shape: circle | square`,
+`texture: 'canopy' (default, aerial tree crowns) | 'lighting' | false`.
 
 ### stacked-columns
 `categories[]`, `series: [{ label, sublabel, color, values[], part[] }]`,
 `labelEvery`, `max`, `ticks`, `tickSuffix`, `partLabel`, `gaps: [{ index,
 label }]`, `bubbles: { label, sublabel, values[], color, height }`,
-`format`, `barGap`, `radius`, `panel`.
+`format`, `barGap`, `radius`, `panel`, `tickColor` (white over dark photos),
+`bubbles.panel`.
 
 ### map
-`map: world | us-states`, `projection: equal-earth | natural-earth |
-mercator | albers-usa`, `values: { key: number }`, `categories: { key:
+`map: world | us-states | us-canada`, `projection: equal-earth | natural-earth |
+mercator | albers-usa | conic`, `fit: [keys]` (fit the view to these regions),
+`insets: [{ key, x, y, r, label }]` (region in its own circle, e.g. HI, DC),
+`clip` (canvas rect), `values: { key: number }`, `categories: { key:
 name }`, `categoryColors`, `steps[]`, `colors[]`, `empty`, `stroke`,
 `strokeWidth`, `labels`, `format`, `legend: { title, x, y, w, h,
-orientation } | false`, `tags: [{ key, label, text, dx, dy }]`, `pins: [{
+orientation } | false`, `tags: [{ key, label, text ('Name\n$41K'), dx, dy }]`, `pins: [{
 lon, lat, label, color, size }]`, `bubbles: [{ lon, lat, value, label, color
 }]`, `extent`, `exclude`, `shadow`. World keys: ISO-2, ISO-3, numeric or
 English name. US keys: postal code or name.
 
 ### flow-split
 `items: [{ label, sublabel, left, right, rightExtra, color, image }]`,
-`leftTitle`, `rightTitle`, `gap`, `columnWidth`, `flowWidth`.
+`leftTitle`, `rightTitle`, `total: { label, value }`, `gap`, `columnWidth`, `flowWidth`.
 
 ### dual-ranking
 `left`/`right: { items: [{ label, value, flag, note }], unit }`,
@@ -148,7 +158,9 @@ English name. US keys: postal code or name.
 ### sized-tiles
 `items: [{ label, sub, value, display, image, category, tag, color }]`,
 `perRow`, `format`, `categories`, `shelf: wood | line | none`,
-`shelfColor`, `gloss`, `fit: cover | contain`.
+`shelfColor`, `gloss`, `fit: cover | contain`, `pack` (pack by real width),
+`overlap`, `rows: [4, 3, 3]` (items per shelf). Object AREA ∝ value for any
+aspect ratio; shelves size to their content.
 
 ### pictogram
 `parts: [{ label, value, color }]` or `groups: [{ label, value, color, icon

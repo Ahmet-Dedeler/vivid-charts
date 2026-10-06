@@ -3,19 +3,22 @@
   "type": "impact",
   "title": {
     "box": {
-      "x": 64,
-      "y": 60,
-      "w": 1070,
+      "x": 50,
+      "y": 44,
+      "w": 760,
       "h": 0
     },
+    "frame": "rule",
+    "frameColor": "#1b1b1b",
     "lines": [
       {
         "text": "AMERICA'S NET WORTH",
         "role": "kicker",
-        "size": 44,
+        "size": 42,
         "tracking": 0.32,
         "weight": 500,
-        "family": "Barlow"
+        "family": "Barlow",
+        "gap": 34
       },
       {
         "runs": [
@@ -24,7 +27,7 @@
           },
           {
             "text": "2026",
-            "size": 70,
+            "size": 64,
             "family": "Barlow",
             "weight": 400
           }
@@ -33,30 +36,40 @@
         "size": 150,
         "family": "Anton"
       }
-    ],
-    "frame": "rule",
-    "frameColor": "#1b1b1b"
+    ]
   },
   "layers": [
     {
+      "type": "image",
+      "src": "cutout:./assets/group.jpg",
+      "box": {
+        "x": 800,
+        "y": 24,
+        "w": 380,
+        "h": 240
+      },
+      "fit": "contain",
+      "focus": "bottom"
+    },
+    {
       "type": "flow-split",
       "box": {
-        "x": 64,
-        "y": 360,
-        "w": 1080,
-        "h": 980
+        "x": 40,
+        "y": 300,
+        "w": 1100,
+        "h": 1060
       },
       "leftTitle": "Share of U.S. households",
       "rightTitle": "Share of U.S. net worth",
       "items": [
         {
-          "label": "Silent Gen & older",
+          "label": "Silent Generation & older",
           "sublabel": "Born before 1946",
           "left": 7,
           "right": 11,
           "rightExtra": "$19.8T",
           "color": "#7d8794",
-          "image": "icon:fluent-emoji-flat:old-man"
+          "image": "./assets/silent.jpg"
         },
         {
           "label": "Baby Boomers",
@@ -65,7 +78,7 @@
           "right": 52,
           "rightExtra": "$97.4T",
           "color": "#2a7d2e",
-          "image": "icon:fluent-emoji-flat:old-woman"
+          "image": "./assets/boomer.jpg"
         },
         {
           "label": "Generation X",
@@ -74,22 +87,27 @@
           "right": 26,
           "rightExtra": "$47.7T",
           "color": "#25a7c4",
-          "image": "icon:fluent-emoji-flat:man"
+          "image": "./assets/genx.jpg"
         },
         {
-          "label": "Millennials + Gen Z",
+          "label": "Millennials (incl. Gen Z)",
           "sublabel": "1981 or later",
           "left": 37,
           "right": 11,
           "rightExtra": "$20.8T",
           "color": "#d9534f",
-          "image": "icon:fluent-emoji-flat:woman"
+          "image": "./assets/millennial.jpg"
         }
-      ]
+      ],
+      "total": {
+        "label": "All U.S. households",
+        "value": "$185.7T"
+      }
     }
   ],
   "footer": {
-    "source": "Federal Reserve, Distributional Financial Accounts (DFA), Q2 2026. Households assigned by birth year of the reference person.",
+    "source": "Federal Reserve, Distributional Financial Accounts (DFA), Q2 2026.",
+    "note": "Each household is assigned to one generation based on the birth year of its reference person (typically the head of household). Portraits are AI-generated illustrations.",
     "brand": "vivid charts"
   }
 }

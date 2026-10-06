@@ -140,15 +140,46 @@ async function cutout(inner: string, modelOverride?: string): Promise<Buffer> {
   const out = path.join(cacheDir, `cutout-${key}.png`);
   if (fs.existsSync(out)) return fs.readFileSync(out);
   const tmp = path.join(cacheDir, `in-${key}`);
+  const raw = path.join(cacheDir, `raw-${key}.png`);
   fs.writeFileSync(tmp, buf);
   try {
-    execFileSync('uvx', ['--from', 'rembg[cpu,cli]', 'rembg', 'i', '-m', model, tmp, out], { stdio: 'pipe' });
+    execFileSync('uvx', ['--from', 'rembg[cpu,cli]', 'rembg', 'i', '-m', model, tmp, raw], { stdio: 'pipe' });
+    // Crop away empty transparent margins so the subject fills its box.
+    fs.writeFileSync(out, trimAlpha(fs.readFileSync(raw)));
+    fs.rmSync(raw, { force: true });
   } catch (e) {
     throw new Error(`vivid: cutout failed for ${inner}. Needs uv (https://docs.astral.sh/uv). ${String(e).slice(0, 200)}`);
   } finally {
     fs.rmSync(tmp, { force: true });
   }
   return fs.readFileSync(out);
+}
+
+/** Crop a PNG to the bounding box of its visible pixels (plus a 2% pad). */
+export function trimAlpha(buf: Buffer): Buffer {
+  const png = PNG.sync.read(buf);
+  const { width: W, height: H, data } = png;
+  let x0 = W;
+  let y0 = H;
+  let x1 = -1;
+  let y1 = -1;
+  for (let y = 0; y < H; y++)
+    for (let x = 0; x < W; x++)
+      if (data[(y * W + x) * 4 + 3] > 24) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+  if (x1 < 0) return buf;
+  const pad = Math.round(Math.max(W, H) * 0.02);
+  x0 = Math.max(0, x0 - pad);
+  y0 = Math.max(0, y0 - pad);
+  x1 = Math.min(W - 1, x1 + pad);
+  y1 = Math.min(H - 1, y1 + pad);
+  const out = new PNG({ width: x1 - x0 + 1, height: y1 - y0 + 1 });
+  PNG.bitblt(png, out, x0, y0, out.width, out.height, 0, 0);
+  return PNG.sync.write(out);
 }
 
 /** Refs that resolve without I/O beyond bundled packages. */
@@ -297,4 +328,26 @@ export function headBox(ref: string | undefined): HeadBox | null {
   }
   headCache.set(ref, result);
   return result;
+}
+
+/** Width / height of a loaded PNG or JPEG asset, or undefined if unknown. */
+export function imageAspect(ref: string): number | undefined {
+  const uri = asset(ref);
+  if (!uri) return undefined;
+  const buf = Buffer.from(uri.split(',')[1] ?? '', 'base64');
+  try {
+    if (uri.startsWith('data:image/png')) return buf.readUInt32BE(16) / buf.readUInt32BE(20);
+    if (uri.startsWith('data:image/jpeg')) {
+      let i = 2;
+      while (i < buf.length) {
+        const marker = buf[i + 1];
+        const len = buf.readUInt16BE(i + 2);
+        if (marker >= 0xc0 && marker <= 0xc3) return buf.readUInt16BE(i + 7) / buf.readUInt16BE(i + 5);
+        i += 2 + len;
+      }
+    }
+  } catch {
+    /* fall through */
+  }
+  return undefined;
 }

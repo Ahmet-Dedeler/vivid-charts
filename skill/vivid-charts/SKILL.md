@@ -153,6 +153,14 @@ Full catalogue with when-to-use, variations and composition notes:
   (that is the story). The engine's `areaScale` does this; don't fight it.
   Check it yourself: pick the biggest and smallest marks, compare their
   areas to their values.
+- **Fill the canvas with content, not air.** Size marks to the space (shelves,
+  rows and chains should pack tight), push photos large, and crop the map to
+  where the data is. Large empty bands are the most common amateur tell.
+- **Generated imagery is fine when real photos aren't.** For "typical person"
+  portraits, props (a piggy bank of smiley coins) or textures, generate them
+  (any image model), save under the project, cut them out with `cutout:`, and
+  disclose "AI-generated illustration" in the footer. Never generate images of
+  real, named people.
 - **When working from a reference, diff against it.** Put the reference and
   your render side by side and list every difference (sizing, crop, label
   placement, arrows, logos, type, spacing, canvas height). Fix them all, not
