@@ -10,6 +10,7 @@
 import { scaleLinear } from 'd3-scale';
 import { alpha, darken, mix, onColor } from '../core/color.js';
 import { h, r2, rectPath } from '../core/svg.js';
+import { areaScale } from '../core/scale.js';
 import { capHeight, measure, runs, text, type TextStyle } from '../core/text.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { registerChart } from '../registry.js';
@@ -139,21 +140,25 @@ function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
   // Bubble strip.
   if (l.bubbles) {
     const bv = l.bubbles.values;
-    const bmax = Math.max(...bv.map((v) => v ?? 0));
+    // Area ∝ value: 1 death must look much smaller than 18.
+    const bubbleR = areaScale(bv.map((v) => v ?? 0), bubbleH * 0.5 - 6, { ref: 'max', floor: 3 });
     const bc = l.bubbles.color ?? pal.accent;
     const cy = axisY + bubbleH / 2;
     parts.push(h('rect', { x: plot.x - 6, y: axisY + 8, width: plot.w + 12, height: bubbleH - 16, fill: alpha('#fff', 0.85), rx: 8 }));
     bv.forEach((v, i) => {
       if (v == null) return;
       const cx = plot.x + colW * (i + 0.5);
-      const r = Math.max(colW * 0.42, (bubbleH * 0.5 - 6) * Math.sqrt(v / bmax));
+      const r = bubbleR(v);
       parts.push(h('circle', { cx, cy, r, fill: bc, opacity: 0.8, style: 'mix-blend-mode:multiply' }));
     });
-    const vs: TextStyle = { ...type.label, size: Math.min(22, colW * 0.55), weight: 800, fill: onColor(bc) };
     bv.forEach((v, i) => {
       if (v == null) return;
       const cx = plot.x + colW * (i + 0.5);
-      parts.push(runs(editorial(v, vs, { ...l.format, style: 'plain', decimals: 0 }), cx, cy + capHeight(vs) / 2, vs, 'middle'));
+      const r = bubbleR(v);
+      // Label inside when it fits, otherwise in ink just below the bubble.
+      const inside = r >= 11;
+      const vs: TextStyle = { ...type.label, size: inside ? Math.min(22, colW * 0.55, r * 1.25) : 15, weight: 800, fill: inside ? onColor(bc) : pal.ink };
+      parts.push(runs(editorial(v, vs, { ...l.format, style: 'plain', decimals: 0 }), cx, inside ? cy + capHeight(vs) / 2 : cy + r + 16, vs, 'middle'));
     });
     const ls: TextStyle = { ...type.label, size: 30, weight: 800, upper: true, fill: bc };
     parts.push(text(l.bubbles.label, plot.x - 24, cy - 2, ls, 'end'));

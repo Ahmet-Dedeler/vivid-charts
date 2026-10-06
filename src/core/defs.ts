@@ -231,6 +231,31 @@ export class Defs {
     return `url(#${fid})`;
   }
 
+  /**
+   * Sticker outline: a solid outline that follows the image's alpha (works on
+   * cutouts), plus a soft shadow. The "cut-out head" look.
+   */
+  sticker(color = '#ffffff', width = 4, shadow = 0.28): string {
+    const key = `sticker:${color}:${width}:${shadow}`;
+    const fid = this.add(
+      key,
+      (fid) =>
+        h(
+          'filter',
+          { id: fid, x: '-20%', y: '-20%', width: '140%', height: '140%' },
+          h('feMorphology', { in: 'SourceAlpha', operator: 'dilate', radius: width, result: 'grown' }),
+          h('feFlood', { floodColor: color, result: 'fill' }),
+          h('feComposite', { in: 'fill', in2: 'grown', operator: 'in', result: 'outline' }),
+          h('feGaussianBlur', { in: 'grown', stdDeviation: width * 1.2, result: 'blur' }),
+          h('feOffset', { in: 'blur', dy: width * 0.8, result: 'off' }),
+          h('feComponentTransfer', { in: 'off', result: 'shadow' }, h('feFuncA', { type: 'linear', slope: shadow })),
+          h('feMerge', {}, h('feMergeNode', { in: 'shadow' }), h('feMergeNode', { in: 'outline' }), h('feMergeNode', { in: 'SourceGraphic' })),
+        ),
+      'f',
+    );
+    return `url(#${fid})`;
+  }
+
   clipCircle(cx: number, cy: number, r: number): string {
     const key = `cc:${r2(cx)}:${r2(cy)}:${r2(r)}`;
     const cid = this.add(key, (cid) => h('clipPath', { id: cid }, h('circle', { cx, cy, r })), 'c');

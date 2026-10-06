@@ -111,7 +111,8 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
       list = list.map((r) => (r.size ? { ...r, size: (r.size / (base.size ?? size)) * size } : r));
     }
     // Never overflow the title box: shrink the line to fit.
-    const natural = measureRuns(list, { ...base, size });
+    const stretch = line.stretch ?? 1;
+    const natural = measureRuns(list, { ...base, size }) * stretch;
     if (natural > box.w) {
       const k = box.w / natural;
       size *= k;
@@ -122,12 +123,14 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
     const lx = lineAlign === 'middle' ? box.x + box.w / 2 : lineAlign === 'end' ? box.x + box.w : box.x;
     const cap = capHeight(style);
     y += cap;
-    const w = measureRuns(list, style);
+    const w = measureRuns(list, style) * stretch;
     if (line.highlight) {
       const x0 = lineAlign === 'middle' ? lx - w / 2 : lineAlign === 'end' ? lx - w : lx;
       parts.push(h('rect', { x: x0 - size * 0.15, y: y - cap - size * 0.12, width: w + size * 0.3, height: cap + size * 0.28, fill: line.highlight, rx: size * 0.08 }));
     }
-    parts.push(runs(list, lx, y, style, lineAlign));
+    const lineSvg = runs(list, lx, y, style, lineAlign);
+    // Condense around the anchor point so alignment is preserved.
+    parts.push(stretch === 1 ? lineSvg : h('g', { transform: `translate(${lx},0) scale(${stretch},1) translate(${-lx},0)` }, lineSvg));
     if (line.rules) {
       const x0 = lx - w / 2 - size * 0.6;
       const x1 = lx + w / 2 + size * 0.6;
@@ -163,7 +166,7 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
 }
 
 function stripLine(line: TitleSpec["lines"][number]): TextStyle {
-  const { text: _t, runs: _r, role: _ro, fit: _f, gap: _g, align: _a, rules: _ru, highlight: _h, ...rest } = line;
+  const { text: _t, runs: _r, role: _ro, fit: _f, gap: _g, align: _a, rules: _ru, highlight: _h, stretch: _s, ...rest } = line;
   return rest as TextStyle;
 }
 

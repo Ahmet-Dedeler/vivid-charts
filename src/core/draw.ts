@@ -2,9 +2,10 @@
  * Drawing primitives shared by every chart: photos, avatars, flags, icons,
  * callout arrows, brackets, metaball connectors.
  */
-import { asset, iconBody } from './assets.js';
+import { asset, headBox, iconBody } from './assets.js';
 import type { Defs } from './defs.js';
 import { h, r2 } from './svg.js';
+import { capHeight, text } from './text.js';
 
 export interface ImageOpts {
   /** cover (default) crops to fill; contain fits inside. */
@@ -50,7 +51,7 @@ export function avatar(
   const img = asset(ref)
     ? image(ref, cx - s / 2, cy - r * (focus === 'top' ? 1 : zoom), s, s, { clip, filter, focus })
     : opts.initials
-      ? h('text', { x: cx, y: cy + r * 0.18, textAnchor: 'middle', fontSize: r * 0.6, fill: '#fff', fontFamily: 'sans-serif' }, opts.initials)
+      ? text(opts.initials, cx, cy + capHeight({ family: 'Barlow', weight: 700, size: r * 0.7 }) / 2, { family: 'Barlow', weight: 700, size: r * 0.7, fill: '#fff' }, 'middle')
       : '';
   return h(
     'g',
@@ -171,4 +172,47 @@ export function capsule(c1: [number, number], c2: [number, number], width: numbe
   const ox = (Math.sin(ang) * width) / 2;
   const oy = (-Math.cos(ang) * width) / 2;
   return `M${r2(c1[0] + ox)},${r2(c1[1] + oy)}L${r2(c2[0] + ox)},${r2(c2[1] + oy)}L${r2(c2[0] - ox)},${r2(c2[1] - oy)}L${r2(c1[0] - ox)},${r2(c1[1] - oy)}Z`;
+}
+
+/**
+ * Cut-out head sticker: a (background-removed) portrait cropped to the head,
+ * hair allowed to break out above, a rounded bottom at the neck, and a white
+ * outline that follows the silhouette. The editorial "floating heads" look.
+ * (cx, cy) is the face center; `size` the head width.
+ */
+export function headSticker(defs: Defs, ref: string | undefined, cx: number, cy: number, size: number, opts: { outline?: string; fallback?: string; initials?: string } = {}): string {
+  const outline = defs.sticker(opts.outline ?? '#ffffff', Math.max(3, size * 0.035));
+  if (!asset(ref)) {
+    const fill = opts.fallback ?? '#888';
+    const ts = { family: 'Barlow', weight: 800, size: size * 0.32, fill: '#fff' };
+    return h('g', { filter: outline }, h('circle', { cx, cy, r: size * 0.44, fill }), opts.initials ? text(opts.initials, cx, cy + capHeight(ts) / 2, ts, 'middle') : '');
+  }
+  const hb = headBox(ref);
+  if (hb) {
+    // Scale the cutout so the detected head is `size` wide, centered on (cx, cy),
+    // and clip just below the neck with a rounded edge.
+    const imgW = size / hb.width;
+    const imgH = imgW * hb.aspect;
+    const headTop = hb.top * imgH;
+    const neck = hb.neck * imgH;
+    const ix = cx - hb.cx * imgW;
+    const iy = cy - (headTop + neck) / 2;
+    const neckY = iy + neck;
+    const clip = defs.clipPath(
+      `M${r2(ix)},${r2(iy - 10)}H${r2(ix + imgW)}V${r2(neckY - size * 0.18)}` +
+        `Q${r2(cx + size * 0.5)},${r2(neckY + size * 0.12)} ${r2(cx)},${r2(neckY + size * 0.14)}` +
+        `Q${r2(cx - size * 0.5)},${r2(neckY + size * 0.12)} ${r2(ix)},${r2(neckY - size * 0.18)}Z`,
+    );
+    return h('g', { filter: outline }, h('g', { clipPath: clip }, image(ref, ix, iy, imgW, imgH, { fit: 'contain' })));
+  }
+  // Opaque photo: crop to a circle-ish head region instead.
+  const S = size * 2.05;
+  const top = cy - S * 0.36;
+  const neckR = size * 0.5;
+  const clip = defs.clipPath(
+    `M${r2(cx - size * 0.62)},${r2(top)}H${r2(cx + size * 0.62)}V${r2(cy)}` +
+      `A${r2(neckR * 1.24)},${r2(neckR)} 0 0 1 ${r2(cx)},${r2(cy + neckR * 1.15)}` +
+      `A${r2(neckR * 1.24)},${r2(neckR)} 0 0 1 ${r2(cx - size * 0.62)},${r2(cy)}Z`,
+  );
+  return h('g', { filter: outline }, h('g', { clipPath: clip }, image(ref, cx - S / 2, top, S, S, { focus: 'top' })));
 }

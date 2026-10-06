@@ -56,6 +56,8 @@ export interface TitleLine extends TextStyle {
   rules?: boolean;
   /** Highlighter behind the text. */
   highlight?: string;
+  /** Horizontal scale, e.g. 0.82 to condense a wide display face. */
+  stretch?: number;
 }
 
 export interface TitleSpec {

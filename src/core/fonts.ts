@@ -34,6 +34,7 @@ const STEM_TO_FAMILY: Record<string, string> = {
   Barlow: 'Barlow',
   BarlowCondensed: 'Barlow Condensed',
   BebasNeue: 'Bebas Neue',
+  BodoniModa: 'Bodoni Moda',
   Bungee: 'Bungee',
   Caveat: 'Caveat',
   DMSerifDisplay: 'DM Serif Display',

@@ -19,6 +19,11 @@ Fix, re-render, repeat. Two to four rounds is normal.
 ## Data
 - [ ] Numbers match the source. Units and the year are stated.
 - [ ] Bars start at zero; circle/tile *areas* (not radii) encode value.
+- [ ] Size audit: take the two most different values (e.g. $19B vs $178B).
+      Is the area ratio about the same as the value ratio? Two different
+      values must never render at the same size because of a minimum clamp.
+- [ ] If there is a reference piece, list every visible difference between
+      it and your render, and fix each one.
 - [ ] Decimals are consistent; values are rounded sensibly.
 - [ ] Source line present; approximations and exclusions disclosed.
 
@@ -38,5 +43,5 @@ Fix, re-render, repeat. Two to four rounds is normal.
 | chart looks "default" | change the bar shape/fill, add texture, swap the type preset, put a photo in |
 | labels overlap in a map | `tags[].dx/dy`, shrink `box`, or rely on callouts |
 | title too wide | it auto-shrinks; use more lines or `fit: true` per line |
-| bubbles too similar | lower `minRadius` |
+| bubbles too similar | they may genuinely be similar; never fake contrast. If one outlier shrinks the rest, the default ref (90th percentile) lets it overflow instead |
 | wrong face crop | `focus: "top"`, or a `commons:` file with a tighter portrait |

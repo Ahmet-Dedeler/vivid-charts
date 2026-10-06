@@ -23,6 +23,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
+import { PNG } from 'pngjs';
 
 const require = createRequire(import.meta.url);
 
@@ -220,4 +221,80 @@ export function asset(ref: string | undefined): string | undefined {
     console.warn(String(e));
     return undefined;
   }
+}
+
+export interface HeadBox {
+  /** Head center x, as a fraction of image width. */
+  cx: number;
+  /** Top of the hair and the neck line, as fractions of image height. */
+  top: number;
+  neck: number;
+  /** Head width as a fraction of image width. */
+  width: number;
+  /** Image aspect (height / width). */
+  aspect: number;
+}
+
+const headCache = new Map<string, HeadBox | null>();
+
+/**
+ * Find the head inside a background-removed portrait by reading the alpha
+ * silhouette row by row: width grows over the hair, peaks at the head, pinches
+ * at the neck, then widens into the shoulders. Returns null for non-PNG or
+ * opaque images (no silhouette to read).
+ */
+export function headBox(ref: string | undefined): HeadBox | null {
+  if (!ref) return null;
+  if (headCache.has(ref)) return headCache.get(ref)!;
+  let result: HeadBox | null = null;
+  try {
+    const uri = asset(ref);
+    if (uri?.startsWith('data:image/png')) {
+      const png = PNG.sync.read(Buffer.from(uri.split(',')[1], 'base64'));
+      const { width: W, height: H, data } = png;
+      const rows: { l: number; r: number }[] = [];
+      let opaqueRows = 0;
+      for (let y = 0; y < H; y++) {
+        let l = -1;
+        let r = -1;
+        for (let x = 0; x < W; x++) {
+          if (data[(y * W + x) * 4 + 3] > 128) {
+            if (l < 0) l = x;
+            r = x;
+          }
+        }
+        rows.push({ l, r });
+        if (l === 0 && r === W - 1) opaqueRows++;
+      }
+      if (opaqueRows < H * 0.5) {
+        const top = rows.findIndex((row) => row.l >= 0);
+        const widths = rows.map((row) => (row.l < 0 ? 0 : row.r - row.l));
+        // Smooth over a few rows to ignore stray hair.
+        const sm = widths.map((_, i) => {
+          let s = 0;
+          let c = 0;
+          for (let k = -3; k <= 3; k++) if (widths[i + k] !== undefined) (s += widths[i + k]), c++;
+          return s / c;
+        });
+        const searchEnd = Math.min(H - 1, top + Math.round(H * 0.6));
+        // Head max width: widest row in the first stretch below the top.
+        let headMaxY = top;
+        for (let y = top; y < top + (searchEnd - top) * 0.55; y++) if (sm[y] > sm[headMaxY]) headMaxY = y;
+        // Neck: narrowest row after the head, before the shoulders widen past 1.35× head width.
+        let neckY = headMaxY;
+        for (let y = headMaxY; y < searchEnd; y++) {
+          if (sm[y] < sm[neckY]) neckY = y;
+          if (sm[y] > sm[headMaxY] * 1.35) break;
+        }
+        if (neckY === headMaxY) neckY = Math.min(H - 1, headMaxY + Math.round((headMaxY - top) * 0.9));
+        const hw = sm[headMaxY];
+        const row = rows[headMaxY];
+        result = { cx: (row.l + row.r) / 2 / W, top: top / H, neck: neckY / H, width: Math.max(hw, W * 0.05) / W, aspect: H / W };
+      }
+    }
+  } catch {
+    result = null;
+  }
+  headCache.set(ref, result);
+  return result;
 }

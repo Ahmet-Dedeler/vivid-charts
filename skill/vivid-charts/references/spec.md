@@ -25,12 +25,14 @@ grayscale | duotone` + `imageFade: top | bottom`.
 ### title
 `box`, `align: start | middle | end`, `lines: TitleLine[]`, `dek` (supports
 `**bold**`), `dekWidth`, `dekSize`, `dekColor`, `frame: ornate | box | rule`,
-`frameColor`, `panel` (fill color behind the lockup).
+`frameColor`, `panel` (fill color behind the lockup), `shadow` (soft shadow
+behind title text over photos), `dekPanel` (translucent box behind the dek).
 
 `TitleLine`: `text` or `runs` (mixed styles), `role: display | kicker |
 label | body | note | number`, `size`, `family`, `weight`, `italic`,
 `fill`, `tracking` (em), `upper`, `fit` (scale to box width), `align`,
-`rules` (lines either side), `highlight` (color behind), `gap` (px after).
+`rules` (lines either side), `highlight` (color behind), `gap` (px after),
+`stretch` (horizontal scale, e.g. 0.8 to condense Bodoni Moda into a tight editorial title).
 Lines auto-shrink to the box width.
 
 ### footer
@@ -39,7 +41,7 @@ Lines auto-shrink to the box width.
 
 ## Text styles
 `{ family, weight, italic, size, tracking, fill, upper, opacity, stroke,
-strokeWidth }`. Bundled families: Barlow, Barlow Condensed, Oswald, Anton,
+strokeWidth }`. Bundled families: Bodoni Moda, Barlow, Barlow Condensed, Oswald, Anton,
 Bebas Neue, Archivo Black, Inter, Playfair Display, DM Serif Display, Abril
 Fatface, Libre Caslon Text, Zilla Slab, Shrikhand, Bungee, Caveat. Add more
 with `registerFont(family, file, weight, italic)`.
@@ -108,7 +110,11 @@ color`, `duotone: [dark, light]`, `connector: metaball | capsule | none`,
 
 ### snake-timeline
 `items: [{ label, value, holder, display }]`, `holders: { key: { name,
-image, color, flag, logo } }`, `perRow`, `format`, `portraits`.
+image, color, flag, logo, source } }`, `perRow`, `format`, `portraits`,
+`refValue` (value that fills a column; default 90th percentile, outliers
+overflow), `sourceNote`. Use `cutout:` images: heads are auto-detected from
+the silhouette and drawn as white-outlined stickers. Give it a tall canvas
+(~2000px for 40 periods).
 
 ### voronoi-circle
 `items: [{ label, value, group, flag, short, display }]`, `groups: { key:

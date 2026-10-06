@@ -10,6 +10,7 @@ import { darken, lighten, mix } from '../core/color.js';
 import { capsule, icon, image, metaball } from '../core/draw.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { h } from '../core/svg.js';
+import { areaScale } from '../core/scale.js';
 import { arcText, capHeight, runs, text, type TextStyle } from '../core/text.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
@@ -43,6 +44,7 @@ export interface BubbleChainLayer extends LayerBase {
   valueColor?: string;
   /** Small caption under the first value ("Net Worth"). */
   valueCaption?: string;
+  /** Visibility floor in px only. Never use it to even out sizes: area must stay proportional. */
   minRadius?: number;
   sort?: boolean;
 }
@@ -64,7 +66,8 @@ function render(l: BubbleChainLayer, box: Box, ctx: Ctx): string {
   const cellH = box.h / rows;
   const maxR = Math.min(cellW, cellH) * 0.5 * 1.04;
   const max = items[0]?.value ?? 1;
-  const minR = l.minRadius ?? maxR * 0.42;
+  // Area ∝ value. The largest item fills its cell; nothing is clamped up.
+  const radius = areaScale(items.map((i) => i.value), maxR, { ref: 'max', floor: l.minRadius ?? 4 });
   const color = l.color ?? pal.ramp[2];
 
   // Snake positions: row 0 holds `first` items from the left, then rows
@@ -82,7 +85,7 @@ function render(l: BubbleChainLayer, box: Box, ctx: Ctx): string {
       const c = k % cols;
       col = row % 2 === 1 ? c : cols - 1 - c;
     }
-    const r = Math.max(minR, maxR * Math.sqrt(it.value / max));
+    const r = radius(it.value);
     // Nudge small bubbles toward the row's baseline so the chain undulates.
     const jitterY = (rand(i + 3) - 0.5) * cellH * 0.12;
     pos.push({ cx: box.x + cellW * (col + 0.5), cy: box.y + cellH * (row + 0.5) + jitterY, r });

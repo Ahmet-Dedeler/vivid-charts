@@ -146,6 +146,18 @@ Full catalogue with when-to-use, variations and composition notes:
 
 ## 5. Non-negotiables
 
+- **Size encodings are proportional, always.** If a circle/tile/icon size
+  means a value, its *area* is proportional to that value (r ∝ √v). Never
+  clamp small values up to a minimum size to "even things out": then $39B and
+  $75B look identical and the chart lies. Let outliers overflow their cell
+  (that is the story). The engine's `areaScale` does this; don't fight it.
+  Check it yourself: pick the biggest and smallest marks, compare their
+  areas to their values.
+- **When working from a reference, diff against it.** Put the reference and
+  your render side by side and list every difference (sizing, crop, label
+  placement, arrows, logos, type, spacing, canvas height). Fix them all, not
+  just the first one you notice.
+
 - Real data with a cited source. Never invent numbers to fill a layout. If
   values are approximate, say so in the footer.
 - Render and **look at the PNG** before you call it done. Overlaps, clipped

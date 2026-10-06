@@ -7,7 +7,7 @@
   "title": {
     "box": {
       "x": 100,
-      "y": 40,
+      "y": 46,
       "w": 1000,
       "h": 0
     },
@@ -16,23 +16,29 @@
       {
         "text": "THE WORLD'S",
         "role": "display",
-        "size": 84,
-        "family": "Playfair Display",
+        "size": 104,
+        "family": "Bodoni Moda",
         "weight": 900,
-        "italic": true
+        "italic": true,
+        "stretch": 0.8,
+        "gap": 4
       },
       {
         "text": "RICHEST PERSON",
         "role": "display",
-        "size": 84,
-        "family": "Playfair Display",
+        "size": 104,
+        "family": "Bodoni Moda",
         "weight": 900,
-        "italic": true
+        "italic": true,
+        "stretch": 0.8,
+        "gap": 20
       },
       {
-        "text": "Every year since 1987, in 2026 dollars",
+        "text": "EVERY YEAR SINCE 1987, IN 2026 DOLLARS",
         "role": "kicker",
-        "size": 22
+        "size": 24,
+        "weight": 600,
+        "tracking": 0.02
       }
     ]
   },
@@ -43,7 +49,7 @@
         "x": 60,
         "y": 330,
         "w": 1080,
-        "h": 1030
+        "h": 1500
       },
       "perRow": 8,
       "format": {
@@ -54,49 +60,57 @@
         "ts": {
           "name": "Yoshiaki Tsutsumi",
           "color": "#e8202a",
-          "flag": "jp"
+          "flag": "jp",
+          "source": "SEIBU"
         },
         "mo": {
           "name": "Taikichiro Mori",
           "color": "#ec2c8c",
           "flag": "jp",
-          "image": "wiki:Taikichiro_Mori"
+          "image": "cutout:wiki:Taikichiro_Mori",
+          "source": "MORI"
         },
         "bg": {
           "name": "Bill Gates",
           "color": "#0b6fe8",
           "flag": "us",
-          "image": "cutout:wiki:Bill_Gates"
+          "image": "cutout:wiki:Bill_Gates",
+          "source": "Microsoft"
         },
         "wb": {
           "name": "Warren Buffett",
           "color": "#1d2a6b",
           "flag": "us",
-          "image": "cutout:wiki:Warren_Buffett"
+          "image": "cutout:wiki:Warren_Buffett",
+          "source": "Berkshire Hathaway"
         },
         "cs": {
           "name": "Carlos Slim",
           "color": "#6aa13a",
           "flag": "mx",
-          "image": "cutout:wiki:Carlos_Slim"
+          "image": "cutout:wiki:Carlos_Slim",
+          "source": "América Móvil · Grupo Carso"
         },
         "jb": {
           "name": "Jeff Bezos",
           "color": "#12b5ea",
           "flag": "us",
-          "image": "cutout:wiki:Jeff_Bezos"
+          "image": "cutout:wiki:Jeff_Bezos",
+          "source": "amazon · Blue Origin"
         },
         "em": {
           "name": "Elon Musk",
           "color": "#6a9cf0",
           "flag": "us",
-          "image": "cutout:wiki:Elon_Musk"
+          "image": "cutout:wiki:Elon_Musk",
+          "source": "SpaceX · Tesla"
         },
         "ba": {
           "name": "Bernard Arnault",
           "color": "#f4a63a",
           "flag": "fr",
-          "image": "cutout:wiki:Bernard_Arnault"
+          "image": "cutout:wiki:Bernard_Arnault",
+          "source": "LVMH"
         }
       },
       "items": [
@@ -300,27 +314,54 @@
           "value": 923000000000.0,
           "holder": "em"
         }
-      ]
+      ],
+      "sourceNote": "Main source\nof wealth"
     },
     {
       "type": "annotation",
       "box": {
-        "x": 230,
-        "y": 712,
-        "w": 560,
-        "h": 60
+        "x": 225,
+        "y": 862,
+        "w": 480,
+        "h": 90
       },
       "text": "**Bill Gates** held the title in 18 of the 40 Forbes lists, including 13 years in a row.",
       "color": "#0b6fe8",
       "style": {
         "italic": false,
-        "size": 24,
+        "size": 26,
         "weight": 500
       }
+    },
+    {
+      "type": "annotation",
+      "box": {
+        "x": 880,
+        "y": 1800,
+        "w": 300,
+        "h": 90
+      },
+      "text": "Elon Musk is within reach of the first trillion-dollar individual fortune.",
+      "color": "#5b8ee6",
+      "align": "middle",
+      "style": {
+        "italic": false,
+        "size": 24,
+        "weight": 500
+      },
+      "to": [
+        1055,
+        1778
+      ],
+      "from": [
+        1055,
+        1798
+      ]
     }
   ],
   "footer": {
-    "source": "Forbes World's Billionaires lists; 2026 figure is real-time as of Sept 2026. Inflation-adjusted using U.S. CPI.",
+    "source": "Forbes World's Billionaires lists, at each year's list date; 2026 figure is real-time as of Sept 2026. Inflation-adjusted using U.S. CPI.",
     "brand": "vivid charts"
-  }
+  },
+  "height": 2020
 }
