@@ -1,7 +1,7 @@
 {
   "name": "vivid-charts",
-  "version": "0.2.0",
-  "description": "Poster-grade data visualization for humans and AI agents: Visual Capitalist-style infographics (photos, maps, treemaps, streamgraphs, bubble chains\u2026) from a JSON spec, rendered to SVG/PNG without a browser. Ships with an agent skill.",
+  "version": "0.2.1",
+  "description": "Poster-grade data visualization for humans and AI agents: Visual Capitalist-style infographics (photos, maps, treemaps, streamgraphs, bubble chains…) from a JSON spec, rendered to SVG/PNG without a browser. Ships with an agent skill.",
   "type": "module",
   "license": "MIT",
   "author": "Ahmet Dedeler",
@@ -26,8 +26,8 @@
     "visual-capitalist"
   ],
   "bin": {
-    "vivid": "./dist/cli.js",
-    "vivid-charts": "./dist/cli.js"
+    "vivid": "dist/cli.js",
+    "vivid-charts": "dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
