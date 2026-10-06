@@ -231,6 +231,8 @@ export interface PosterSpec {
   footer?: FooterSpec;
   /** Directory to resolve relative asset paths against. */
   baseDir?: string;
+  /** What to do about overlapping / off-canvas text: 'warn' (default), 'error', 'off'. */
+  lint?: 'warn' | 'error' | 'off';
 }
 
 export type Renderer<L extends LayerBase = any> = (layer: L, box: Box, ctx: Ctx) => string;

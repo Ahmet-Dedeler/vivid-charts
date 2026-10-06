@@ -14,7 +14,7 @@ import { alpha, darken, lighten, mix, onColor } from '../core/color.js';
 import { avatar, flag, icon, image } from '../core/draw.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { h, rectPath } from '../core/svg.js';
-import { capHeight, measure, paragraph, runs, text, type TextStyle } from '../core/text.js';
+import { untracked, capHeight, measure, paragraph, runs, text, type TextStyle } from '../core/text.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
 
@@ -205,8 +205,8 @@ function render(l: TreemapLayer, box: Box, ctx: Ctx): string {
       const gl = (l.groups?.[key]?.label ?? key).toUpperCase();
       const es: TextStyle = { ...type.kicker, size: 15, weight: 700, fill: darken(base, 0.1), tracking: 0.08 };
       const len = measure(gl, es);
-      if (gNode.x0 < 1 && gh > len + 20) labels.push(h('g', { transform: `translate(${inner.x - 12},${gy + gh / 2 + len / 2}) rotate(-90)` }, text(gl, 0, 0, es)));
-      else if (gNode.x1 > inner.w - 1 && gh > len + 20) labels.push(h('g', { transform: `translate(${inner.x + inner.w + 12},${gy + gh / 2 - len / 2}) rotate(90)` }, text(gl, 0, 0, es)));
+      if (gNode.x0 < 1 && gh > len + 20) labels.push(h('g', { transform: `translate(${inner.x - 12},${gy + gh / 2 + len / 2}) rotate(-90)` }, untracked(() => text(gl, 0, 0, es))));
+      else if (gNode.x1 > inner.w - 1 && gh > len + 20) labels.push(h('g', { transform: `translate(${inner.x + inner.w + 12},${gy + gh / 2 - len / 2}) rotate(90)` }, untracked(() => text(gl, 0, 0, es))));
       else if (gNode.y1 > inner.h - 1 && gw > len + 20) labels.push(text(gl, gx + gw / 2, inner.y + inner.h + 22, es, 'middle'));
     }
   });

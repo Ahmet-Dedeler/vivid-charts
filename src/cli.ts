@@ -3,12 +3,16 @@
  * vivid CLI
  *   vivid render spec.json -o out.png [--scale 2]
  *   vivid render spec.json -o out.svg
+ *   vivid render spec.json --strict   fail on overlapping / off-canvas text
+ *   vivid check spec.json             report layout issues only
  *   vivid charts            list chart types
  *   vivid palettes          list palettes
  *   vivid fonts             list bundled font families
  *   vivid icons <query>     search bundled icons
  */
-import { renderFile } from './render.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { renderFile, checkLayout } from './render.js';
 import { listCharts } from './registry.js';
 import { PALETTES } from './core/color.js';
 import { TYPE_PRESETS } from './core/theme.js';
@@ -24,12 +28,23 @@ const flag = (name: string) => {
 async function main() {
   switch (cmd) {
     case 'render': {
+      if (args.includes('--strict')) process.env.VIVID_LINT = 'error';
       const spec = args.find((a) => !a.startsWith('-') && a !== flag('-o') && a !== flag('--scale'));
       const out = flag('-o') ?? spec?.replace(/\.json$/, '.png');
       if (!spec || !out) throw new Error('usage: vivid render spec.json -o out.png');
       const t = Date.now();
       await renderFile(spec, out, { scale: Number(flag('--scale') ?? 1) });
       console.log(`${out} (${Date.now() - t}ms)`);
+      break;
+    }
+    case 'check': {
+      const file = args[0];
+      if (!file) throw new Error('usage: vivid check spec.json');
+      const spec = JSON.parse(fs.readFileSync(file, 'utf8'));
+      spec.baseDir ??= path.dirname(path.resolve(file));
+      const issues = await checkLayout(spec);
+      console.log(issues.length ? issues.join('\n') : 'no layout issues');
+      if (issues.length) process.exit(1);
       break;
     }
     case 'charts':
@@ -46,7 +61,7 @@ async function main() {
       console.log(searchIcons(args[0] ?? '', Number(flag('--limit') ?? 60)).join('\n'));
       break;
     default:
-      console.log('vivid render <spec.json> -o <out.png|out.svg> [--scale 2]\nvivid charts | palettes | fonts | icons <query>');
+      console.log('vivid render <spec.json> -o <out.png|out.svg> [--scale 2] [--strict]\nvivid check <spec.json>\nvivid charts | palettes | fonts | icons <query>');
   }
 }
 

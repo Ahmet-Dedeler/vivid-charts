@@ -1,0 +1,14 @@
+{
+  "palette": { "name": "civic", "bg": "#e8e2d6", "ink": "#1b2a2a" },
+  "type": "modern",
+  "title": {
+    "box": { "x": 80, "y": 70, "w": 1000, "h": 0 },
+    "lines": [
+      { "text": "−99%", "role": "display", "family": "Archivo Black", "size": 170, "fill": "#128a7c", "gap": -40 },
+      { "text": "THE AID THAT DRIED UP", "role": "display", "family": "Archivo Black", "size": 72, "gap": 0 }
+    ],
+    "dek": "Humanitarian funding for North Korea reported to the UN. **$361M** in 2002, **$2.4M** in 2025.",
+    "dekWidth": 820
+  },
+  "lint": "error"
+}

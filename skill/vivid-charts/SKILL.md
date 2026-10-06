@@ -53,7 +53,8 @@ run downloads a model (~170 MB); results are cached in `~/.cache/vivid-charts`.
 7. **Compose the poster** at 1200×1500 (4:5): title lockup in the chart's dead
    space (where short bars leave room), hero image fading into the background,
    chart, 1–3 annotations that say the insight in words, source + brand footer.
-8. **Render, look, fix.** Open the PNG. Run the QA checklist
+8. **Render, check, look, fix.** `vivid check spec.json` must say "no layout
+   issues". Then open the PNG. Run the QA checklist
    (`references/qa-checklist.md`). Expect 2–4 iterations. This is where
    "fine" becomes "great".
 
@@ -163,6 +164,14 @@ Full catalogue with when-to-use, variations and composition notes:
 `references/forms.md`.
 
 ## 5. Non-negotiables
+
+- **Zero layout issues.** Run `vivid check spec.json` (or render with
+  `--strict`) before you deliver. It reports every pair of overlapping text
+  and any text off the canvas, from the real glyph outlines. The renderer also
+  prints these as `vivid: text overlap …` warnings: never ignore one, fix the
+  layout (move a box, shrink a size, add space) and check again. Don't stack a
+  big number and a headline as two separate layers; put them in one `title`
+  with several `lines`, where line spacing is enforced automatically.
 
 - **Size encodings are proportional, always.** If a circle/tile/icon size
   means a value, its *area* is proportional to that value (r ∝ √v). Never

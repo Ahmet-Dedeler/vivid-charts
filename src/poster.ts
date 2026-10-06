@@ -12,7 +12,7 @@ import { arrow, image, icon } from './core/draw.js';
 import { headBox } from './core/assets.js';
 import { editorial } from './core/format.js';
 import { h, g, resetIds, rectPath, type Box } from './core/svg.js';
-import { measure, measureRuns, paragraph, runs, text, capHeight, wrap, type Run, type TextStyle } from './core/text.js';
+import { measure, measureRuns, paragraph, runs, text, capHeight, wrap, inkBox, untracked, trackBox, startTextCollect, stopTextCollect, setTextOwner, textCollisions, type Run, type TextStyle } from './core/text.js';
 import { typeSet } from './core/theme.js';
 import { getRenderer } from './registry.js';
 import type {
@@ -31,16 +31,28 @@ import type {
   TitleSpec,
 } from './types.js';
 
+/** Layout problems found during the last render (text overlaps, off-canvas text). */
+export let lastLayoutIssues: string[] = [];
+
 export function renderPosterSVG(spec: PosterSpec): string {
   resetIds();
+  startTextCollect();
   const width = spec.width ?? 1200;
   const height = spec.height ?? 1500;
   const ctx: Ctx = { defs: new Defs(), pal: palette(spec.palette), type: typeSet(spec.type), width, height };
 
   const bg = background(spec.background ?? {}, ctx);
-  const layers = (spec.layers ?? []).map((l) => layer(l, ctx)).join('');
+  const layers = (spec.layers ?? [])
+    .map((l, i) => {
+      setTextOwner(`layer ${i} (${l.type}${l.id ? ' ' + l.id : ''})`);
+      return layer(l, ctx);
+    })
+    .join('');
+  setTextOwner('title');
   const title = spec.title ? titleLockup(spec.title, ctx) : '';
+  setTextOwner('footer');
   const footer = spec.footer ? footerBlock(spec.footer, ctx) : '';
+  lastLayoutIssues = textCollisions(stopTextCollect(), width, height);
 
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">` +
@@ -101,6 +113,9 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
   const ax = align === 'middle' ? box.x + box.w / 2 : align === 'end' ? box.x + box.w : box.x;
   const parts: string[] = [];
   let y = box.y;
+  // Bottom of the previous line's actual ink, and its size, for clearance.
+  let prevInkBottom = -Infinity;
+  let prevSize = 0;
 
   t.lines.forEach((line, i) => {
     const role = line.role ?? (i === 0 && t.lines.length === 1 ? 'display' : line.size && line.size >= 60 ? 'display' : 'kicker');
@@ -125,13 +140,23 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
     const lx = lineAlign === 'middle' ? box.x + box.w / 2 : lineAlign === 'end' ? box.x + box.w : box.x;
     const cap = capHeight(style);
     y += cap;
+    // Never let a line's glyphs touch the line above, whatever `gap` says
+    // (tight gaps, negative gaps, fonts whose digits or % sit low).
+    const ink = inkBox(list, lx, y, style, lineAlign);
+    const clearance = Math.max(8, 0.16 * Math.min(size, prevSize || size));
+    if (ink.y0 < prevInkBottom + clearance) y += prevInkBottom + clearance - ink.y0;
+    const inkNow = inkBox(list, lx, y, style, lineAlign);
+    prevInkBottom = inkNow.y1;
+    prevSize = size;
     const w = measureRuns(list, style) * stretch;
     if (line.highlight) {
       const x0 = lineAlign === 'middle' ? lx - w / 2 : lineAlign === 'end' ? lx - w : lx;
       parts.push(h('rect', { x: x0 - size * 0.15, y: y - cap - size * 0.12, width: w + size * 0.3, height: cap + size * 0.28, fill: line.highlight, rx: size * 0.08 }));
     }
-    let lineSvg = runs(list, lx, y, style, lineAlign);
-    if (line.effect) lineSvg = letterEffect(line.effect, list, lx, y, style, lineAlign, w / stretch, cap, ctx);
+    // Draw untracked (stretch and effects transform/duplicate it), then record the real box once.
+    let lineSvg = untracked(() => runs(list, lx, y, style, lineAlign));
+    if (line.effect) lineSvg = untracked(() => letterEffect(line.effect!, list, lx, y, style, lineAlign, w / stretch, cap, ctx));
+    trackBox({ x0: lx + (inkNow.x0 - lx) * stretch, x1: lx + (inkNow.x1 - lx) * stretch, y0: inkNow.y0, y1: inkNow.y1 }, list.map((r) => r.text).join(''));
     // Condense around the anchor point so alignment is preserved.
     parts.push(stretch === 1 ? lineSvg : h('g', { transform: `translate(${lx},0) scale(${stretch},1) translate(${-lx},0)` }, lineSvg));
     if (line.flank) {
@@ -163,6 +188,9 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
       y += 14;
     }
     y += 18;
+    // The dek's first line must clear the last title line's ink too.
+    const dekCap = capHeight(dekStyle);
+    if (y + (dekStyle.size ?? 24) - dekCap < prevInkBottom + 10) y = prevInkBottom + 10 - (dekStyle.size ?? 24) + dekCap;
     const dw = t.dekWidth ?? box.w;
     const p = paragraph(t.dek, ax, y + (dekStyle.size ?? 24), dw, dekStyle, { anchor: align, lineHeight: 1.32, boldWeight: 700 });
     if (t.dekPanel) {
@@ -322,6 +350,11 @@ function footerBlock(f: FooterSpec, ctx: Ctx): string {
 
 function layer(l: Layer, ctx: Ctx): string {
   const box = l.box ?? { x: 64, y: 360, w: ctx.width - 128, h: ctx.height - 360 - 120 };
+  if (l.rotate) return untracked(() => layerInner(l, ctx, box));
+  return layerInner(l, ctx, box);
+}
+
+function layerInner(l: Layer, ctx: Ctx, box: Box): string {
   let out = '';
   switch (l.type) {
     case 'text':

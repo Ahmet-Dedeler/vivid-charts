@@ -133,7 +133,9 @@ export function capHeight(style: TextStyle = {}): number {
 }
 
 /** Path data for one style, starting at the baseline point (x, y). */
-function glyphPath(text: string, s: ReturnType<typeof resolve>, x: number, y: number): { d: string; width: number } {
+type Ink = { x0: number; y0: number; x1: number; y1: number };
+
+function glyphPath(text: string, s: ReturnType<typeof resolve>, x: number, y: number, ink?: Ink): { d: string; width: number } {
   const font = getFont(s.family, s.weight, s.italic);
   const glyphs = glyphsOf(font, prep(text, s), s.weight, s.italic);
   let cx = x;
@@ -141,6 +143,16 @@ function glyphPath(text: string, s: ReturnType<typeof resolve>, x: number, y: nu
   for (let i = 0; i < glyphs.length; i++) {
     const { g, f } = glyphs[i];
     const scale = s.size / f.unitsPerEm;
+    if (ink) {
+      // Glyph outline bounds in font units (y up); empty for spaces.
+      const bb = g.getBoundingBox();
+      if (bb.x2 > bb.x1) {
+        ink.x0 = Math.min(ink.x0, cx + bb.x1 * scale);
+        ink.x1 = Math.max(ink.x1, cx + bb.x2 * scale);
+        ink.y0 = Math.min(ink.y0, y - bb.y2 * scale);
+        ink.y1 = Math.max(ink.y1, y - bb.y1 * scale);
+      }
+    }
     d += pathData(g.getPath(cx, y, s.size));
     cx += (g.advanceWidth ?? 0) * scale;
     if (i < glyphs.length - 1) cx += (glyphs[i + 1].f === f ? f.getKerningValue(g, glyphs[i + 1].g) * scale : 0) + s.tracking * s.size;
@@ -168,17 +180,96 @@ export function text(str: string, x: number, y: number, style: TextStyle = {}, a
 }
 
 /** Draw mixed-style runs on one baseline. */
+// ───────────── text layout checking ─────────────
+//
+// While a poster renders, every line of text records its ink box (the real
+// glyph outlines, not the em box). After rendering, `textCollisions()` finds
+// pairs of text that overlap and text that runs off the canvas, so layout
+// bugs are caught by the renderer instead of by a human squinting at a PNG.
+
+export interface TextBox extends Ink {
+  text: string;
+  owner: string;
+}
+
+let collector: TextBox[] | null = null;
+let suspended = 0;
+let owner = '';
+
+export function startTextCollect() {
+  collector = [];
+  suspended = 0;
+}
+export function stopTextCollect(): TextBox[] {
+  const out = collector ?? [];
+  collector = null;
+  return out;
+}
+/** Label for the element whose text is being drawn ("title", "layer 3 (treemap)"). */
+export function setTextOwner(o: string) {
+  owner = o;
+}
+/** Draw text without recording it (rotated text, decorative duplicates of an effect). */
+export function untracked<T>(fn: () => T): T {
+  suspended++;
+  try {
+    return fn();
+  } finally {
+    suspended--;
+  }
+}
+/** Record a box manually (for text drawn untracked but placed in canvas space). */
+export function trackBox(b: Ink, text: string) {
+  if (collector && !suspended && b.x1 > b.x0) collector.push({ ...b, text, owner });
+}
+
+/** Ink bounds of runs drawn at (x, y) without drawing anything. */
+export function inkBox(list: Run[], x: number, y: number, base: TextStyle = {}, anchor: Anchor = 'start'): Ink {
+  const total = measureRuns(list, base);
+  let cx = anchor === 'middle' ? x - total / 2 : anchor === 'end' ? x - total : x;
+  const ink: Ink = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+  for (const run of list) {
+    const s = resolve({ ...base, ...Object.fromEntries(Object.entries(run).filter(([, v]) => v !== undefined)) });
+    cx += glyphPath(run.text, s, cx, y + (run.dy ?? 0) * s.size, ink).width;
+  }
+  return ink;
+}
+
+/**
+ * Overlapping text pairs and off-canvas text. Overlap must exceed `tol` px in
+ * both directions, so letters that merely touch are not flagged.
+ */
+export function textCollisions(boxes: TextBox[], width: number, height: number, tol = 2): string[] {
+  const issues: string[] = [];
+  const q = (t: string) => `"${t.length > 40 ? t.slice(0, 37) + '…' : t}"`;
+  for (const b of boxes) {
+    if (b.x0 < -tol || b.y0 < -tol || b.x1 > width + tol || b.y1 > height + tol) issues.push(`text off canvas: ${q(b.text)} (${b.owner})`);
+  }
+  for (let i = 0; i < boxes.length; i++) {
+    const a = boxes[i];
+    for (let j = i + 1; j < boxes.length; j++) {
+      const b = boxes[j];
+      const ox = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
+      const oy = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+      if (ox > tol && oy > tol) issues.push(`text overlap: ${q(a.text)} (${a.owner}) × ${q(b.text)} (${b.owner}), ${Math.round(oy)}px`);
+    }
+  }
+  return issues;
+}
+
 export function runs(list: Run[], x: number, y: number, base: TextStyle = {}, anchor: Anchor = 'start', title = true): string {
   const total = measureRuns(list, base);
   let cx = anchor === 'middle' ? x - total / 2 : anchor === 'end' ? x - total : x;
   const parts: string[] = [];
+  const ink: Ink = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
   for (const run of list) {
     const s = resolve({ ...base, ...Object.fromEntries(Object.entries(run).filter(([, v]) => v !== undefined)) });
-    const { d, width } = glyphPath(run.text, s, cx, y + (run.dy ?? 0) * s.size);
+    const { d, width } = glyphPath(run.text, s, cx, y + (run.dy ?? 0) * s.size, ink);
     if (d) parts.push(h('path', { d, ...paintAttrs(s) }));
     cx += width;
   }
   const label = list.map((r) => r.text).join('');
+  if (label.trim()) trackBox(ink, label);
   // A <title> keeps the text discoverable for accessibility and text search.
   return h('g', { class: 'vt' }, title ? `<title>${esc(label)}</title>` : '', ...parts);
 }

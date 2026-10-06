@@ -1,6 +1,6 @@
 {
   "name": "vivid-charts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Poster-grade data visualization for humans and AI agents: Visual Capitalist-style infographics (photos, maps, treemaps, streamgraphs, bubble chains…) from a JSON spec, rendered to SVG/PNG without a browser. Ships with an agent skill.",
   "type": "module",
   "license": "MIT",

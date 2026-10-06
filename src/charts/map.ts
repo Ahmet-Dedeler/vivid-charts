@@ -18,7 +18,7 @@ import { feature } from 'topojson-client';
 import { alpha, darken, mix, onColor, ramp } from '../core/color.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { h, r2, rectPath } from '../core/svg.js';
-import { capHeight, measure, runs, text, type TextStyle } from '../core/text.js';
+import { capHeight, inkBox, measure, runs, text, type TextStyle } from '../core/text.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
 
@@ -221,6 +221,24 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
     const ls: TextStyle = { ...type.label, size: map === 'us-states' ? 20 : map === 'us-canada' ? 16 : 15, weight: 500 };
     const vs: TextStyle = { ...type.number, size: map === 'us-states' ? 22 : map === 'us-canada' ? 18 : 16, italic: false };
     const callouts: { f: Feat; c: [number, number] }[] = [];
+    const placedBoxes: { x0: number; y0: number; x1: number; y1: number }[] = [];
+    // Inset circles are obstacles too.
+    for (const [, [ix, iy, ir]] of insetCenters) placedBoxes.push({ x0: ix - ir - 6, y0: iy - ir - 6, x1: ix + ir + 6, y1: iy + ir + 6 });
+    // Tags are placed by the author, so region labels yield to them (including the leader to an inset).
+    for (const tg of l.tags ?? []) {
+      const key = normKey(tg.key, map);
+      const f = all.find((x) => x.key === key);
+      if (!f) continue;
+      const inset = insetCenters.get(key);
+      const c0: [number, number] = inset ? [inset[0], inset[1] - inset[2]] : (path.centroid(f as any) as [number, number]);
+      const c: [number, number] = [c0[0] + (tg.dx ?? 0), c0[1] + (tg.dy ?? -72)];
+      const lines = tg.text ? tg.text.split('\n') : [];
+      const ts: TextStyle = { ...type.label, size: 24, weight: 800, upper: true, tracking: 0.06 };
+      const capS: TextStyle = { ...type.label, size: 22, weight: 500, upper: true };
+      const half = Math.max(measure(tg.label, ts) + 28, ...lines.map((ln) => measure(ln, capS))) / 2 + 4;
+      placedBoxes.push({ x0: c[0] - half, y0: c[1] - 23, x1: c[0] + half, y1: c[1] + 27 + lines.length * 30 });
+      if (inset) placedBoxes.push({ x0: c[0] - 8, y0: Math.min(c[1], c0[1]), x1: c[0] + 8, y1: Math.max(c[1], c0[1]) });
+    }
     for (const f of feats) {
       const v = values[f.key];
       if (v === undefined) continue;
@@ -229,14 +247,21 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
       const b = path.bounds(f as any);
       const w = b[1][0] - b[0][0];
       const hh = b[1][1] - b[0][1];
-      // Try full size, then a compact size, before giving up and using a callout.
+      // Try full size, then a compact size, before giving up and using a callout
+      // (in-region labels never collide: a clash sends the label to the callout column).
       let placed = false;
       for (const k of [1, 0.74]) {
         const lsk = { ...ls, size: ls.size! * k };
         const vsk = { ...vs, size: vs.size! * k };
         const vRuns = editorial(v, vsk, { ...l.format, style: 'plain' });
         const need = Math.max(measure(f.label, lsk), measure(vRuns.map((r) => r.text).join(''), vsk));
-        if (w > need + 4 && hh > (lsk.size! + vsk.size!) * 1.05) {
+        // Ink box of the two-line label; it must not hit a label already placed.
+        const lb = inkBox([{ text: f.label }], c[0], c[1] - 3 * k, lsk, 'middle');
+        const vb = inkBox(vRuns, c[0], c[1] + vsk.size! * 0.95, vsk, 'middle');
+        const box2 = { x0: Math.min(lb.x0, vb.x0) - 2, y0: lb.y0 - 2, x1: Math.max(lb.x1, vb.x1) + 2, y1: vb.y1 + 2 };
+        const clash = placedBoxes.some((p) => box2.x0 < p.x1 && box2.x1 > p.x0 && box2.y0 < p.y1 && box2.y1 > p.y0);
+        if (!clash && w > need + 4 && hh > (lsk.size! + vsk.size!) * 1.05) {
+          placedBoxes.push(box2);
           const fill = onColor(colorFor(v), '#111', '#fff');
           parts.push(text(f.label, c[0], c[1] - 3 * k, { ...lsk, fill }, 'middle'));
           parts.push(runs(vRuns, c[0], c[1] + vsk.size! * 0.95, { ...vsk, fill }, 'middle'));
@@ -251,8 +276,20 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
     const colX = box.x + box.w + 26;
     const startY = Math.min(...callouts.map((c) => c.c[1])) - 10;
     const step = Math.max(34, Math.min(42, (box.y + box.h - startY) / Math.max(1, callouts.length)));
-    callouts.forEach(({ f, c }, i) => {
-      const ty = startY + i * step;
+    // Each callout row takes the next free slot, skipping anything already placed
+    // in the column (tags, labels), so the column can never run into them.
+    const colW = 130;
+    let nextY = startY;
+    callouts.forEach(({ f, c }) => {
+      let ty = nextY;
+      for (let guard = 0; guard < 200; guard++) {
+        const row = { x0: colX - 4, y0: ty - 16, x1: colX + colW, y1: ty + 16 };
+        const hit = placedBoxes.find((p) => row.x0 < p.x1 && row.x1 > p.x0 && row.y0 < p.y1 && row.y1 > p.y0);
+        if (!hit) break;
+        ty = hit.y1 + 17;
+      }
+      placedBoxes.push({ x0: colX - 4, y0: ty - 16, x1: colX + colW, y1: ty + 16 });
+      nextY = ty + step;
       parts.push(h('path', { d: `M${r2(c[0])},${r2(c[1])}C${r2(c[0] + 40)},${r2(c[1])} ${r2(colX - 40)},${r2(ty)} ${r2(colX - 6)},${r2(ty)}`, fill: 'none', stroke: pal.ink, strokeWidth: 1.2, strokeOpacity: 0.8 }));
       parts.push(h('circle', { cx: c[0], cy: c[1], r: 4, fill: '#fff', stroke: pal.bg, strokeWidth: 1 }));
       parts.push(text(f.label, colX, ty + capHeight(ls) / 2, { ...ls, fill: pal.ink }));

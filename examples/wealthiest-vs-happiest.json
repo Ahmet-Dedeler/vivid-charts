@@ -31,7 +31,7 @@
       },
       "text": "Wealthiest\nCountries",
       "align": "middle",
-      "lineHeight": 0.92,
+      "lineHeight": 1.02,
       "style": {
         "family": "Libre Caslon Text",
         "weight": 700,
@@ -49,7 +49,7 @@
       },
       "text": "Happiest\nCountries",
       "align": "middle",
-      "lineHeight": 0.92,
+      "lineHeight": 1.02,
       "style": {
         "family": "Libre Caslon Text",
         "weight": 700,

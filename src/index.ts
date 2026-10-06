@@ -1,4 +1,4 @@
-export { renderSVG, renderPNG, renderFile, svgToPNG } from './render.js';
+export { renderSVG, renderPNG, renderFile, svgToPNG, checkLayout, LayoutError } from './render.js';
 export { renderPosterSVG } from './poster.js';
 export { registerChart, listCharts } from './registry.js';
 export { PALETTES, palette, mix, lighten, darken, alpha, onColor, ramp } from './core/color.js';

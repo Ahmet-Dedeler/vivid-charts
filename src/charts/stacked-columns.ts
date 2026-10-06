@@ -11,7 +11,7 @@ import { scaleLinear } from 'd3-scale';
 import { alpha, darken, mix, onColor } from '../core/color.js';
 import { h, r2, rectPath } from '../core/svg.js';
 import { areaScale } from '../core/scale.js';
-import { capHeight, measure, runs, text, type TextStyle } from '../core/text.js';
+import { untracked, capHeight, measure, runs, text, type TextStyle } from '../core/text.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
@@ -134,7 +134,7 @@ function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
   for (const gp of l.gaps ?? []) {
     const gx = plot.x + colW * (gp.index + 0.5);
     const gs: TextStyle = { ...type.label, size: 24, weight: 800, upper: true, fill: alpha(pal.ink, 0.6), tracking: 0.08 };
-    parts.push(h('g', { transform: `translate(${gx - capHeight(gs) / 2},${plot.y + plot.h * 0.42}) rotate(90)` }, text(gp.label, 0, 0, gs)));
+    parts.push(h('g', { transform: `translate(${gx - capHeight(gs) / 2},${plot.y + plot.h * 0.42}) rotate(90)` }, untracked(() => text(gp.label, 0, 0, gs))));
   }
 
   // X axis.

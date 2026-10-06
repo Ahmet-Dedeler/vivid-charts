@@ -16,6 +16,7 @@ path in canvas coordinates; clip any chart to the shape of an object).
 | `layers` | array | drawn in order, first = back |
 | `footer` | object | see below |
 | `baseDir` | string | resolve relative image paths (CLI sets it to the spec's folder) |
+| `lint` | `warn` \| `error` \| `off` | overlapping / off-canvas text: warn (default), throw, or ignore. `vivid check` and `--strict` use the same check |
 
 ### background
 `color`, `gradient: [c1, c2, ...]` (top→bottom), `glow` + `glowAt: [x, y]`
@@ -37,7 +38,9 @@ label | body | note | number`, `size`, `family`, `weight`, `italic`,
 gradient | image | shadow, color, colors, depth, image }`, `flank: sparkle | dot` + `flankColor` (ornaments
 either side), `highlight` (color behind), `gap` (px after),
 `stretch` (horizontal scale, e.g. 0.8 to condense Bodoni Moda into a tight editorial title).
-Lines auto-shrink to the box width.
+Lines auto-shrink to the box width, and each line keeps a minimum clearance
+from the line above based on real glyph outlines (a small or negative `gap`
+can never make lines touch).
 
 ### footer
 `source`, `note`, `brand` (text wordmark), `brandColor`, `logo` (image ref),
@@ -215,6 +218,8 @@ short } }`, `values: [{ key: '$648B' }…]`, `sideLabels`, `badge`.
 ## TypeScript API
 
 ```ts
+import { checkLayout } from 'vivid-charts';
+const issues = await checkLayout(spec); // [] when the layout is clean
 import { renderPNG, renderSVG, registerChart, Defs, text, runs, arcText, avatar, metaball, editorial } from 'vivid-charts';
 const png = await renderPNG(spec, { scale: 2 });
 registerChart('radial-bars', (layer, box, ctx) => '<g>…</g>');

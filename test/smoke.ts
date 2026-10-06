@@ -5,7 +5,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { renderPNG } from '../src/render.js';
+import { renderPNG, checkLayout } from '../src/render.js';
 import { listCharts } from '../src/registry.js';
 import type { PosterSpec } from '../src/types.js';
 
@@ -35,6 +35,31 @@ for (const f of fs.readdirSync(dir).filter((f) => f.endsWith('.json'))) {
     origWarn(`✗ ${f}: ${e instanceof Error ? e.message : e}`);
   }
 }
+// ── layout regression tests ──
+// 1. A title with a negative gap must still come out collision-free.
+// 2. Two layers deliberately placed on top of each other must be flagged.
+console.warn = origWarn;
+{
+  const fixture = JSON.parse(fs.readFileSync(path.join(root, 'test/fixtures-title.json'), 'utf8')) as PosterSpec;
+  const issues = await checkLayout(fixture);
+  if (issues.length) {
+    failed++;
+    origWarn(`✗ title clearance regression:\n  ${issues.join('\n  ')}`);
+  } else console.log('✓ title lines never collide (negative gap fixture)');
+
+  const clash: PosterSpec = {
+    layers: [
+      { type: 'stat', box: { x: 80, y: 80, w: 600, h: 200 }, value: '−99%', size: 170 },
+      { type: 'text', box: { x: 80, y: 180, w: 900, h: 100 }, text: 'THE AID THAT DRIED UP', style: { size: 72, weight: 800 } },
+    ],
+  };
+  const found = await checkLayout(clash);
+  if (!found.some((i) => i.includes('overlap'))) {
+    failed++;
+    origWarn('✗ overlap detector missed two overlapping layers');
+  } else console.log('✓ overlap detector catches overlapping layers');
+}
+
 const builtins = ['text', 'image', 'stat', 'annotation', 'shape', 'svg', 'legend'];
 const missing = listCharts().filter((c) => !used.has(c) && c !== 'pictogram');
 if (missing.length) origWarn(`(no example yet for: ${missing.join(', ')})`);

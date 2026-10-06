@@ -11,7 +11,7 @@ import { scaleLinear, scaleSqrt } from 'd3-scale';
 import { alpha, darken, onColor } from '../core/color.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { h, r2 } from '../core/svg.js';
-import { capHeight, measure, paragraph, runs, text, type TextStyle } from '../core/text.js';
+import { untracked, capHeight, measure, paragraph, runs, text, type TextStyle } from '../core/text.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
 
@@ -45,6 +45,11 @@ export interface RadialBarsLayer extends LayerBase {
 }
 
 function render(l: RadialBarsLayer, box: Box, ctx: Ctx): string {
+  // All labels here are rotated, so they're excluded from the canvas-space overlap check.
+  return untracked(() => renderInner(l, box, ctx));
+}
+
+function renderInner(l: RadialBarsLayer, box: Box, ctx: Ctx): string {
   const { pal, type } = ctx;
   const items = [...l.items];
   if (l.sort !== 'none') items.sort((a, b) => (l.sort === 'asc' ? a.value - b.value : b.value - a.value));
@@ -97,6 +102,7 @@ function render(l: RadialBarsLayer, box: Box, ctx: Ctx): string {
       g.push(text(it.label, flip ? -d : d, capHeight(ls) / 2, ls, flip ? 'end' : 'start'));
       g.push(runs(vr, flip ? -(d + lw + 8) : d + lw + 8, capHeight(vs) / 2, { ...vs, fill: ls.fill }, flip ? 'end' : 'start'));
     }
+    // Rotated labels are excluded from the canvas-space overlap check.
     parts.push(h('g', { transform: `translate(${r2(cx)},${r2(cy)}) rotate(${r2(rot)})` }, ...g));
   });
   parts.push(h('circle', { cx, cy, r: r0 - 8, fill: 'none', stroke: alpha(pal.ink, 0.12), strokeWidth: 1.5 }));

@@ -13,7 +13,7 @@ import { alpha, darken, lighten, onColor } from '../core/color.js';
 import { flag, icon, image } from '../core/draw.js';
 import { editorial, type FormatOptions } from '../core/format.js';
 import { h } from '../core/svg.js';
-import { capHeight, measure, paragraph, runs, text, type TextStyle } from '../core/text.js';
+import { untracked, capHeight, measure, paragraph, runs, text, type TextStyle } from '../core/text.js';
 import { registerChart } from '../registry.js';
 import type { Box, Ctx, LayerBase } from '../types.js';
 
@@ -80,7 +80,8 @@ function render(l: BubblePackLayer, box: Box, ctx: Ctx): string {
       }
       const mark = it.logo || it.flag ? r * 0.36 : 0;
       const noteS: TextStyle = { ...type.body, size: Math.max(12, r * 0.07), fill: ink };
-      const noteP = it.note && r > 120 ? paragraph(it.note, cx, 0, r * 1.3, noteS, { anchor: 'middle', boldWeight: 700, lineHeight: 1.25 }) : null;
+      // Measure only (untracked so the layout check doesn't see a phantom copy at y=0).
+      const noteP = it.note && r > 120 ? untracked(() => paragraph(it.note!, cx, 0, r * 1.3, noteS, { anchor: 'middle', boldWeight: 700, lineHeight: 1.25 })) : null;
       const blockH = mark + (mark ? r * 0.08 : 0) + capHeight(ns) + r * 0.1 + capHeight(vs) + (it.caption ? r * 0.2 : 0) + (noteP ? noteP.height + r * 0.12 : 0);
       let y = cy - blockH / 2;
       if (it.logo) {

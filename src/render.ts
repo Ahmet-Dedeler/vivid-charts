@@ -6,14 +6,36 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import { preloadAssets, setAssetBaseDir } from './core/assets.js';
-import { renderPosterSVG } from './poster.js';
+import { renderPosterSVG, lastLayoutIssues } from './poster.js';
 import './charts/index.js';
 import type { PosterSpec } from './types.js';
 
+export class LayoutError extends Error {}
+
+/**
+ * Render to SVG. Layout problems (overlapping text, text off the canvas) are
+ * reported per `spec.lint`: 'warn' (default, console.warn), 'error' (throw),
+ * or 'off'. Fix them by moving boxes, shrinking sizes or adding gap; never ship
+ * a poster with warnings.
+ */
 export async function renderSVG(spec: PosterSpec): Promise<string> {
   if (spec.baseDir) setAssetBaseDir(spec.baseDir);
   await preloadAssets(spec);
-  return renderPosterSVG(spec);
+  const svg = renderPosterSVG(spec);
+  const issues = lastLayoutIssues;
+  const mode = (process.env.VIVID_LINT as PosterSpec['lint']) ?? spec.lint ?? 'warn';
+  if (issues.length && mode !== 'off') {
+    const msg = issues.map((i) => `vivid: ${i}`).join('\n');
+    if (mode === 'error') throw new LayoutError(msg);
+    console.warn(msg);
+  }
+  return svg;
+}
+
+/** Layout issues of a spec without writing anything (for agents and tests). */
+export async function checkLayout(spec: PosterSpec): Promise<string[]> {
+  await renderSVG({ ...spec, lint: 'off' });
+  return [...lastLayoutIssues];
 }
 
 export async function renderPNG(spec: PosterSpec, opts: { scale?: number } = {}): Promise<Buffer> {

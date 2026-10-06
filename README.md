@@ -53,7 +53,10 @@ vivid palettes        # palettes + type presets
 vivid icons diamond   # search ~14k bundled icons and brand logos
 vivid render spec.json -o out.svg
 vivid render spec.json -o out@2x.png --scale 2
+vivid check spec.json   # overlapping or off-canvas text? (exit 1 if any)
 ```
+
+Every render checks the layout from the real glyph outlines and warns about overlapping or off-canvas text (`--strict` makes it an error), so agents can't ship a poster with colliding labels.
 
 As a library:
 

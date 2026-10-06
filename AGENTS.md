@@ -18,5 +18,8 @@ plus an agent skill in `skill/vivid-charts`.
 - Never commit fetched photos. Images resolve at render time (`wiki:`, `commons:`, `cutout:`).
   AI-generated illustrations (fictional people, props) may live in `examples/assets/`; disclose them in the footer.
 - `data/` holds bundled geodata (Natural Earth, public domain). Keep it simplified and small.
+- Every example must pass `pnpm test`, which fails on any `vivid:` warning, including the text
+  overlap / off-canvas check. Charts must place labels collision-free themselves (track placed
+  boxes, fall back to callouts); text drawn inside rotated groups goes through `untracked()`.
 - Compare each example against its reference piece side by side after changes (`out/cmp/`).
 - Example data must be real and sourced in the footer; say so when values are approximate.
