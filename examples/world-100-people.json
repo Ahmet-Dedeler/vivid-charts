@@ -1,0 +1,92 @@
+{
+  "palette": "civic",
+  "type": {
+    "preset": "modern",
+    "display": {
+      "family": "Archivo Black"
+    }
+  },
+  "background": {
+    "color": "#f3efe6",
+    "grain": 0.05
+  },
+  "title": {
+    "box": {
+      "x": 60,
+      "y": 60,
+      "w": 1080,
+      "h": 0
+    },
+    "align": "middle",
+    "lines": [
+      {
+        "text": "IF THE WORLD WERE",
+        "role": "kicker",
+        "size": 32,
+        "weight": 600,
+        "tracking": 0.16,
+        "gap": 12
+      },
+      {
+        "text": "100 PEOPLE",
+        "role": "display",
+        "size": 120,
+        "family": "Archivo Black",
+        "effect": {
+          "type": "shadow",
+          "color": "#d9cfb8",
+          "depth": 7
+        }
+      }
+    ],
+    "dek": "Where the world's 8.2 billion people live, scaled to 100",
+    "dekSize": 24
+  },
+  "layers": [
+    {
+      "type": "pictogram",
+      "box": {
+        "x": 120,
+        "y": 330,
+        "w": 960,
+        "h": 980
+      },
+      "icon": "icon:ph:person-fill",
+      "shape": "icon",
+      "total": 100,
+      "columns": 10,
+      "parts": [
+        {
+          "label": "Asia",
+          "value": 59,
+          "color": "#d9534f"
+        },
+        {
+          "label": "Africa",
+          "value": 19,
+          "color": "#e6a23c"
+        },
+        {
+          "label": "Europe",
+          "value": 9,
+          "color": "#25a7c4"
+        },
+        {
+          "label": "Latin America",
+          "value": 8,
+          "color": "#2a7d2e"
+        },
+        {
+          "label": "North America",
+          "value": 5,
+          "color": "#6f42c1"
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "source": "UN World Population Prospects 2024 (2024 estimates). Oceania (under 1%) not shown.",
+    "note": "Each figure is about 82 million people.",
+    "brand": "vivid charts"
+  }
+}

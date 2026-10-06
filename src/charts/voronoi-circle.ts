@@ -56,7 +56,11 @@ export interface VoronoiCircleLayer extends LayerBase {
   seed?: number;
   /** Annotation set inside the biggest cell. */
   callout?: string;
-  shape?: 'circle' | 'square';
+  shape?: 'circle' | 'square' | 'barrel' | 'polygon';
+  /** Custom outline for shape 'polygon': points as fractions of the box ([0..1, 0..1]). Put the chart inside any object. */
+  polygon?: [number, number][];
+  /** Cell label color override (e.g. white on a black barrel). */
+  labelColor?: string;
 }
 
 function lcg(seed: number) {
@@ -69,6 +73,36 @@ function circlePolygon(cx: number, cy: number, r: number, n = 96): [number, numb
     const a = (i / n) * Math.PI * 2;
     return [cx + r * Math.cos(a), cy + r * Math.sin(a)] as [number, number];
   });
+}
+
+/** Oil-barrel silhouette filling the box: gently bulging sides, rounded top and bottom edges. */
+function barrelPolygon(b: Box): [number, number][] {
+  const bulge = b.w * 0.06;
+  const rr = b.w * 0.08;
+  const xl = b.x + bulge;
+  const xr = b.x + b.w - bulge;
+  const pts: [number, number][] = [];
+  const N = 40;
+  const arc = (cx: number, cy: number, a0: number, a1: number) => {
+    for (let i = 0; i <= 8; i++) {
+      const a = a0 + ((a1 - a0) * i) / 8;
+      pts.push([cx + rr * Math.cos(a), cy + rr * Math.sin(a)]);
+    }
+  };
+  // Top edge left → right, then the right side bulging out at mid-height.
+  arc(xr - rr, b.y + rr, -Math.PI / 2, 0);
+  for (let i = 1; i < N; i++) {
+    const t = i / N;
+    pts.push([xr + bulge * Math.sin(Math.PI * t), b.y + rr + (b.h - 2 * rr) * t]);
+  }
+  arc(xr - rr, b.y + b.h - rr, 0, Math.PI / 2);
+  arc(xl + rr, b.y + b.h - rr, Math.PI / 2, Math.PI);
+  for (let i = N - 1; i > 0; i--) {
+    const t = i / N;
+    pts.push([xl - bulge * Math.sin(Math.PI * t), b.y + rr + (b.h - 2 * rr) * t]);
+  }
+  arc(xl + rr, b.y + rr, Math.PI, (3 * Math.PI) / 2);
+  return pts;
 }
 
 function centroid(poly: [number, number][]): [number, number] {
@@ -117,8 +151,15 @@ function render(l: VoronoiCircleLayer, box: Box, ctx: Ctx): string {
   const { pal, type, defs } = ctx;
   const cx = box.x + box.w / 2;
   const cy = box.y + box.h / 2;
-  const R = Math.min(box.w, box.h) / 2 - (l.ring !== false ? 46 : 0);
-  const clip = l.shape === 'square' ? ([[cx - R, cy - R], [cx + R, cy - R], [cx + R, cy + R], [cx - R, cy + R]] as [number, number][]) : circlePolygon(cx, cy, R);
+  const R = Math.min(box.w, box.h) / 2 - (l.ring !== false && (l.shape ?? 'circle') === 'circle' ? 46 : 0);
+  const clip: [number, number][] =
+    l.shape === 'square'
+      ? [[cx - R, cy - R], [cx + R, cy - R], [cx + R, cy + R], [cx - R, cy + R]]
+      : l.shape === 'polygon' && l.polygon
+        ? l.polygon.map(([u, v]) => [box.x + u * box.w, box.y + v * box.h] as [number, number])
+        : l.shape === 'barrel'
+          ? barrelPolygon(box)
+          : circlePolygon(cx, cy, R);
 
   const groupKeys = [...new Set(l.items.map((i) => i.group))];
   const total = l.items.reduce((s, i) => s + i.value, 0);
@@ -161,7 +202,7 @@ function render(l: VoronoiCircleLayer, box: Box, ctx: Ctx): string {
       const c = centroid(poly);
       const ir = inradius(poly, c);
       if (ir < 16) return;
-      const vs: TextStyle = { ...type.number, size: Math.max(13, Math.min(64, ir * 0.42)), fill: onColor(base, '#1b1b1b', '#ffffff') };
+      const vs: TextStyle = { ...type.number, size: Math.max(13, Math.min(64, ir * 0.42)), fill: l.labelColor ?? onColor(base, '#1b1b1b', '#ffffff') };
       const ls: TextStyle = { ...type.label, size: Math.max(11, Math.min(40, ir * 0.24)), fill: vs.fill };
       const share = (it.value / total) * 100;
       const vText = it.display ?? `${share.toFixed(1)}%`;
@@ -197,7 +238,7 @@ function render(l: VoronoiCircleLayer, box: Box, ctx: Ctx): string {
   }
 
   // Outer ring with group labels.
-  if (l.ring !== false) {
+  if (l.ring !== false && (l.shape ?? 'circle') === 'circle') {
     const rr = R + 30;
     parts.push(h('circle', { cx, cy, r: rr, fill: 'none', stroke: pal.ink, strokeOpacity: 0.35, strokeWidth: 1.5, strokeDasharray: '5 6' }));
     root.children?.forEach((gNode: any, gi: number) => {

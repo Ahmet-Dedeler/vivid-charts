@@ -117,6 +117,8 @@ export interface LayerBase {
   opacity?: number;
   /** Rotate the whole layer (deg) around its box center. */
   rotate?: number;
+  /** Clip the layer to an SVG path in canvas coordinates (put a chart inside an object). */
+  clipPath?: string;
 }
 
 export interface TextLayer extends LayerBase {

@@ -74,14 +74,16 @@ function render(l: PictogramLayer, box: Box, ctx: Ctx): string {
   const rest = l.rest ?? mix(pal.bg, pal.ink, 0.12);
   for (let i = 0; i < total; i++) out.push(cell(box.x + (i % cols) * s, box.y + Math.floor(i / cols) * s, s, colors[i] ?? rest));
   if (l.showLabels !== false) {
-    let x = box.x;
-    const y = box.y + rows * s + 44;
-    (l.parts ?? []).forEach((p, i) => {
+    // One column per part: big number in the part color, label under it.
+    const parts = l.parts ?? [];
+    const colW = box.w / Math.max(1, parts.length);
+    const y = box.y + rows * s + 70;
+    parts.forEach((p, i) => {
       const c = p.color ?? pal.cats[i % pal.cats.length];
-      const ls: TextStyle = { ...type.label, size: 24, fill: c, weight: 800 };
-      const label = `${p.value}  ${p.label}`;
-      out.push(text(label, x, y, ls));
-      x += label.length * 13 + 40;
+      const cx = box.x + colW * (i + 0.5);
+      const ns: TextStyle = { ...type.number, size: 64, fill: c, italic: false };
+      out.push(text(String(p.value), cx, y, ns, 'middle'));
+      out.push(text(p.label, cx, y + 32, { ...type.label, size: 22, fill: pal.ink, weight: 700 }, 'middle'));
     });
   }
   return out.join('');

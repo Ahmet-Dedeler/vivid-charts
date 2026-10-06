@@ -1,22 +1,33 @@
 {
   "name": "vivid-charts",
-  "version": "0.1.0",
-  "description": "Poster-grade data visualization for humans and AI agents. Editorial, vibrant, Visual Capitalist-style infographics from a JSON spec.",
+  "version": "0.2.0",
+  "description": "Poster-grade data visualization for humans and AI agents: Visual Capitalist-style infographics (photos, maps, treemaps, streamgraphs, bubble chains\u2026) from a JSON spec, rendered to SVG/PNG without a browser. Ships with an agent skill.",
   "type": "module",
   "license": "MIT",
   "author": "Ahmet Dedeler",
-  "repository": "github:Ahmet-Dedeler/vivid-charts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ahmet-Dedeler/vivid-charts.git"
+  },
   "keywords": [
     "dataviz",
+    "data-visualization",
     "infographic",
     "charts",
     "svg",
+    "png",
     "poster",
+    "treemap",
+    "streamgraph",
+    "choropleth",
     "agent-skill",
+    "claude",
+    "ai-agents",
     "visual-capitalist"
   ],
   "bin": {
-    "vivid": "./dist/cli.js"
+    "vivid": "./dist/cli.js",
+    "vivid-charts": "./dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -30,7 +41,9 @@
     "dist",
     "fonts",
     "data",
-    "skill"
+    "skill",
+    "examples",
+    "NOTICE.md"
   ],
   "engines": {
     "node": ">=20"
@@ -40,7 +53,8 @@
     "typecheck": "tsc --noEmit",
     "vivid": "tsx src/cli.ts",
     "examples": "tsx scripts/render-examples.ts",
-    "prepare": "tsup src/index.ts src/cli.ts --format esm --clean --target node20 && tsc -p tsconfig.build.json"
+    "prepare": "tsup src/index.ts src/cli.ts --format esm --clean --target node20 && tsc -p tsconfig.build.json",
+    "test": "tsx test/smoke.ts"
   },
   "dependencies": {
     "@iconify-json/fluent-emoji-flat": "^1.2.6",
@@ -81,5 +95,13 @@
     "tsup": "^8.5.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "homepage": "https://github.com/Ahmet-Dedeler/vivid-charts#readme",
+  "bugs": {
+    "url": "https://github.com/Ahmet-Dedeler/vivid-charts/issues"
+  },
+  "packageManager": "pnpm@10.16.1",
+  "publishConfig": {
+    "access": "public"
   }
 }

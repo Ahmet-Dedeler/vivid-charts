@@ -352,7 +352,8 @@ function layer(l: Layer, ctx: Ctx): string {
     }
   }
   const t = l.rotate ? `rotate(${l.rotate} ${box.x + box.w / 2} ${box.y + box.h / 2})` : undefined;
-  return h('g', { class: `layer ${l.type}`, opacity: l.opacity, transform: t }, out);
+  const clip = l.clipPath ? ctx.defs.clipPath(l.clipPath) : undefined;
+  return h('g', { class: `layer ${l.type}`, opacity: l.opacity, transform: t, clipPath: clip }, out);
 }
 
 function textLayer(l: TextLayer, box: Box, ctx: Ctx): string {

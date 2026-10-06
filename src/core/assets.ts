@@ -131,6 +131,24 @@ export function searchIcons(query: string, limit = 40): string[] {
  * pick a model (default u2net_human_seg, best for people; use isnet-general-use
  * for objects).
  */
+/**
+ * Cutout with graceful degradation: when background removal is unavailable
+ * (no uv, offline model download, VIVID_NO_CUTOUT=1) the original image is
+ * used so the poster still renders.
+ */
+let warnedCutout = false;
+async function cutoutOrOriginal(inner: string, model?: string): Promise<string> {
+  if (!process.env.VIVID_NO_CUTOUT) {
+    try {
+      return toDataUri(await cutout(inner, model), 'image/png');
+    } catch (e) {
+      if (!warnedCutout) console.warn(`${String(e).split('\n')[0]}\nvivid: falling back to the original photo(s).`);
+      warnedCutout = true;
+    }
+  }
+  return loadAsset(inner);
+}
+
 async function cutout(inner: string, modelOverride?: string): Promise<Buffer> {
   const src = await loadAsset(inner);
   const buf = Buffer.from(src.split(',')[1], 'base64');
@@ -202,9 +220,9 @@ export async function loadAsset(ref: string): Promise<string> {
   if (uri) {
     // already resolved
   } else if (ref.startsWith('cutout-object:')) {
-    uri = toDataUri(await cutout(ref.slice(14), 'isnet-general-use'), 'image/png');
+    uri = await cutoutOrOriginal(ref.slice(14), 'isnet-general-use');
   } else if (ref.startsWith('cutout:')) {
-    uri = toDataUri(await cutout(ref.slice(7)), 'image/png');
+    uri = await cutoutOrOriginal(ref.slice(7));
   } else if (ref.startsWith('commons:')) {
     // Any Wikimedia Commons file by name, e.g. commons:Dr._Dre_2013.jpg
     const name = ref.slice(8).replace(/^File:/, '');

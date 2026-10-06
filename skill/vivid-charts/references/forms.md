@@ -57,6 +57,8 @@ callout sentence in the biggest cell; a total stat bottom-right.
 For photo-filled groups pass `groups.<key>.image` (e.g. an AI-generated
 canopy, sand, water texture).
 → `worlds-forests.json`
+Inside an object: `shape: 'barrel'` (or any `polygon`) puts the cells inside an
+oil barrel, a coin, a country outline. → `oil-exporters-barrel.json`
 
 ## stacked-columns — counts over time with composition
 **Use for** 15–40 periods, 2–4 stacked series, optionally a hatched subset
@@ -158,6 +160,7 @@ logo, short}, `values`. → `top-companies-bump.json`
 → `us-population-change.json`
 
 ## pictogram — countable units
+→ `world-100-people.json`
 **Use for** "1 in 5", per-1,000 counts, small integers, two-quantity
 comparisons (`groups`).
 **Options** `parts` (one whole) or `groups` (side-by-side blocks), `icon`,

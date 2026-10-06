@@ -16,8 +16,9 @@ Click any poster for its spec.
 | <a href="examples/everest-overcrowding.json"><img src="docs/gallery/everest-overcrowding.jpg" width="280" alt="Everest overcrowding"></a><br>Everest overcrowding | <a href="examples/richest-person-every-year.json"><img src="docs/gallery/richest-person-every-year.jpg" width="280" alt="Richest person every year"></a><br>Richest person every year | <a href="examples/us-gdp-per-capita.json"><img src="docs/gallery/us-gdp-per-capita.jpg" width="280" alt="GDP per capita, USA + Canada"></a><br>GDP per capita, USA + Canada |
 | <a href="examples/billionaires-by-country.json"><img src="docs/gallery/billionaires-by-country.jpg" width="280" alt="Billionaires by country"></a><br>Billionaires by country | <a href="examples/us-electricity-mix.json"><img src="docs/gallery/us-electricity-mix.jpg" width="280" alt="40 years of U.S. electricity"></a><br>40 years of U.S. electricity | <a href="examples/household-net-worth.json"><img src="docs/gallery/household-net-worth.jpg" width="280" alt="Household net worth"></a><br>Household net worth |
 | <a href="examples/gold-producers.json"><img src="docs/gallery/gold-producers.jpg" width="280" alt="Gold producers 2010 vs 2025"></a><br>Gold producers 2010 vs 2025 | <a href="examples/top-companies-bump.json"><img src="docs/gallery/top-companies-bump.jpg" width="280" alt="Top 10 companies by revenue"></a><br>Top 10 companies by revenue | <a href="examples/critical-minerals.json"><img src="docs/gallery/critical-minerals.jpg" width="280" alt="Critical mineral prices"></a><br>Critical mineral prices |
-| <a href="examples/net-worth-by-generation.json"><img src="docs/gallery/net-worth-by-generation.jpg" width="280" alt="Net worth by generation"></a><br>Net worth by generation | <a href="examples/wealthiest-vs-happiest.json"><img src="docs/gallery/wealthiest-vs-happiest.jpg" width="280" alt="Wealthiest vs happiest"></a><br>Wealthiest vs happiest | <a href="examples/best-selling-consoles.json"><img src="docs/gallery/best-selling-consoles.jpg" width="280" alt="Best-selling consoles"></a><br>Best-selling consoles |
-| <a href="examples/net-worth-by-age.json"><img src="docs/gallery/net-worth-by-age.jpg" width="280" alt="Mean vs median net worth"></a><br>Mean vs median net worth | <a href="examples/billionaires-invest.json"><img src="docs/gallery/billionaires-invest.jpg" width="280" alt="How billionaires invest"></a><br>How billionaires invest | <a href="examples/us-population-change.json"><img src="docs/gallery/us-population-change.jpg" width="280" alt="U.S. population change"></a><br>U.S. population change |
+| <a href="examples/oil-exporters-barrel.json"><img src="docs/gallery/oil-exporters-barrel.jpg" width="280" alt="Oil exporters in a barrel"></a><br>Oil exporters in a barrel | <a href="examples/net-worth-by-generation.json"><img src="docs/gallery/net-worth-by-generation.jpg" width="280" alt="Net worth by generation"></a><br>Net worth by generation | <a href="examples/wealthiest-vs-happiest.json"><img src="docs/gallery/wealthiest-vs-happiest.jpg" width="280" alt="Wealthiest vs happiest"></a><br>Wealthiest vs happiest |
+| <a href="examples/best-selling-consoles.json"><img src="docs/gallery/best-selling-consoles.jpg" width="280" alt="Best-selling consoles"></a><br>Best-selling consoles | <a href="examples/net-worth-by-age.json"><img src="docs/gallery/net-worth-by-age.jpg" width="280" alt="Mean vs median net worth"></a><br>Mean vs median net worth | <a href="examples/billionaires-invest.json"><img src="docs/gallery/billionaires-invest.jpg" width="280" alt="How billionaires invest"></a><br>How billionaires invest |
+| <a href="examples/us-population-change.json"><img src="docs/gallery/us-population-change.jpg" width="280" alt="U.S. population change"></a><br>U.S. population change | <a href="examples/world-100-people.json"><img src="docs/gallery/world-100-people.jpg" width="280" alt="If the world were 100 people"></a><br>If the world were 100 people |   |
 
 ## Why
 
@@ -33,22 +34,35 @@ There was nothing that let an AI agent do that. There are chart libraries (gener
 ## Quick start
 
 ```bash
+npx vivid-charts render spec.json -o poster.png
+```
+
+Or install it (`npm i -g vivid-charts`, then `vivid …`), or from source:
+
+```bash
 git clone https://github.com/Ahmet-Dedeler/vivid-charts && cd vivid-charts
 pnpm install && pnpm build
 node dist/cli.js render examples/worlds-forests.json -o forests.png
 ```
 
-Other commands:
+Commands:
 
 ```bash
-node dist/cli.js charts          # chart types
-node dist/cli.js palettes        # palettes + type presets
-node dist/cli.js icons diamond   # search ~10k bundled icons
-node dist/cli.js render spec.json -o out.svg
-node dist/cli.js render spec.json -o out@2x.png --scale 2
+vivid charts          # chart types
+vivid palettes        # palettes + type presets
+vivid icons diamond   # search ~14k bundled icons and brand logos
+vivid render spec.json -o out.svg
+vivid render spec.json -o out@2x.png --scale 2
 ```
 
-Photo cutouts (`cutout:wiki:Taylor_Swift`) use [rembg](https://github.com/danielgatis/rembg) through `uvx`, so you need [uv](https://docs.astral.sh/uv/). The first cutout downloads a ~170 MB model, after that everything is cached in `~/.cache/vivid-charts`.
+As a library:
+
+```ts
+import { renderPNG } from 'vivid-charts';
+const png = await renderPNG(spec, { scale: 2 });
+```
+
+Photo cutouts (`cutout:wiki:Taylor_Swift`) use [rembg](https://github.com/danielgatis/rembg) through `uvx`, so you need [uv](https://docs.astral.sh/uv/). The first cutout downloads a ~170 MB model, after that everything is cached in `~/.cache/vivid-charts`. Without uv (or with `VIVID_NO_CUTOUT=1`) the original photos are used, so specs always render.
 
 ## Use it as an agent skill
 
@@ -57,6 +71,7 @@ Copy or symlink the skill folder wherever your agent reads skills:
 ```bash
 cp -r skill/vivid-charts ~/.claude/skills/        # Claude Code
 cp -r skill/vivid-charts ~/.agents/skills/        # Codex / OpenCode style
+# or, from the npm package: cp -r "$(npm root -g)/vivid-charts/skill/vivid-charts" ~/.claude/skills/
 ```
 
 Then ask for things like "make a Visual Capitalist style poster of the 15 biggest companies by market cap" and it'll pick a form, write the spec, render it, look at the PNG and fix what's off.
@@ -99,7 +114,7 @@ Full reference: [`skill/vivid-charts/references/spec.md`](skill/vivid-charts/ref
 | `flow-split` | X% of people hold Y% of the thing | [net worth by generation](examples/net-worth-by-generation.json) |
 | `dual-ranking` | overlap between two top-N lists | [wealthiest vs happiest](examples/wealthiest-vs-happiest.json) |
 | `sized-tiles` | objects as bars, on shelves | [best-selling consoles](examples/best-selling-consoles.json) |
-| `pictogram` | countable units, "1 in N" | |
+| `pictogram` | countable units, "1 in N" | [world as 100 people](examples/world-100-people.json) |
 | `treemap` | part-to-whole with exact numbers, grouped | [billionaires by country](examples/billionaires-by-country.json) |
 | `area-time` | stacked area / streamgraph with event pins | [U.S. electricity mix](examples/us-electricity-mix.json) |
 | `bubble-pack` | big vs small, with flags/logos | [household net worth](examples/household-net-worth.json) |
@@ -118,6 +133,7 @@ When none of them fit, draw your own with an `svg` layer or `registerChart()`. T
 - All text becomes vector paths through opentype.js, so measurement is exact and the output looks the same everywhere (no font embedding, no "why is my font different in Figma").
 - Layout math: d3-scale, d3-geo, d3-hierarchy, d3-voronoi-treemap.
 - Re-render the gallery with `pnpm examples` (or `pnpm examples forests` for one).
+- `pnpm test` renders every example and fails on any error or warning (missing icon, asset, glyph). CI runs it on every push.
 
 See [`AGENTS.md`](AGENTS.md) for repo rules and [`NOTICE.md`](NOTICE.md) for font, icon and map licenses.
 

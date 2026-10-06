@@ -1,7 +1,8 @@
 # Spec reference
 
 Coordinates are canvas pixels. Default canvas 1200×1500. Every layer takes
-`box: {x, y, w, h}`, optional `opacity` and `rotate` (degrees).
+`box: {x, y, w, h}`, optional `opacity`, `rotate` (degrees) and `clipPath` (an SVG
+path in canvas coordinates; clip any chart to the shape of an object).
 
 ## Top level
 
@@ -126,7 +127,8 @@ the silhouette and drawn as white-outlined stickers. Give it a tall canvas
 ### voronoi-circle
 `items: [{ label, value, group, flag, short, display }]`, `groups: { key:
 { label, color, image } }`, `format`, `ring`, `texture`, `border`,
-`borderWidth`, `groupGap`, `seed`, `callout`, `shape: circle | square`,
+`borderWidth`, `groupGap`, `seed`, `callout`, `shape: circle | square | barrel |
+polygon` (+ `polygon: [[u, v]…]` in box fractions), `labelColor`,
 `texture: 'canopy' (default, aerial tree crowns) | 'lighting' | false`.
 
 ### stacked-columns

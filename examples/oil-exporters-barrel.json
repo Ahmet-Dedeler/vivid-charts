@@ -1,0 +1,437 @@
+{
+  "palette": {
+    "name": "poster",
+    "bg": "#f2b632",
+    "ink": "#111111",
+    "muted": "#3a2c10"
+  },
+  "type": {
+    "preset": "impact",
+    "display": {
+      "family": "Oswald",
+      "weight": 700
+    }
+  },
+  "background": {
+    "gradient": [
+      "#f6c24a",
+      "#e9a823"
+    ],
+    "grain": 0.06,
+    "glow": "#ffe08a",
+    "glowAt": [
+      0.55,
+      0.45
+    ]
+  },
+  "title": {
+    "box": {
+      "x": 50,
+      "y": 70,
+      "w": 300,
+      "h": 0
+    },
+    "lines": [
+      {
+        "text": "WORLD'S",
+        "role": "display",
+        "size": 70,
+        "family": "Oswald",
+        "weight": 700,
+        "stretch": 0.82,
+        "gap": 0
+      },
+      {
+        "text": "LARGEST",
+        "role": "display",
+        "size": 70,
+        "family": "Oswald",
+        "weight": 700,
+        "stretch": 0.82,
+        "gap": 6
+      },
+      {
+        "text": "OIL",
+        "role": "display",
+        "size": 190,
+        "family": "Anton",
+        "stretch": 0.9,
+        "gap": 10
+      },
+      {
+        "text": "EXPORTERS",
+        "role": "display",
+        "size": 62,
+        "family": "Oswald",
+        "weight": 700,
+        "stretch": 0.82,
+        "gap": 14
+      },
+      {
+        "text": "Million barrels per day, 2025",
+        "role": "label",
+        "size": 22,
+        "weight": 600
+      }
+    ]
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "shape": "rect",
+      "box": {
+        "x": 360,
+        "y": 1332,
+        "w": 500,
+        "h": 26
+      },
+      "fill": "rgba(0,0,0,0.25)",
+      "radius": 13
+    },
+    {
+      "type": "voronoi-circle",
+      "box": {
+        "x": 330,
+        "y": 270,
+        "w": 560,
+        "h": 1070
+      },
+      "shape": "barrel",
+      "ring": false,
+      "texture": false,
+      "border": "#ffffff",
+      "borderWidth": 1.6,
+      "groupGap": 7,
+      "labelColor": "#ffffff",
+      "seed": 11,
+      "groups": {
+        "me": {
+          "label": "Middle East",
+          "color": "#151515"
+        },
+        "af": {
+          "label": "Africa",
+          "color": "#151515"
+        },
+        "ap": {
+          "label": "Asia-Pacific",
+          "color": "#151515"
+        },
+        "sa": {
+          "label": "C. & S. America",
+          "color": "#151515"
+        },
+        "na": {
+          "label": "North America",
+          "color": "#151515"
+        },
+        "eu": {
+          "label": "Europe",
+          "color": "#151515"
+        }
+      },
+      "items": [
+        {
+          "label": "Saudi Arabia",
+          "value": 7900000.0,
+          "group": "me",
+          "display": "7.9M",
+          "flag": "sa",
+          "short": "SAU"
+        },
+        {
+          "label": "UAE",
+          "value": 3900000.0,
+          "group": "me",
+          "display": "3.9M",
+          "flag": "ae",
+          "short": "UAE"
+        },
+        {
+          "label": "Iraq",
+          "value": 3500000.0,
+          "group": "me",
+          "display": "3.5M",
+          "flag": "iq",
+          "short": "IRQ"
+        },
+        {
+          "label": "Kuwait",
+          "value": 2400000.0,
+          "group": "me",
+          "display": "2.4M",
+          "flag": "kw",
+          "short": "KWT"
+        },
+        {
+          "label": "Iran",
+          "value": 2100000.0,
+          "group": "me",
+          "display": "2.1M",
+          "flag": "ir",
+          "short": "IRN"
+        },
+        {
+          "label": "Oman",
+          "value": 1100000.0,
+          "group": "me",
+          "display": "1.1M",
+          "flag": "om",
+          "short": "OMN"
+        },
+        {
+          "label": "Qatar",
+          "value": 1000000.0,
+          "group": "me",
+          "display": "1.0M",
+          "flag": "qa",
+          "short": "QAT"
+        },
+        {
+          "label": "Rest of Middle East",
+          "value": 400000.0,
+          "group": "me",
+          "display": "0.4M",
+          "short": "ME"
+        },
+        {
+          "label": "Nigeria",
+          "value": 1600000.0,
+          "group": "af",
+          "display": "1.6M",
+          "flag": "ng",
+          "short": "NGA"
+        },
+        {
+          "label": "Libya",
+          "value": 1300000.0,
+          "group": "af",
+          "display": "1.3M",
+          "flag": "ly",
+          "short": "LBY"
+        },
+        {
+          "label": "Algeria",
+          "value": 1000000.0,
+          "group": "af",
+          "display": "1.0M",
+          "flag": "dz",
+          "short": "DZA"
+        },
+        {
+          "label": "Angola",
+          "value": 1000000.0,
+          "group": "af",
+          "display": "1.0M",
+          "flag": "ao",
+          "short": "AGO"
+        },
+        {
+          "label": "Rest of Africa",
+          "value": 1200000.0,
+          "group": "af",
+          "display": "1.2M",
+          "short": "AF"
+        },
+        {
+          "label": "Kazakhstan",
+          "value": 1600000.0,
+          "group": "ap",
+          "display": "1.6M",
+          "flag": "kz",
+          "short": "KAZ"
+        },
+        {
+          "label": "Singapore",
+          "value": 1600000.0,
+          "group": "ap",
+          "display": "1.6M",
+          "flag": "sg",
+          "short": "SGP"
+        },
+        {
+          "label": "S. Korea",
+          "value": 1400000.0,
+          "group": "ap",
+          "display": "1.4M",
+          "flag": "kr",
+          "short": "KOR"
+        },
+        {
+          "label": "India",
+          "value": 1400000.0,
+          "group": "ap",
+          "display": "1.4M",
+          "flag": "in",
+          "short": "IND"
+        },
+        {
+          "label": "China",
+          "value": 1300000.0,
+          "group": "ap",
+          "display": "1.3M",
+          "flag": "cn",
+          "short": "CHN"
+        },
+        {
+          "label": "Malaysia",
+          "value": 1000000.0,
+          "group": "ap",
+          "display": "1.0M",
+          "flag": "my",
+          "short": "MYS"
+        },
+        {
+          "label": "Rest of Asia-Pacific",
+          "value": 2500000.0,
+          "group": "ap",
+          "display": "2.5M",
+          "short": "AP"
+        },
+        {
+          "label": "Brazil",
+          "value": 2400000.0,
+          "group": "sa",
+          "display": "2.4M",
+          "flag": "br",
+          "short": "BRA"
+        },
+        {
+          "label": "Venezuela",
+          "value": 900000.0,
+          "group": "sa",
+          "display": "0.9M",
+          "flag": "ve",
+          "short": "VEN"
+        },
+        {
+          "label": "Rest of C&S America",
+          "value": 2300000.0,
+          "group": "sa",
+          "display": "2.3M",
+          "short": "LAT"
+        },
+        {
+          "label": "U.S.",
+          "value": 10700000.0,
+          "group": "na",
+          "display": "10.7M",
+          "flag": "us",
+          "short": "USA"
+        },
+        {
+          "label": "Canada",
+          "value": 4099999.9999999995,
+          "group": "na",
+          "display": "4.1M",
+          "flag": "ca",
+          "short": "CAN"
+        },
+        {
+          "label": "Mexico",
+          "value": 800000.0,
+          "group": "na",
+          "display": "0.8M",
+          "flag": "mx",
+          "short": "MEX"
+        },
+        {
+          "label": "Russia",
+          "value": 6600000.0,
+          "group": "eu",
+          "display": "6.6M",
+          "flag": "ru",
+          "short": "RUS"
+        },
+        {
+          "label": "Netherlands",
+          "value": 2100000.0,
+          "group": "eu",
+          "display": "2.1M",
+          "flag": "nl",
+          "short": "NLD"
+        },
+        {
+          "label": "Norway",
+          "value": 2000000.0,
+          "group": "eu",
+          "display": "2.0M",
+          "flag": "no",
+          "short": "NOR"
+        },
+        {
+          "label": "UK",
+          "value": 900000.0,
+          "group": "eu",
+          "display": "0.9M",
+          "flag": "gb",
+          "short": "GBR"
+        },
+        {
+          "label": "Rest of Europe",
+          "value": 4400000.0,
+          "group": "eu",
+          "display": "4.4M",
+          "short": "EU"
+        }
+      ]
+    },
+    {
+      "type": "svg",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "markup": "<path d=\"M336,612.4000000000001 Q610.0,642.4000000000001 884,612.4000000000001\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"2.5\" opacity=\"0.28\"/><path d=\"M336,997.6 Q610.0,1027.6 884,997.6\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"2.5\" opacity=\"0.28\"/><path d=\"M370,330 V1280\" stroke=\"#ffffff\" stroke-width=\"10\" opacity=\"0.06\" stroke-linecap=\"round\"/><ellipse cx=\"610.0\" cy=\"262\" rx=\"218.0\" ry=\"26\" fill=\"#2a2a2a\" stroke=\"#ffffff\" stroke-width=\"3\"/><ellipse cx=\"610.0\" cy=\"260\" rx=\"194.0\" ry=\"16\" fill=\"none\" stroke=\"#555\" stroke-width=\"2\"/><ellipse cx=\"730.0\" cy=\"258\" rx=\"22\" ry=\"7\" fill=\"#111\" stroke=\"#666\" stroke-width=\"1.5\"/>"
+    },
+    {
+      "type": "annotation",
+      "box": {
+        "x": 930,
+        "y": 330,
+        "w": 230,
+        "h": 100
+      },
+      "text": "The **Middle East** makes up 29% of the world's oil exports.",
+      "style": {
+        "italic": false,
+        "size": 22
+      }
+    },
+    {
+      "type": "annotation",
+      "box": {
+        "x": 40,
+        "y": 1000,
+        "w": 270,
+        "h": 100
+      },
+      "text": "Nearly two-thirds of U.S. oil exports are refined fuels like gasoline, diesel and jet fuel.",
+      "style": {
+        "italic": true,
+        "size": 20
+      }
+    },
+    {
+      "type": "stat",
+      "box": {
+        "x": 930,
+        "y": 1180,
+        "w": 230,
+        "h": 80
+      },
+      "value": "76.7M",
+      "label": "GLOBAL TOTAL",
+      "size": 54,
+      "color": "#111111",
+      "align": "start"
+    }
+  ],
+  "footer": {
+    "source": "OPEC Annual Statistical Bulletin 2026; crude oil plus refined products, 2025 averages.",
+    "note": "Cell area is proportional to exports. Values as published via Visual Capitalist.",
+    "brand": "vivid charts"
+  }
+}

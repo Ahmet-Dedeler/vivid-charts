@@ -16,8 +16,9 @@ source), render it, **look at it**, and iterate until it is good.
 ## 0. Setup (once)
 
 ```bash
-# from a clone of github.com/Ahmet-Dedeler/vivid-charts
-pnpm install && pnpm build          # or: npx github:Ahmet-Dedeler/vivid-charts
+npx vivid-charts charts             # list chart types (or: npm i -g vivid-charts → `vivid …`)
+npx vivid-charts render spec.json -o out.png [--scale 2]
+# from source: git clone github.com/Ahmet-Dedeler/vivid-charts && pnpm install && pnpm build
 node dist/cli.js charts             # list chart types
 node dist/cli.js palettes           # palettes + type presets
 node dist/cli.js icons diamond      # search ~10k bundled icons
@@ -88,8 +89,9 @@ many as fit; the best pieces use 6–8.
     discs, small topical icons orbiting a portrait (diamonds for Jay-Z,
     butterflies for Taylor Swift). Brands get logos, not names.
 11. **Put the chart inside an object** when the topic has one: Voronoi cells
-    in an oil barrel, a donut behind a coin, bars as skyscrapers or filling
-    ballot boxes (draw the object as an `svg`/`image` layer, then the chart).
+    in an oil barrel (`voronoi-circle` with `shape: 'barrel'` or any
+    `polygon`), a donut behind a coin, bars as skyscrapers or filling ballot
+    boxes (`clipPath` on any layer, plus an `svg`/`image` layer for the object).
 12. **Depth, lightly.** Soft shadows under objects, a glow behind the title,
     columns that rise *into* a photo. Never 3D charts.
 13. **Respect the reader.** Source line, notes on methodology, honest scales
@@ -155,6 +157,7 @@ catalogue is a starting point, not a cage.
 | Mean vs median, A vs B per category | `dumbbell` | Net worth by age |
 | Survey splits, mixes per row | `stacked-bars` | How billionaires plan to invest |
 | State values where area misleads | `tile-map` | U.S. population change to 2040 |
+| Shares inside a topical object | `voronoi-circle` + `shape: 'barrel'`/`polygon` | Oil exporters in a barrel |
 
 Full catalogue with when-to-use, variations and composition notes:
 `references/forms.md`.
