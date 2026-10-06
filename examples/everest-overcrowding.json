@@ -3,41 +3,30 @@
   "type": "impact",
   "background": {
     "gradient": [
-      "#1d5fc8",
-      "#5d97e0",
-      "#e9f1fb"
+      "#1d5fcf",
+      "#2f74db",
+      "#bcd3f0",
+      "#eef3fa"
     ],
-    "image": "commons:Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg",
-    "imageBox": {
-      "x": 0,
-      "y": 0,
-      "w": 1200,
-      "h": 1250
-    },
-    "imageFade": "bottom",
-    "imageOpacity": 0.95,
-    "grain": 0.03,
-    "glow": "#0d3f8f",
-    "glowAt": [
-      0.15,
-      0.2
-    ]
+    "grain": 0.03
   },
   "title": {
     "box": {
-      "x": 90,
-      "y": 80,
-      "w": 520,
+      "x": 96,
+      "y": 82,
+      "w": 480,
       "h": 0
     },
+    "shadow": false,
     "lines": [
       {
         "text": "The Rise of",
         "role": "note",
-        "size": 34,
+        "size": 30,
         "fill": "#ffffff",
         "italic": true,
-        "weight": 600
+        "weight": 600,
+        "gap": 10
       },
       {
         "runs": [
@@ -46,39 +35,54 @@
           },
           {
             "text": " on",
-            "size": 34
+            "size": 30
           }
         ],
         "role": "display",
-        "size": 82,
+        "size": 70,
         "fill": "#ffffff",
         "family": "Barlow Condensed",
-        "weight": 800
+        "weight": 800,
+        "gap": 2
       },
       {
         "text": "EVEREST",
         "role": "display",
-        "size": 150,
+        "size": 124,
         "fill": "#ffffff",
         "family": "Barlow Condensed",
         "weight": 800
       }
     ],
-    "dek": "Mt. Everest used to be a two-season mountain. Now it's a two-week one, summited by **seven times** as many people.",
-    "dekWidth": 470,
-    "dekSize": 26,
-    "dekColor": "#ffffff",
-    "shadow": true,
-    "dekPanel": "rgba(13,40,95,0.62)"
+    "dekRule": "#ffffff",
+    "dek": "**Mt. Everest** used to be a two-season mountain. Now it's a two-week one, summited by **seven times** as many people.",
+    "dekWidth": 440,
+    "dekSize": 21,
+    "dekColor": "#ffffff"
   },
   "layers": [
     {
+      "type": "image",
+      "src": "commons:Hillary_Step_near_Everest_top.jpg",
+      "box": {
+        "x": 360,
+        "y": -20,
+        "w": 1340,
+        "h": 845
+      },
+      "fade": {
+        "left": 0.22,
+        "bottom": 0.4
+      },
+      "focus": "top"
+    },
+    {
       "type": "stacked-columns",
       "box": {
-        "x": 60,
-        "y": 160,
-        "w": 1100,
-        "h": 1240
+        "x": 40,
+        "y": 150,
+        "w": 1130,
+        "h": 1220
       },
       "categories": [
         "1995",
@@ -308,13 +312,17 @@
           4
         ],
         "color": "#e0105a",
-        "height": 120
-      }
+        "height": 96
+      },
+      "barGap": 0.12,
+      "tickColor": "#ffffff"
     }
   ],
   "footer": {
-    "source": "The Himalayan Database. Values approximated for this demo from a published chart; visitors are clients and independent climbers, workers are hired staff, mostly Nepali.",
+    "source": "The Himalayan Database, 2,396 expeditions from 1921 (2,047 from 1995). Values in this demo are approximated from a published chart.",
+    "note": "Visitors are clients and independent climbers; workers are hired staff, mostly Nepali. Deaths cover people on registered expeditions.",
     "brand": "vivid charts",
-    "color": "#29436b"
+    "color": "#29436b",
+    "brandColor": "#0e2a5c"
   }
 }

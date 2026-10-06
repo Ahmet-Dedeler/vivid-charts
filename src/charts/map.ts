@@ -9,7 +9,10 @@
  * Keys: world → ISO alpha-2, alpha-3, numeric, or English name. us-states →
  * postal code ("CA") or name.
  */
-import { geoAlbersUsa, geoArea, geoCentroid, geoEqualEarth, geoMercator, geoPath, geoNaturalEarth1, type GeoProjection } from 'd3-geo';
+import { geoAlbersUsa, geoArea, geoCentroid, geoConicConformal, geoEqualEarth, geoMercator, geoPath, geoNaturalEarth1, type GeoProjection } from 'd3-geo';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { feature } from 'topojson-client';
 import { alpha, darken, mix, onColor, ramp } from '../core/color.js';
@@ -38,8 +41,8 @@ const US_POSTAL: Record<string, string> = {
 
 export interface MapLayer extends LayerBase {
   type: 'map';
-  map?: 'world' | 'us-states';
-  projection?: 'equal-earth' | 'natural-earth' | 'mercator' | 'albers-usa';
+  map?: MapKind;
+  projection?: 'equal-earth' | 'natural-earth' | 'mercator' | 'albers-usa' | 'conic';
   /** Numeric values per region key → stepped choropleth. */
   values?: Record<string, number>;
   /** Category per region key → categorical fill (colors from `categoryColors`). */
@@ -56,9 +59,19 @@ export interface MapLayer extends LayerBase {
   labels?: boolean | 'auto';
   format?: FormatOptions;
   legend?: { title?: string; x?: number; y?: number; w?: number; h?: number; orientation?: 'vertical' | 'horizontal' } | false;
+  /** Tag pills ("HIGHEST") with a leader to the region. `text` goes under the pill (\n for lines). */
   tags?: { key: string; label: string; text?: string; dx?: number; dy?: number }[];
+  /**
+   * Regions drawn in their own circle instead of on the main map (Hawaii, D.C.):
+   * excluded from fitting, scaled to fill the circle, labelled with name + value.
+   */
+  insets?: { key: string; x: number; y: number; r: number; label?: 'above' | 'right' | 'none' }[];
+  /** Clip the main map to this canvas rectangle (e.g. crop Arctic islands under the title). */
+  clip?: Box;
   pins?: { lon: number; lat: number; label?: string; color?: string; size?: number }[];
   bubbles?: { lon: number; lat: number; value: number; label?: string; color?: string }[];
+  /** Fit the projection to just these region keys (others still draw, possibly off-box). */
+  fit?: string[];
   /** Crop to a lon/lat extent [[west, south], [east, north]]. */
   extent?: [[number, number], [number, number]];
   /** Exclude regions (e.g. Antarctica "AQ"). */
@@ -66,13 +79,35 @@ export interface MapLayer extends LayerBase {
   shadow?: boolean;
 }
 
+type MapKind = 'world' | 'us-states' | 'us-canada';
+
+const CA_NAME: Record<string, string> = {
+  Alberta: 'AB', 'British Columbia': 'BC', Manitoba: 'MB', 'New Brunswick': 'NB', 'Newfoundland and Labrador': 'NL', 'Nova Scotia': 'NS',
+  'Northwest Territories': 'NT', Nunavut: 'NU', Ontario: 'ON', 'Prince Edward Island': 'PE', Quebec: 'QC', Québec: 'QC', Saskatchewan: 'SK', Yukon: 'YT',
+};
+
+function dataFile(name: string): string {
+  let dir = path.dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 5; i++) {
+    const f = path.join(dir, 'data', name);
+    if (fs.existsSync(f)) return f;
+    dir = path.dirname(dir);
+  }
+  throw new Error(`vivid: data file not found: ${name}`);
+}
+
 type Feat = { type: 'Feature'; id?: string; properties: { name: string }; geometry: any; key: string; label: string };
 
-function loadFeatures(map: 'world' | 'us-states'): Feat[] {
-  if (map === 'us-states') {
+function loadFeatures(map: MapKind): Feat[] {
+  if (map === 'us-states' || map === 'us-canada') {
     const topo = require('us-atlas/states-10m.json');
     const fc = feature(topo, topo.objects.states) as any;
-    return fc.features.map((f: any) => ({ ...f, key: US_POSTAL[f.properties.name] ?? f.properties.name, label: US_POSTAL[f.properties.name] ?? f.properties.name }));
+    const us = fc.features.map((f: any) => ({ ...f, key: US_POSTAL[f.properties.name] ?? f.properties.name, label: US_POSTAL[f.properties.name] ?? f.properties.name }));
+    if (map === 'us-states') return us;
+    // Natural Earth 1:50m admin-1 (public domain), simplified, in data/.
+    const ca = JSON.parse(fs.readFileSync(dataFile('canada-provinces.json'), 'utf8'));
+    const cfc = feature(ca, ca.objects.provinces) as any;
+    return [...us, ...cfc.features.map((f: any) => ({ ...f, key: f.properties.postal, label: f.properties.postal }))];
   }
   const topo = require('world-atlas/countries-50m.json');
   const fc = feature(topo, topo.objects.countries) as any;
@@ -82,8 +117,9 @@ function loadFeatures(map: 'world' | 'us-states'): Feat[] {
   });
 }
 
-function normKey(k: string, map: 'world' | 'us-states'): string {
+function normKey(k: string, map: MapKind): string {
   if (map === 'us-states') return US_POSTAL[k] ?? k.toUpperCase();
+  if (map === 'us-canada') return US_POSTAL[k] ?? CA_NAME[k] ?? k.toUpperCase();
   if (/^\d{3}$/.test(k)) return iso.numericToAlpha2(k) ?? k;
   if (/^[A-Za-z]{3}$/.test(k)) return iso.alpha3ToAlpha2(k.toUpperCase()) ?? k;
   if (/^[A-Za-z]{2}$/.test(k)) return k.toUpperCase();
@@ -94,14 +130,36 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
   const { pal, type, defs } = ctx;
   const map = l.map ?? 'world';
   const exclude = new Set((l.exclude ?? (map === 'world' ? ['AQ'] : [])).map((k) => normKey(k, map)));
-  const feats = loadFeatures(map).filter((f) => !exclude.has(f.key));
+  const insetKeys = new Set((l.insets ?? []).map((i) => normKey(i.key, map)));
+  const all = loadFeatures(map).filter((f) => !exclude.has(f.key));
+  const feats = all.filter((f) => !insetKeys.has(f.key));
   const fc = { type: 'FeatureCollection', features: feats } as any;
 
   const proj: GeoProjection =
-    l.projection === 'mercator' ? geoMercator() : l.projection === 'natural-earth' ? geoNaturalEarth1() : map === 'us-states' || l.projection === 'albers-usa' ? (geoAlbersUsa() as unknown as GeoProjection) : geoEqualEarth();
+    l.projection === 'mercator'
+      ? geoMercator()
+      : l.projection === 'natural-earth'
+        ? geoNaturalEarth1()
+        : l.projection === 'conic' || map === 'us-canada'
+          ? geoConicConformal().parallels([40, 64]).rotate([98, 0])
+          : map === 'us-states' || l.projection === 'albers-usa'
+            ? (geoAlbersUsa() as unknown as GeoProjection)
+            : geoEqualEarth();
+  // Fit to a lon/lat box via a dense MultiPoint along its edges (polygon winding
+  // on the sphere is easy to get backwards, which fits the whole globe instead).
   const fitTarget = l.extent
-    ? { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[l.extent[0], [l.extent[1][0], l.extent[0][1]], l.extent[1], [l.extent[0][0], l.extent[1][1]], l.extent[0]]] } }
-    : fc;
+    ? (() => {
+        const [[w, sth], [e, n]] = l.extent!;
+        const pts: [number, number][] = [];
+        for (let i = 0; i <= 20; i++) {
+          const t = i / 20;
+          pts.push([w + (e - w) * t, sth], [w + (e - w) * t, n], [w, sth + (n - sth) * t], [e, sth + (n - sth) * t]);
+        }
+        return { type: 'MultiPoint', coordinates: pts };
+      })()
+    : l.fit
+      ? { type: 'FeatureCollection', features: feats.filter((f) => l.fit!.map((k) => normKey(k, map)).includes(f.key)) }
+      : fc;
   proj.fitExtent([[box.x, box.y], [box.x + box.w, box.y + box.h]], fitTarget as any);
   const path = geoPath(proj);
 
@@ -131,12 +189,37 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
     const fill = v !== undefined ? colorFor(v) : c !== undefined ? catColor(c) : empty;
     regionPaths.push(h('path', { d, fill, stroke, strokeWidth: l.strokeWidth ?? (map === 'world' ? 0.6 : 1), strokeLinejoin: 'round' }));
   }
-  parts.push(h('g', { filter: l.shadow ? defs.shadow({ dy: 6, blur: 18, opacity: 0.25 }) : undefined }, ...regionPaths));
+  parts.push(h('g', { filter: l.shadow ? defs.shadow({ dy: 6, blur: 18, opacity: 0.25 }) : undefined, clipPath: l.clip ? defs.clipPath(rectPath(l.clip.x, l.clip.y, l.clip.w, l.clip.h, 0)) : undefined }, ...regionPaths));
+
+  // Insets: each region in its own circle, fitted to ~60% of it.
+  const insetCenters = new Map<string, [number, number, number]>();
+  for (const ins of l.insets ?? []) {
+    const key = normKey(ins.key, map);
+    const f = all.find((x) => x.key === key);
+    if (!f) continue;
+    insetCenters.set(key, [ins.x, ins.y, ins.r]);
+    const ip = geoMercator().fitExtent([[ins.x - ins.r * 0.62, ins.y - ins.r * 0.62], [ins.x + ins.r * 0.62, ins.y + ins.r * 0.62]], f as any);
+    const v = values[f.key];
+    const fill = v !== undefined ? colorFor(v) : empty;
+    parts.push(h('circle', { cx: ins.x, cy: ins.y, r: ins.r, fill: pal.bg, stroke: alpha(pal.ink, 0.55), strokeWidth: 1.5 }));
+    parts.push(h('path', { d: geoPath(ip)(f as any) ?? '', fill, stroke, strokeWidth: 0.8 }));
+    if (ins.label !== 'none' && v !== undefined) {
+      const ls: TextStyle = { ...type.label, size: 20, weight: 500, fill: pal.ink };
+      const vs: TextStyle = { ...type.number, size: 24, italic: false, fill: pal.ink };
+      if (ins.label === 'right') {
+        parts.push(text(f.label, ins.x + ins.r + 14, ins.y - 4, ls));
+        parts.push(runs(editorial(v, vs, { ...l.format, style: 'plain' }), ins.x + ins.r + 14, ins.y + 24, vs));
+      } else {
+        parts.push(text(f.label, ins.x, ins.y - ins.r - 40, ls, 'middle'));
+        parts.push(runs(editorial(v, vs, { ...l.format, style: 'plain' }), ins.x, ins.y - ins.r - 12, vs, 'middle'));
+      }
+    }
+  }
 
   // Labels: abbreviation + value at the centroid, or a callout when the region is tiny.
   if (l.labels && Object.keys(values).length) {
-    const ls: TextStyle = { ...type.label, size: map === 'us-states' ? 20 : 15, weight: 500 };
-    const vs: TextStyle = { ...type.number, size: map === 'us-states' ? 22 : 16, italic: false };
+    const ls: TextStyle = { ...type.label, size: map === 'us-states' ? 20 : map === 'us-canada' ? 16 : 15, weight: 500 };
+    const vs: TextStyle = { ...type.number, size: map === 'us-states' ? 22 : map === 'us-canada' ? 18 : 16, italic: false };
     const callouts: { f: Feat; c: [number, number] }[] = [];
     for (const f of feats) {
       const v = values[f.key];
@@ -146,13 +229,22 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
       const b = path.bounds(f as any);
       const w = b[1][0] - b[0][0];
       const hh = b[1][1] - b[0][1];
-      const vRuns = editorial(v, vs, { ...l.format, style: 'plain' });
-      const need = Math.max(measure(f.label, ls), 40);
-      if (w > need + 6 && hh > 40) {
-        const fill = onColor(colorFor(v), '#111', '#fff');
-        parts.push(text(f.label, c[0], c[1] - 3, { ...ls, fill }, 'middle'));
-        parts.push(runs(vRuns, c[0], c[1] + vs.size! * 0.95, { ...vs, fill }, 'middle'));
-      } else if (map === 'us-states') callouts.push({ f, c });
+      // Try full size, then a compact size, before giving up and using a callout.
+      let placed = false;
+      for (const k of [1, 0.74]) {
+        const lsk = { ...ls, size: ls.size! * k };
+        const vsk = { ...vs, size: vs.size! * k };
+        const vRuns = editorial(v, vsk, { ...l.format, style: 'plain' });
+        const need = Math.max(measure(f.label, lsk), measure(vRuns.map((r) => r.text).join(''), vsk));
+        if (w > need + 4 && hh > (lsk.size! + vsk.size!) * 1.05) {
+          const fill = onColor(colorFor(v), '#111', '#fff');
+          parts.push(text(f.label, c[0], c[1] - 3 * k, { ...lsk, fill }, 'middle'));
+          parts.push(runs(vRuns, c[0], c[1] + vsk.size! * 0.95, { ...vsk, fill }, 'middle'));
+          placed = true;
+          break;
+        }
+      }
+      if (!placed && map !== 'world') callouts.push({ f, c });
     }
     // Stack callouts in a column to the right of the map, sorted top→bottom.
     callouts.sort((a, b) => a.c[1] - b.c[1]);
@@ -168,19 +260,30 @@ function render(l: MapLayer, box: Box, ctx: Ctx): string {
     });
   }
 
-  // HIGHEST / LOWEST style tags.
+  // HIGHEST / LOWEST tags: pill, optional caption lines under it, leader to the region (or its inset).
   for (const tg of l.tags ?? []) {
-    const f = feats.find((x) => x.key === normKey(tg.key, map));
+    const key = normKey(tg.key, map);
+    const f = all.find((x) => x.key === key);
     if (!f) continue;
-    const c0 = path.centroid(f as any);
-    const c: [number, number] = [c0[0] + (tg.dx ?? 0), c0[1] + (tg.dy ?? 0)];
+    const inset = insetCenters.get(key);
+    const c0: [number, number] = inset ? [inset[0], inset[1] - inset[2]] : (path.centroid(f as any) as [number, number]);
+    const c: [number, number] = [c0[0] + (tg.dx ?? 0), c0[1] + (tg.dy ?? -72)];
     const ts: TextStyle = { ...type.label, size: 24, weight: 800, upper: true, tracking: 0.06, fill: pal.bg };
     const w = measure(tg.label, ts) + 28;
-    parts.push(h('path', { d: rectPath(c[0] - w / 2, c[1] - 72, w, 38, 4), fill: pal.ink }));
-    parts.push(text(tg.label, c[0], c[1] - 72 + 19 + capHeight(ts) / 2, ts, 'middle'));
-    parts.push(h('path', { d: `M${c[0]},${c[1] - 34}L${c0[0]},${c0[1] - 4}`, stroke: pal.ink, strokeWidth: 2 }));
-    parts.push(h('circle', { cx: c0[0], cy: c0[1], r: 4, fill: pal.ink, stroke: pal.bg, strokeWidth: 1.5 }));
-    if (tg.text) parts.push(text(tg.text, c[0], c[1] - 84, { ...type.label, size: 22, fill: pal.ink }, 'middle'));
+    const lines = tg.text ? tg.text.split('\n') : [];
+    const capS: TextStyle = { ...type.label, size: 22, weight: 500, fill: pal.ink, upper: true };
+    const valS: TextStyle = { ...type.number, size: 26, italic: false, fill: pal.ink };
+    const blockBottom = c[1] + 19 + lines.length * 28;
+    // Leader from the nearest edge of the tag block to the region.
+    const fromY = c0[1] > c[1] ? blockBottom + 4 : c[1] - 22;
+    if (!inset || tg.dx || tg.dy) parts.push(h('path', { d: `M${r2(c[0])},${r2(fromY)}L${r2(c0[0])},${r2(c0[1])}`, stroke: pal.ink, strokeWidth: 1.6 }));
+    if (!inset) parts.push(h('circle', { cx: c0[0], cy: c0[1], r: 4, fill: pal.ink, stroke: pal.bg, strokeWidth: 1.5 }));
+    parts.push(h('path', { d: rectPath(c[0] - w / 2, c[1] - 19, w, 38, 3), fill: pal.ink }));
+    parts.push(text(tg.label, c[0], c[1] + capHeight(ts) / 2, ts, 'middle'));
+    lines.forEach((ln, i) => {
+      const isValue = /^[$€£\d]/.test(ln);
+      parts.push(text(ln, c[0], c[1] + 19 + 30 + i * 30, isValue ? valS : capS, 'middle'));
+    });
   }
 
   // Bubbles.

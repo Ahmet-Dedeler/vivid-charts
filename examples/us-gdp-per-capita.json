@@ -2,13 +2,14 @@
   "palette": "atlas",
   "type": "impact",
   "background": {
-    "color": "#111111"
+    "color": "#141414",
+    "grain": 0.03
   },
   "title": {
     "box": {
-      "x": 60,
-      "y": 60,
-      "w": 900,
+      "x": 44,
+      "y": 40,
+      "w": 700,
       "h": 0
     },
     "lines": [
@@ -18,30 +19,51 @@
         "family": "Libre Caslon Text",
         "italic": true,
         "weight": 400,
-        "size": 56,
-        "fill": "#f5f5f0"
+        "size": 50,
+        "fill": "#f5f5f0",
+        "gap": 26
       },
       {
-        "text": "IN THE 50 STATES",
+        "text": "IN THE USA AND CANADA",
         "role": "display",
-        "size": 120,
+        "size": 96,
         "fill": "#f5f5f0"
       }
     ],
-    "dekColor": "#cfcfc8",
-    "dekSize": 26
+    "dek": "All 50 U.S. states + D.C. and all 13 Canadian provinces & territories, by 2024 nominal GDP per capita",
+    "dekWidth": 600,
+    "dekColor": "#d4d4cc",
+    "dekSize": 22
   },
   "layers": [
     {
-      "type": "map",
-      "map": "us-states",
+      "type": "shape",
+      "shape": "line",
       "box": {
-        "x": 30,
-        "y": 390,
-        "w": 930,
-        "h": 720
+        "x": 0,
+        "y": 78,
+        "w": 760,
+        "h": 0
+      },
+      "stroke": "#f5f5f0",
+      "strokeWidth": 2
+    },
+    {
+      "type": "map",
+      "map": "us-canada",
+      "box": {
+        "x": 215,
+        "y": 430,
+        "w": 780,
+        "h": 800
       },
       "labels": true,
+      "clip": {
+        "x": 0,
+        "y": 288,
+        "w": 1200,
+        "h": 1212
+      },
       "values": {
         "AK": 97000,
         "WA": 108000,
@@ -93,7 +115,20 @@
         "DE": 106000,
         "MD": 87000,
         "DC": 267000,
-        "HI": 82000
+        "HI": 82000,
+        "YT": 66000,
+        "NT": 82000,
+        "NU": 100000,
+        "BC": 55000,
+        "AB": 70000,
+        "SK": 66000,
+        "MB": 47000,
+        "ON": 54000,
+        "QC": 50000,
+        "NL": 56000,
+        "NB": 41000,
+        "NS": 44000,
+        "PE": 44000
       },
       "steps": [
         65000,
@@ -108,53 +143,136 @@
         "#c3d6fb",
         "#ffffff"
       ],
-      "stroke": "#111111",
-      "strokeWidth": 1.2,
+      "empty": "#2b2b2b",
+      "stroke": "#141414",
+      "strokeWidth": 1.1,
       "format": {
         "prefix": "$",
         "decimals": 0
       },
       "legend": {
-        "title": "GDP PER CAPITA (2024)",
-        "x": 620,
-        "y": 290,
-        "w": 500,
-        "h": 30,
-        "orientation": "horizontal"
+        "title": "GDP PER CAPITA (2024, USD)",
+        "x": 1060,
+        "y": 180,
+        "w": 64,
+        "h": 440
       },
-      "tags": [
+      "insets": [
         {
-          "key": "MS",
-          "label": "Lowest",
-          "dx": 40,
-          "dy": 190
+          "key": "HI",
+          "x": 120,
+          "y": 1170,
+          "r": 70,
+          "label": "above"
         },
         {
-          "key": "NY",
-          "label": "Highest*",
-          "dx": -60,
-          "dy": -30
+          "key": "DC",
+          "x": 1065,
+          "y": 1300,
+          "r": 56,
+          "label": "none"
         }
+      ],
+      "tags": [
+        {
+          "key": "NB",
+          "label": "Lowest",
+          "text": "New Brunswick\n$41K",
+          "dx": -140,
+          "dy": -200
+        },
+        {
+          "key": "DC",
+          "label": "Highest",
+          "text": "Washington, D.C.\n$267K",
+          "dx": 0,
+          "dy": -150
+        }
+      ],
+      "fit": [
+        "WA",
+        "OR",
+        "CA",
+        "NV",
+        "ID",
+        "MT",
+        "WY",
+        "UT",
+        "AZ",
+        "CO",
+        "NM",
+        "ND",
+        "SD",
+        "NE",
+        "KS",
+        "OK",
+        "TX",
+        "MN",
+        "IA",
+        "MO",
+        "AR",
+        "LA",
+        "WI",
+        "IL",
+        "MI",
+        "IN",
+        "OH",
+        "KY",
+        "TN",
+        "MS",
+        "AL",
+        "GA",
+        "FL",
+        "SC",
+        "NC",
+        "VA",
+        "WV",
+        "PA",
+        "NY",
+        "ME",
+        "NH",
+        "VT",
+        "MA",
+        "RI",
+        "CT",
+        "NJ",
+        "DE",
+        "MD",
+        "BC",
+        "AB",
+        "SK",
+        "MB",
+        "ON",
+        "QC",
+        "NL",
+        "NB",
+        "NS",
+        "PE"
       ]
     },
     {
-      "type": "annotation",
+      "type": "text",
       "box": {
-        "x": 60,
-        "y": 1200,
-        "w": 700,
-        "h": 80
+        "x": 24,
+        "y": 600,
+        "w": 205,
+        "h": 200
       },
-      "text": "*Washington, D.C. tops everything at **$267K**, but it's a city, not a state.",
-      "color": "#f5f5f0",
+      "text": "**Why Do Some Canadian Territories Rank High?**\nSmall populations and resource-heavy economies lift GDP per capita, but not necessarily household incomes.",
       "style": {
-        "size": 24
-      }
+        "family": "Barlow Condensed",
+        "weight": 500,
+        "size": 22,
+        "fill": "#e8e8e2"
+      },
+      "lineHeight": 1.25
     }
   ],
   "footer": {
-    "source": "U.S. Bureau of Economic Analysis, U.S. Census Bureau.",
+    "source": "U.S. Bureau of Economic Analysis, U.S. Census Bureau, Statistics Canada, and Bank of Canada.",
+    "note": "Canadian values converted to USD at the 2024 average exchange rate. Canadian population uses Q4 2024 estimates; U.S. population uses July 1, 2024 estimates.",
     "brand": "vivid charts",
-    "color": "#a7a7a0"
+    "color": "#a7a7a0",
+    "brandColor": "#f5f5f0"
   }
 }

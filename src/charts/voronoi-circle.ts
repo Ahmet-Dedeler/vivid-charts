@@ -46,8 +46,8 @@ export interface VoronoiCircleLayer extends LayerBase {
   format?: FormatOptions;
   /** Show group totals on the ring ("AMERICAS · 38.9%"). */
   ring?: boolean;
-  /** Organic lighting texture on cells. */
-  texture?: boolean;
+  /** Cell texture: 'canopy' (tree crowns, default), 'lighting' (organic relief), or false. */
+  texture?: boolean | 'canopy' | 'lighting';
   /** Gap between cells, drawn in this color (default: background). */
   border?: string;
   borderWidth?: number;
@@ -130,7 +130,8 @@ function render(l: VoronoiCircleLayer, box: Box, ctx: Ctx): string {
   const border = l.border ?? pal.bg;
   const bw = l.borderWidth ?? 2.5;
   const gap = l.groupGap ?? 9;
-  const tex = l.texture !== false ? defs.texture(0.5, 0.06) : undefined;
+  const tex = l.texture === 'lighting' || l.texture === true ? defs.texture(0.5, 0.06) : undefined;
+  const canopy = l.texture === undefined || l.texture === 'canopy';
   const parts: string[] = [];
   const labels: string[] = [];
 
@@ -144,7 +145,8 @@ function render(l: VoronoiCircleLayer, box: Box, ctx: Ctx): string {
       const poly = leaf.polygon as [number, number][];
       // Subtle per-cell shade variation so neighbours separate even without borders.
       const shade = mix(base, li % 2 ? darken(base, 0.08) : lighten(base, 0.05), 0.5);
-      cells.push(h('path', { d: toPath(poly), fill: gimg ? 'none' : shade }));
+      const fill = gimg ? 'none' : canopy ? defs.canopy(base, { seed: gi * 7 + (li % 3), light: li % 2 ? -0.05 : 0.04, crown: Math.max(7, R / 40) }) : shade;
+      cells.push(h('path', { d: toPath(poly), fill }));
     });
     const gclip = defs.clipPath(toPath(gpoly));
     const fillLayer = gimg ? image(gimg, box.x, box.y, box.w, box.h, { clip: gclip }) : h('g', { filter: tex }, ...cells);

@@ -65,9 +65,10 @@ export interface RankedBarsLayer extends LayerBase {
     /** Alternate a lighter shade on every other bar. */
     zebra?: boolean;
   };
-  value?: { position?: 'outside' | 'inside'; size?: number; color?: string; style?: 'editorial' | 'plain'; family?: string };
+  value?: { position?: 'outside' | 'inside'; size?: number; color?: string; style?: 'editorial' | 'plain'; family?: string; /** Scale label size with the value (top values read bigger). */ grow?: boolean };
   header?: string;
-  axis?: boolean;
+  /** true: solid baseline. 'shadow': baseline with a soft shadow, bars look like they slide out from a wall. */
+  axis?: boolean | 'shadow';
   /** Bars start at the canvas left edge. */
   bleed?: boolean;
   categories?: Record<string, string>;
@@ -127,7 +128,9 @@ function render(l: RankedBarsLayer, box: Box, ctx: Ctx): string {
     const topEnd = x0 + x(items[0].value) + gap + valueW;
     parts.push(text(l.header, Math.min(box.x + box.w, topEnd), box.y - labelSize * 0.6, hs, 'end'));
   }
-  if (l.axis) parts.push(h('rect', { x: x0 - 1.5, y: box.y, width: 3, height: box.h, fill: pal.ink }));
+  if (l.axis === 'shadow') {
+    parts.push(h('rect', { x: x0 - 26, y: box.y, width: 26, height: box.h, fill: defs.linear([[0, pal.ink, 0], [1, pal.ink, 0.1]], 0) }));
+  } else if (l.axis) parts.push(h('rect', { x: x0 - 1.5, y: box.y, width: 3, height: box.h, fill: pal.ink }));
 
   items.forEach((it, i) => {
     const cy = box.y + rowH * (i + 0.5);
@@ -196,9 +199,11 @@ function render(l: RankedBarsLayer, box: Box, ctx: Ctx): string {
       const vs = { ...valueStyle, fill: onColor(col), size: Math.min(valueSize, barH * 0.7) };
       parts.push(runs(valueRuns(it), x0 + w - barH * 0.4, cy + capHeight(vs) / 2, vs, 'end'));
     } else {
-      const vr = valueRuns(it);
-      parts.push(runs(vr, vx, cy + capHeight(valueStyle) / 2, valueStyle));
-      vx += measureRuns(vr, valueStyle) + gap * 0.6;
+      const k = l.value?.grow ? 0.78 + 0.42 * (it.value / max) : 1;
+      const vsz = { ...valueStyle, size: valueSize * k };
+      const vr = editorial(it.display ?? it.value, vsz, { ...l.format, style: l.value?.style });
+      parts.push(runs(vr, vx, cy + capHeight(vsz) / 2, vsz));
+      vx += measureRuns(vr, vsz) + gap * 0.6;
     }
     if (labelsAt === 'tip') {
       parts.push(text(it.label, vx, cy + capHeight(labelStyle) / 2, labelStyle));
@@ -214,6 +219,7 @@ function render(l: RankedBarsLayer, box: Box, ctx: Ctx): string {
       parts.push(text(it.note, vx, cy + capHeight(ns) / 2, ns));
     }
   });
+  if (l.axis === 'shadow') parts.push(h('rect', { x: x0, y: box.y, width: 18, height: box.h, fill: defs.linear([[0, '#000', 0.28], [1, '#000', 0]], 0) }));
   return parts.join('');
 }
 

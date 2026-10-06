@@ -58,6 +58,9 @@ export interface TitleLine extends TextStyle {
   highlight?: string;
   /** Horizontal scale, e.g. 0.82 to condense a wide display face. */
   stretch?: number;
+  /** Small ornament on both sides of the line (sparkle ✦ or dot). Centered lines only. */
+  flank?: 'sparkle' | 'dot';
+  flankColor?: string;
 }
 
 export interface TitleSpec {
@@ -69,6 +72,8 @@ export interface TitleSpec {
   dekWidth?: number;
   dekSize?: number;
   dekColor?: string;
+  /** Draw a rule (this color) between the title lines and the dek. */
+  dekRule?: string;
   /** Translucent panel behind the dek (e.g. "rgba(10,30,70,0.55)") for busy photo backgrounds. */
   dekPanel?: string;
   /** Draw an ornamental frame around the lockup. */
@@ -86,8 +91,9 @@ export interface FooterSpec {
   /** Text wordmark drawn bottom-right (your publication / handle). */
   brand?: string;
   logo?: string;
-  /** Height reserved at the bottom. Default 90. */
+  /** Unused (footer is bottom-anchored and sizes itself). */
   height?: number;
+  brandColor?: string;
   color?: string;
   /** A solid strip at the very bottom (app-store style banner). */
   strip?: { color: string; text?: string; textColor?: string };
@@ -126,6 +132,15 @@ export interface ImageLayer extends LayerBase {
   shape?: 'rect' | 'circle';
   radius?: number;
   shadow?: boolean;
+  /**
+   * Place a cutout by its head instead of by box: the detected head is centered
+   * on (x, y) at `size` px wide. Ideal for photo collages. `box` is ignored.
+   */
+  head?: { x: number; y: number; size: number };
+  /** Fade the image out to transparent, finishing at this canvas y (soft bottom edge for collages). */
+  until?: number;
+  /** Fade length in px for `until` (default 140). */
+  untilFade?: number;
 }
 
 export interface StatLayer extends LayerBase {

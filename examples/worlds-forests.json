@@ -33,33 +33,33 @@
     {
       "type": "voronoi-circle",
       "box": {
-        "x": 40,
-        "y": 270,
-        "w": 1120,
-        "h": 1080
+        "x": 20,
+        "y": 250,
+        "w": 1160,
+        "h": 1130
       },
       "seed": 7,
       "callout": "Over half of the world's forest area is held in just five countries.",
       "groups": {
         "am": {
           "label": "Americas",
-          "color": "#3f9a2f"
+          "color": "#4c9a2a"
         },
         "eu": {
           "label": "Europe",
-          "color": "#5f8f45"
+          "color": "#6a9c50"
         },
         "me": {
           "label": "Middle East",
-          "color": "#8f9a3a"
+          "color": "#8f9d45"
         },
         "af": {
           "label": "Africa",
-          "color": "#7a7a35"
+          "color": "#66763a"
         },
         "ap": {
           "label": "Asia-Pacific",
-          "color": "#2c5a22"
+          "color": "#2d6524"
         }
       },
       "items": [
@@ -287,20 +287,39 @@
     {
       "type": "stat",
       "box": {
-        "x": 760,
-        "y": 1372,
-        "w": 380,
-        "h": 60
+        "x": 740,
+        "y": 1368,
+        "w": 400,
+        "h": 80
       },
       "value": "4.1B Hectares",
       "label": "",
-      "size": 38,
+      "size": 44,
       "align": "end",
       "color": "#2c5a22"
+    },
+    {
+      "type": "text",
+      "box": {
+        "x": 740,
+        "y": 1336,
+        "w": 400,
+        "h": 30
+      },
+      "text": "GLOBAL FOREST AREA 2025:",
+      "align": "end",
+      "style": {
+        "family": "Barlow",
+        "weight": 500,
+        "size": 22,
+        "tracking": 0.04,
+        "fill": "#2e2a1f"
+      }
     }
   ],
   "footer": {
-    "source": "UN Food and Agriculture Organization via Our World in Data. Numbers may not total 100 due to rounding.",
+    "source": "UN Food and Agriculture Organization via Our World in Data.",
+    "note": "Data is for 2025, the latest available as of Aug 2026. Numbers do not total 100 due to rounding.",
     "brand": "vivid charts"
   }
 }

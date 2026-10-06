@@ -3,25 +3,37 @@
   "type": "retro",
   "background": {
     "gradient": [
-      "#eef0f2",
-      "#d6e7f3"
-    ]
+      "#d9ecf2",
+      "#eef0ee",
+      "#e3e8ea"
+    ],
+    "grain": 0.07
   },
   "layers": [
     {
+      "type": "svg",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "markup": "<path d=\"M0,0C24.0,-20 64.0,-16.0 80,0C64.0,16.0 24.0,20 0,0Z\" fill=\"#f2542d\" transform=\"translate(585,256) rotate(218)\"/><path d=\"M0,0C28.799999999999997,-22 76.80000000000001,-17.6 96,0C76.80000000000001,17.6 28.799999999999997,22 0,0Z\" fill=\"#f0a020\" transform=\"translate(585,256) rotate(192)\"/><path d=\"M0,0C27.599999999999998,-21 73.60000000000001,-16.8 92,0C73.60000000000001,16.8 27.599999999999998,21 0,0Z\" fill=\"#f2542d\" transform=\"translate(585,256) rotate(166)\"/><path d=\"M0,0C22.2,-18 59.2,-14.4 74,0C59.2,14.4 22.2,18 0,0Z\" fill=\"#f0a020\" transform=\"translate(585,256) rotate(140)\"/><circle cx=\"585\" cy=\"256\" r=\"9\" fill=\"#f2542d\"/><path d=\"M0,0C24.0,-20 64.0,-16.0 80,0C64.0,16.0 24.0,20 0,0Z\" fill=\"#f2542d\" transform=\"translate(1060,256) rotate(-38)\"/><path d=\"M0,0C28.799999999999997,-22 76.80000000000001,-17.6 96,0C76.80000000000001,17.6 28.799999999999997,22 0,0Z\" fill=\"#f0a020\" transform=\"translate(1060,256) rotate(-12)\"/><path d=\"M0,0C27.599999999999998,-21 73.60000000000001,-16.8 92,0C73.60000000000001,16.8 27.599999999999998,21 0,0Z\" fill=\"#f2542d\" transform=\"translate(1060,256) rotate(14)\"/><path d=\"M0,0C22.2,-18 59.2,-14.4 74,0C59.2,14.4 22.2,18 0,0Z\" fill=\"#f0a020\" transform=\"translate(1060,256) rotate(40)\"/><circle cx=\"1060\" cy=\"256\" r=\"9\" fill=\"#f2542d\"/>"
+    },
+    {
       "type": "bubble-chain",
       "box": {
-        "x": 40,
+        "x": 30,
         "y": 40,
-        "w": 1120,
-        "h": 1330
+        "w": 1140,
+        "h": 1340
       },
       "columns": 3,
       "firstRow": 1,
       "color": "#f2542d",
       "duotone": [
-        "#2b0a02",
-        "#ff8a5c"
+        "#1c0600",
+        "#ff7b4a"
       ],
       "iconColor": "#1a22d6",
       "labelColor": "#1a22d6",
@@ -35,9 +47,9 @@
           "value": 2800000000.0,
           "image": "cutout:wiki:Jay-Z",
           "icons": [
-            "icon:ph:diamond-fill",
-            "icon:ph:diamond-fill",
-            "icon:ph:diamond-bold"
+            "icon:game-icons:cut-diamond",
+            "icon:game-icons:cut-diamond",
+            "icon:game-icons:cut-diamond"
           ]
         },
         {
@@ -45,7 +57,9 @@
           "value": 2000000000.0,
           "image": "cutout:wiki:Taylor_Swift",
           "icons": [
-            "icon:ph:butterfly-fill"
+            "icon:ph:butterfly-fill",
+            "icon:ph:butterfly-fill",
+            "icon:ph:butterfly-bold"
           ]
         },
         {
@@ -53,6 +67,8 @@
           "value": 1200000000.0,
           "image": "cutout:wiki:Bruce_Springsteen",
           "icons": [
+            "icon:ph:star-fill",
+            "icon:ph:star-fill",
             "icon:ph:star-fill"
           ]
         },
@@ -61,8 +77,9 @@
           "value": 1000000000.0,
           "image": "cutout:wiki:Beyoncé",
           "icons": [
-            "icon:ph:diamond-fill",
-            "icon:ph:circle-bold"
+            "icon:game-icons:diamond-ring",
+            "icon:ph:circle-bold",
+            "icon:ph:sparkle-fill"
           ]
         },
         {
@@ -70,6 +87,8 @@
           "value": 1000000000.0,
           "image": "cutout:wiki:Rihanna",
           "icons": [
+            "icon:ph:drop-fill",
+            "icon:ph:drop-fill",
             "icon:ph:drop-fill"
           ]
         },
@@ -78,8 +97,9 @@
           "value": 1000000000.0,
           "image": "cutout:commons:Dr._Dre_2013.jpg",
           "icons": [
-            "icon:ph:headphones-fill",
-            "icon:ph:vinyl-record-fill"
+            "icon:game-icons:hemp",
+            "icon:game-icons:hemp",
+            "icon:ph:wind-bold"
           ]
         },
         {
@@ -88,7 +108,8 @@
           "image": "cutout:wiki:Jimmy_Buffett",
           "icons": [
             "icon:game-icons:cut-lemon",
-            "icon:ph:sun-fill"
+            "icon:ph:martini-fill",
+            "icon:ph:circle-fill"
           ]
         },
         {
@@ -96,8 +117,9 @@
           "value": 850000000.0,
           "image": "cutout:wiki:Madonna",
           "icons": [
-            "icon:ph:cross-fill",
-            "icon:ph:hand-fill"
+            "icon:ph:hand-fill",
+            "icon:ph:cross-bold",
+            "icon:game-icons:eyepatch"
           ]
         },
         {
@@ -106,6 +128,7 @@
           "image": "cutout:wiki:Selena_Gomez",
           "icons": [
             "icon:ph:heart-break-fill",
+            "icon:ph:heart-fill",
             "icon:ph:heart-fill"
           ]
         },
@@ -114,7 +137,8 @@
           "value": 570000000.0,
           "image": "cutout:wiki:Celine_Dion",
           "icons": [
-            "icon:ph:boat-fill",
+            "icon:game-icons:sinking-ship",
+            "icon:ph:waves-bold",
             "icon:ph:waves-bold"
           ]
         }
@@ -123,9 +147,9 @@
   ],
   "title": {
     "box": {
-      "x": 440,
-      "y": 80,
-      "w": 700,
+      "x": 470,
+      "y": 44,
+      "w": 690,
       "h": 0
     },
     "align": "middle",
@@ -133,26 +157,36 @@
       {
         "text": "RICHEST",
         "role": "display",
-        "size": 104,
-        "fill": "#1a22d6"
+        "size": 170,
+        "family": "Rozha One",
+        "fill": "#1a22d6",
+        "stretch": 0.6,
+        "gap": 16
       },
       {
         "text": "MUSIC",
         "role": "display",
-        "size": 104,
-        "fill": "#1a22d6"
+        "size": 170,
+        "family": "Rozha One",
+        "fill": "#1a22d6",
+        "stretch": 0.6,
+        "gap": 16
       },
       {
         "text": "ARTISTS",
         "role": "display",
-        "size": 104,
-        "fill": "#1a22d6"
+        "size": 170,
+        "family": "Rozha One",
+        "fill": "#1a22d6",
+        "stretch": 0.6,
+        "gap": 16
       }
     ]
   },
   "footer": {
-    "source": "Forbes. Data as of 2026.",
+    "source": "Forbes. Julio Iglesias excluded due to no available net worth data. Data as of 2026.",
     "brand": "vivid charts",
-    "color": "#4a54c9"
+    "color": "#4a54c9",
+    "brandColor": "#1a22d6"
   }
 }

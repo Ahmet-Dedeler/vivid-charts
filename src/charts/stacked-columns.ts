@@ -39,12 +39,14 @@ export interface StackedColumnsLayer extends LayerBase {
   /** Vertical callout text at a category index with no/low data. */
   gaps?: { index: number; label: string }[];
   /** Strip of bubbles under the axis for a second metric. */
-  bubbles?: { label: string; sublabel?: string; values: (number | null)[]; color?: string; height?: number };
+  bubbles?: { label: string; sublabel?: string; values: (number | null)[]; color?: string; height?: number; /** White panel behind the strip (off by default). */ panel?: boolean };
   format?: FormatOptions;
   barGap?: number;
   radius?: number;
   /** Translucent white panel behind the plot so it reads over a photo. */
   panel?: boolean;
+  /** Tick label color (use white over a dark photo). */
+  tickColor?: string;
 }
 
 function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
@@ -67,13 +69,20 @@ function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
 
   // Ticks on the right, with a small ◂ pointer like a ruler.
   const ticks = l.ticks ?? y.ticks(4).filter((t) => t > 0);
-  const tickStyle: TextStyle = { ...type.number, size: 28, fill: pal.ink, italic: false };
+  const tickStyle: TextStyle = { ...type.number, size: 28, fill: l.tickColor ?? pal.ink, italic: false };
+  const tickShadow = l.tickColor ? defs.shadow({ dy: 1, blur: 6, opacity: 0.6 }) : undefined;
   for (const t of ticks) {
     const ty = y(t);
     parts.push(h('path', { d: `M${plot.x},${r2(ty)}H${plot.x + plot.w}`, stroke: alpha('#fff', 0.7), strokeWidth: 1.5 }));
-    parts.push(h('path', { d: `M${plot.x + plot.w + 10},${ty}l8,-6v12z`, fill: pal.ink }));
-    parts.push(text(`${t.toLocaleString('en-US')}`, plot.x + plot.w + 24, ty + capHeight(tickStyle) / 2, tickStyle));
-    if (t === ticks[ticks.length - 1] && l.tickSuffix) parts.push(text(l.tickSuffix, plot.x + plot.w + 24, ty + capHeight(tickStyle) / 2 + 32, tickStyle));
+    parts.push(
+      h(
+        'g',
+        { filter: tickShadow },
+        h('path', { d: `M${plot.x + plot.w + 10},${ty}l8,-6v12z`, fill: tickStyle.fill }),
+        text(`${t.toLocaleString('en-US')}`, plot.x + plot.w + 24, ty + capHeight(tickStyle) / 2, tickStyle),
+        t === ticks[ticks.length - 1] && l.tickSuffix ? text(l.tickSuffix, plot.x + plot.w + 24, ty + capHeight(tickStyle) / 2 + 32, tickStyle) : '',
+      ),
+    );
   }
 
   const radius = l.radius ?? 2;
@@ -144,7 +153,7 @@ function render(l: StackedColumnsLayer, box: Box, ctx: Ctx): string {
     const bubbleR = areaScale(bv.map((v) => v ?? 0), bubbleH * 0.5 - 6, { ref: 'max', floor: 3 });
     const bc = l.bubbles.color ?? pal.accent;
     const cy = axisY + bubbleH / 2;
-    parts.push(h('rect', { x: plot.x - 6, y: axisY + 8, width: plot.w + 12, height: bubbleH - 16, fill: alpha('#fff', 0.85), rx: 8 }));
+    if (l.bubbles.panel) parts.push(h('rect', { x: plot.x - 6, y: axisY + 8, width: plot.w + 12, height: bubbleH - 16, fill: alpha('#fff', 0.85), rx: 8 }));
     bv.forEach((v, i) => {
       if (v == null) return;
       const cx = plot.x + colW * (i + 0.5);

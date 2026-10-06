@@ -177,7 +177,7 @@ export async function loadAsset(ref: string): Promise<string> {
   } else if (ref.startsWith('commons:')) {
     // Any Wikimedia Commons file by name, e.g. commons:Dr._Dre_2013.jpg
     const name = ref.slice(8).replace(/^File:/, '');
-    const buf = await fetchCached(`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(name)}?width=800`);
+    const buf = await fetchCached(`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(name)}?width=1600`);
     uri = toDataUri(buf, sniffMime(buf));
   } else if (ref.startsWith('wiki:')) {
     const url = await wikiImageUrl(ref.slice(5));

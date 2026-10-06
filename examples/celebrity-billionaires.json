@@ -1,67 +1,106 @@
 {
   "palette": "olive",
   "type": "editorial",
+  "background": {
+    "color": "#f0eee6",
+    "grain": 0.05
+  },
   "layers": [
     {
       "type": "image",
       "src": "cutout:wiki:Taylor_Swift",
-      "box": {
-        "x": 600,
-        "y": 260,
-        "w": 320,
-        "h": 440
-      },
       "filter": "grayscale",
-      "fade": {
-        "bottom": 0.3
-      }
+      "head": {
+        "x": 672,
+        "y": 520,
+        "size": 120
+      },
+      "until": 1000,
+      "untilFade": 220
+    },
+    {
+      "type": "image",
+      "src": "cutout:wiki:George_Lucas",
+      "filter": "grayscale",
+      "head": {
+        "x": 800,
+        "y": 430,
+        "size": 190
+      },
+      "until": 1010,
+      "untilFade": 220
     },
     {
       "type": "image",
       "src": "cutout:wiki:Steven_Spielberg",
-      "box": {
-        "x": 780,
-        "y": 120,
-        "w": 440,
-        "h": 640
-      },
       "filter": "grayscale",
-      "fade": {
-        "bottom": 0.25
-      }
+      "head": {
+        "x": 1060,
+        "y": 430,
+        "size": 300
+      },
+      "until": 1060,
+      "untilFade": 220
+    },
+    {
+      "type": "image",
+      "src": "cutout:commons:Michael_Jordan_in_2014.jpg",
+      "filter": "grayscale",
+      "head": {
+        "x": 630,
+        "y": 760,
+        "size": 125
+      },
+      "until": 1110,
+      "untilFade": 220
     },
     {
       "type": "image",
       "src": "cutout:wiki:Oprah_Winfrey",
-      "box": {
-        "x": 640,
-        "y": 560,
-        "w": 420,
-        "h": 520
-      },
       "filter": "grayscale",
-      "fade": {
-        "bottom": 0.3
-      }
+      "head": {
+        "x": 945,
+        "y": 820,
+        "size": 205
+      },
+      "until": 1110,
+      "untilFade": 220
+    },
+    {
+      "type": "image",
+      "src": "cutout:wiki:Jay-Z",
+      "filter": "grayscale",
+      "head": {
+        "x": 1095,
+        "y": 915,
+        "size": 140
+      },
+      "until": 1120,
+      "untilFade": 220
     },
     {
       "type": "ranked-bars",
       "box": {
-        "x": 40,
-        "y": 40,
-        "w": 1020,
-        "h": 1340
+        "x": 24,
+        "y": 36,
+        "w": 1040,
+        "h": 1318
       },
       "header": "2026 Net Worth",
-      "axis": true,
+      "axis": "shadow",
       "format": {
         "prefix": "$",
         "scale": 1000000000.0
       },
       "bar": {
-        "shape": "rounded",
-        "thickness": 0.48
+        "shape": "flat",
+        "thickness": 0.44
       },
+      "value": {
+        "grow": true,
+        "size": 30
+      },
+      "labelSize": 19,
       "items": [
         {
           "label": "Steven Spielberg",
@@ -100,7 +139,7 @@
         },
         {
           "label": "Kim Kardashian",
-          "sub": "Media Personality",
+          "sub": "Media Personality/Entrepreneur",
           "value": 1.9
         },
         {
@@ -125,7 +164,7 @@
         },
         {
           "label": "Tyler Perry",
-          "sub": "Writer/Director/Actor",
+          "sub": "Writer/Director/Producer/Actor",
           "value": 1.4
         },
         {
@@ -139,8 +178,38 @@
           "value": 1.2
         },
         {
+          "label": "Arnold Schwarzenegger",
+          "sub": "Actor/Politician",
+          "value": 1.2
+        },
+        {
+          "label": "Jerry Seinfeld",
+          "sub": "Comedian/Writer",
+          "value": 1.1
+        },
+        {
+          "label": "Roger Federer",
+          "sub": "Athlete",
+          "value": 1.1
+        },
+        {
+          "label": "James Cameron",
+          "sub": "Director/Producer",
+          "value": 1.1
+        },
+        {
+          "label": "Beyoncé",
+          "sub": "Musician",
+          "value": 1.0
+        },
+        {
           "label": "Rihanna",
           "sub": "Musician",
+          "value": 1.0
+        },
+        {
+          "label": "Dr. Dre",
+          "sub": "Musician/Producer",
           "value": 1.0
         }
       ]
@@ -148,40 +217,54 @@
   ],
   "title": {
     "box": {
-      "x": 700,
-      "y": 1075,
-      "w": 420,
+      "x": 670,
+      "y": 1080,
+      "w": 440,
       "h": 0
     },
     "align": "middle",
     "frame": "ornate",
+    "panel": "#f0eee6",
     "lines": [
       {
-        "text": "World's Richest",
+        "text": "WORLD'S RICHEST",
         "role": "kicker",
-        "size": 26,
-        "rules": true
+        "size": 25,
+        "rules": true,
+        "weight": 500,
+        "tracking": 0.2
       },
       {
         "text": "Celebrity",
-        "size": 88,
-        "role": "display"
+        "size": 118,
+        "role": "display",
+        "family": "DM Serif Display",
+        "weight": 400,
+        "stretch": 0.86,
+        "flank": "sparkle"
       },
       {
         "text": "Billionaires",
-        "size": 88,
-        "role": "display"
+        "size": 118,
+        "role": "display",
+        "family": "DM Serif Display",
+        "weight": 400,
+        "stretch": 0.86
       },
       {
         "text": "2026",
         "role": "kicker",
-        "size": 26,
-        "rules": true
+        "size": 25,
+        "rules": true,
+        "weight": 500,
+        "tracking": 0.2
       }
     ]
   },
   "footer": {
-    "source": "Forbes. Net worths are estimates as of Mar 1, 2026.",
-    "brand": "vivid charts"
+    "source": "Forbes (via Hypebeast). Latest data available: Mar 13, 2026. Net worths are estimates as of Mar 1, 2026.",
+    "note": "Excludes businesspeople primarily famous for wealth.",
+    "brand": "vivid charts",
+    "height": 72
   }
 }

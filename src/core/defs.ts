@@ -156,6 +156,70 @@ export class Defs {
     return `url(#${fid})`;
   }
 
+  /**
+   * Aerial tree-canopy pattern: hundreds of overlapping tree crowns, each a
+   * sphere-lit blob in a shade of `color`, over a dark understory. Tiles
+   * seamlessly. Reads like a drone photo of forest, not a flat fill.
+   */
+  canopy(color: string, opts: { seed?: number; crown?: number; tile?: number; light?: number } = {}): string {
+    const { seed = 1, crown = 13, tile = 280, light = 0 } = opts;
+    const key = `canopy:${color}:${seed}:${crown}:${tile}:${light}`;
+    const pid = this.add(
+      key,
+      (pid) => {
+        let st = seed * 9973 + 17;
+        const rnd = () => ((st = (st * 16807) % 2147483647) / 2147483647);
+        const base = d3color(color)!;
+        // Mix toward black (k < 0) or white (k > 0) for depth variation.
+        const shade = (k: number) => {
+          const r = base.rgb();
+          const to = k < 0 ? { r: 0, g: 0, b: 0 } : { r: 255, g: 255, b: 255 };
+          const a = Math.abs(k);
+          return `rgb(${Math.round(r.r + (to.r - r.r) * a)},${Math.round(r.g + (to.g - r.g) * a)},${Math.round(r.b + (to.b - r.b) * a)})`;
+        };
+        const tones = [-0.28, -0.14, 0, 0.12, 0.24].map((t) => t + light);
+        const grads = tones.map((t, i) =>
+          h(
+            'radialGradient',
+            { id: `${pid}g${i}`, cx: 0.4, cy: 0.36, r: 0.68, fx: 0.32, fy: 0.28 },
+            h('stop', { offset: 0, stopColor: shade(Math.min(0.4, t + 0.16)) }),
+            h('stop', { offset: 0.55, stopColor: shade(t) }),
+            h('stop', { offset: 1, stopColor: shade(Math.max(-0.75, t - 0.42)) }),
+          ),
+        );
+        const crowns: string[] = [];
+        const n = Math.round((tile * tile) / (crown * crown * 1.6));
+        for (let i = 0; i < n; i++) {
+          const x = rnd() * tile;
+          const y = rnd() * tile;
+          const r = crown * (0.55 + rnd() * 0.9);
+          const g = Math.floor(rnd() * tones.length);
+          // A crown is a main blob plus two lobes, so outlines aren't perfect circles.
+          const lobes = [
+            [0, 0, r],
+            [(rnd() - 0.5) * r, (rnd() - 0.5) * r, r * (0.55 + rnd() * 0.3)],
+            [(rnd() - 0.5) * r, (rnd() - 0.5) * r, r * (0.5 + rnd() * 0.3)],
+          ];
+          // Draw wrapped copies near edges so the tile is seamless.
+          for (const ox of [-tile, 0, tile])
+            for (const oy of [-tile, 0, tile]) {
+              if (x + ox < -r * 2 || x + ox > tile + r * 2 || y + oy < -r * 2 || y + oy > tile + r * 2) continue;
+              for (const [dx, dy, rr] of lobes) crowns.push(h('circle', { cx: r2(x + ox + dx), cy: r2(y + oy + dy), r: r2(rr), fill: `url(#${pid}g${g})` }));
+            }
+        }
+        return h(
+          'pattern',
+          { id: pid, width: tile, height: tile, patternUnits: 'userSpaceOnUse' },
+          h('defs', {}, ...grads),
+          h('rect', { width: tile, height: tile, fill: shade(-0.6 + light) }),
+          ...crowns,
+        );
+      },
+      'p',
+    );
+    return `url(#${pid})`;
+  }
+
   /** Soft drop shadow. */
   shadow(opts: { dx?: number; dy?: number; blur?: number; color?: string; opacity?: number } = {}): string {
     const { dx = 0, dy = 4, blur = 8, color = '#000', opacity = 0.25 } = opts;

@@ -42,6 +42,7 @@ const STEM_TO_FAMILY: Record<string, string> = {
   LibreCaslonText: 'Libre Caslon Text',
   Oswald: 'Oswald',
   PlayfairDisplay: 'Playfair Display',
+  RozhaOne: 'Rozha One',
   Shrikhand: 'Shrikhand',
   ZillaSlab: 'Zilla Slab',
 };

@@ -9,9 +9,10 @@ import { palette } from './core/color.js';
 import { isDark, alpha, mix } from './core/color.js';
 import { Defs } from './core/defs.js';
 import { arrow, image, icon } from './core/draw.js';
+import { headBox } from './core/assets.js';
 import { editorial } from './core/format.js';
 import { h, g, resetIds, rectPath, type Box } from './core/svg.js';
-import { measure, measureRuns, paragraph, runs, text, capHeight, type Run, type TextStyle } from './core/text.js';
+import { measure, measureRuns, paragraph, runs, text, capHeight, wrap, type Run, type TextStyle } from './core/text.js';
 import { typeSet } from './core/theme.js';
 import { getRenderer } from './registry.js';
 import type {
@@ -131,6 +132,17 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
     const lineSvg = runs(list, lx, y, style, lineAlign);
     // Condense around the anchor point so alignment is preserved.
     parts.push(stretch === 1 ? lineSvg : h('g', { transform: `translate(${lx},0) scale(${stretch},1) translate(${-lx},0)` }, lineSvg));
+    if (line.flank) {
+      const fs = size * 0.11;
+      const fx0 = lx - w / 2 - size * 0.32;
+      const fx1 = lx + w / 2 + size * 0.32;
+      const fy = y - cap * 0.5;
+      const star = (x: number) =>
+        line.flank === 'dot'
+          ? h('circle', { cx: x, cy: fy, r: fs * 0.5, fill: line.flankColor ?? pal.accent })
+          : h('path', { d: `M${x},${fy - fs * 1.4}Q${x},${fy} ${x + fs * 1.4},${fy}Q${x},${fy} ${x},${fy + fs * 1.4}Q${x},${fy} ${x - fs * 1.4},${fy}Q${x},${fy} ${x},${fy - fs * 1.4}Z`, fill: line.flankColor ?? pal.accent });
+      parts.push(star(fx0), star(fx1));
+    }
     if (line.rules) {
       const x0 = lx - w / 2 - size * 0.6;
       const x1 = lx + w / 2 + size * 0.6;
@@ -143,6 +155,11 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
 
   if (t.dek) {
     const dekStyle: TextStyle = { ...type.body, size: t.dekSize ?? 24, fill: t.dekColor ?? pal.ink };
+    if (t.dekRule) {
+      y += 8;
+      parts.push(h('rect', { x: box.x, y, width: box.w, height: 2.5, fill: t.dekRule }));
+      y += 14;
+    }
     y += 18;
     const dw = t.dekWidth ?? box.w;
     const p = paragraph(t.dek, ax, y + (dekStyle.size ?? 24), dw, dekStyle, { anchor: align, lineHeight: 1.32, boldWeight: 700 });
@@ -166,7 +183,7 @@ function titleLockup(t: TitleSpec, ctx: Ctx): string {
 }
 
 function stripLine(line: TitleSpec["lines"][number]): TextStyle {
-  const { text: _t, runs: _r, role: _ro, fit: _f, gap: _g, align: _a, rules: _ru, highlight: _h, stretch: _s, ...rest } = line;
+  const { text: _t, runs: _r, role: _ro, fit: _f, gap: _g, align: _a, rules: _ru, highlight: _h, stretch: _s, flank: _fl, flankColor: _fc, ...rest } = line;
   return rest as TextStyle;
 }
 
@@ -203,31 +220,34 @@ function ornateFrame(b: Box, color: string, fill: string): string {
 function footerBlock(f: FooterSpec, ctx: Ctx): string {
   const { pal, type, width: W, height: H } = ctx;
   const stripH = f.strip ? 64 : 0;
-  const fh = f.height ?? 90;
-  const top = H - stripH - fh;
   const color = f.color ?? alpha(pal.ink, 0.62);
   const parts: string[] = [];
-  const noteStyle: TextStyle = { ...type.note, size: 17, fill: color };
-  const brandW = f.brand ? 260 : 0;
-  const textW = W - 64 * 2 - brandW - 24;
-  let y = top + 34;
-  if (f.source) {
-    const p = paragraph(`**Source:** ${f.source}`, 64, y, textW, noteStyle, { lineHeight: 1.3, boldWeight: 600 });
+  const noteStyle: TextStyle = { ...type.note, size: 16, fill: color };
+  const lh = 16 * 1.3;
+  const brandW = f.brand || f.logo ? 250 : 0;
+  const textW = W - 60 * 2 - brandW - 24;
+  // Bottom-anchored: measure first so long sources grow upward instead of off-canvas.
+  const srcLines = f.source ? wrap(`Source: ${f.source}`, textW, noteStyle).length : 0;
+  const noteLines = f.note ? wrap(f.note, textW, noteStyle).length : 0;
+  const bottom = H - stripH - 28;
+  let y = bottom - (srcLines + noteLines - 1) * lh;
+  if (f.note) {
+    const p = paragraph(f.note, 60, y, textW, noteStyle, { lineHeight: 1.3 });
     parts.push(p.svg);
     y += p.height;
   }
-  if (f.note) parts.push(paragraph(f.note, 64, y, textW, noteStyle, { lineHeight: 1.3 }).svg);
+  if (f.source) parts.push(paragraph(`**Source:** ${f.source}`, 60, y, textW, noteStyle, { lineHeight: 1.3, boldWeight: 600 }).svg);
 
-  if (f.logo) parts.push(image(f.logo, W - 64 - 200, top + 18, 200, 50, { fit: 'contain' }));
+  if (f.logo) parts.push(image(f.logo, W - 60 - 200, bottom - 36, 200, 46, { fit: 'contain' }));
   else if (f.brand) {
-    const bs: TextStyle = { family: 'Barlow', weight: 800, size: 22, tracking: 0.16, upper: true, fill: pal.ink };
+    const bs: TextStyle = { family: 'Barlow', weight: 800, size: 22, tracking: 0.16, upper: true, fill: f.brandColor ?? pal.ink };
     const bw = measure(f.brand, bs);
-    parts.push(h('circle', { cx: W - 64 - bw - 22, cy: top + 40, r: 13, fill: 'none', stroke: pal.ink, strokeWidth: 4 }));
-    parts.push(text(f.brand, W - 64, top + 48, bs, 'end'));
+    parts.push(h('circle', { cx: W - 60 - bw - 22, cy: bottom - 8, r: 12, fill: 'none', stroke: bs.fill, strokeWidth: 4 }));
+    parts.push(text(f.brand, W - 60, bottom, bs, 'end'));
   }
   if (f.strip) {
     parts.push(h('rect', { x: 0, y: H - stripH, width: W, height: stripH, fill: f.strip.color }));
-    if (f.strip.text) parts.push(text(f.strip.text, 64, H - stripH / 2 + 8, { ...type.label, size: 22, fill: f.strip.textColor ?? '#fff' }));
+    if (f.strip.text) parts.push(text(f.strip.text, 60, H - stripH / 2 + 8, { ...type.label, size: 22, fill: f.strip.textColor ?? '#fff' }));
   }
   return g({ class: 'footer' }, ...parts);
 }
@@ -277,15 +297,36 @@ function textLayer(l: TextLayer, box: Box, ctx: Ctx): string {
 
 function imageLayer(l: ImageLayer, box: Box, ctx: Ctx): string {
   const { defs, pal } = ctx;
+  if (l.head) {
+    const hb = headBox(l.src);
+    if (hb) {
+      const w = l.head.size / hb.width;
+      const hgt = w * hb.aspect;
+      const headMidY = ((hb.top + hb.neck) / 2) * hgt;
+      box = { x: l.head.x - hb.cx * w, y: l.head.y - headMidY, w, h: hgt };
+    } else {
+      // No silhouette: treat the photo as a head-and-shoulders crop.
+      const s = l.head.size * 2.2;
+      box = { x: l.head.x - s / 2, y: l.head.y - s * 0.32, w: s, h: s };
+    }
+  }
   const filter = l.filter === 'grayscale' ? defs.grayscale(1.15) : l.filter === 'duotone' ? defs.duotone(...(l.duotone ?? [pal.ramp[pal.ramp.length - 1], pal.ramp[0]])) : undefined;
   const clip = l.shape === 'circle' ? defs.clipCircle(box.x + box.w / 2, box.y + box.h / 2, Math.min(box.w, box.h) / 2) : l.radius ? defs.clipPath(rectPath(box.x, box.y, box.w, box.h, l.radius)) : undefined;
-  let img = image(l.src, box.x, box.y, box.w, box.h, { fit: l.fit, focus: l.focus ?? 'top', filter, clip });
+  let img = image(l.src, box.x, box.y, box.w, box.h, { fit: l.head ? 'contain' : l.fit, focus: l.focus ?? 'top', filter, clip });
   if (l.fade) {
     // Each axis gets its own gradient mask; nesting the groups multiplies them.
     const { left = 0, right = 0, top = 0, bottom = 0 } = l.fade;
     const e = 0.0001;
     if (left || right) img = h('g', { mask: defs.fadeMask(box, [[0, left ? 0 : 1], [left || e, 1], [1 - (right || e), 1], [1, right ? 0 : 1]], 0) }, img);
     if (top || bottom) img = h('g', { mask: defs.fadeMask(box, [[0, top ? 0 : 1], [top || e, 1], [1 - (bottom || e), 1], [1, bottom ? 0 : 1]], 90) }, img);
+  }
+  if (l.until !== undefined || l.head) {
+    // Head-placed cutouts always get a soft bottom so no hard photo edge shows.
+    const until = Math.min(l.until ?? Infinity, box.y + box.h);
+    const len = Math.min(l.untilFade ?? 140, (until - box.y) * 0.5);
+    const fb = { x: box.x - 2, y: box.y, w: box.w + 4, h: Math.max(1, until - box.y) };
+    const start = Math.max(0, (fb.h - len) / fb.h);
+    img = h('g', { mask: defs.fadeMask(fb, [[0, 1], [start, 1], [1, 0]], 90) }, img);
   }
   return h('g', { filter: l.shadow ? defs.shadow({ dy: 10, blur: 30, opacity: 0.35 }) : undefined }, img);
 }

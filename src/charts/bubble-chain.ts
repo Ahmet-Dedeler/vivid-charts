@@ -20,8 +20,8 @@ export interface BubbleItem {
   value: number;
   display?: string;
   image?: string;
-  /** Icons scattered around the bubble (icon:set:name). Repeats if fewer than iconCount. */
-  icons?: string[];
+  /** Topical icons around the rim: refs, or { icon, angle (deg, 0 = top), size (× r), distance (× r), rotate }. */
+  icons?: (string | { icon: string; angle?: number; size?: number; distance?: number; rotate?: number })[];
   color?: string;
   sublabel?: string;
 }
@@ -63,33 +63,43 @@ function render(l: BubbleChainLayer, box: Box, ctx: Ctx): string {
   const rest = items.length - first;
   const rows = 1 + Math.ceil(rest / cols);
   const cellW = box.w / cols;
-  const cellH = box.h / rows;
-  const maxR = Math.min(cellW, cellH) * 0.5 * 1.04;
-  const max = items[0]?.value ?? 1;
-  // Area ∝ value. The largest item fills its cell; nothing is clamped up.
-  const radius = areaScale(items.map((i) => i.value), maxR, { ref: 'max', floor: l.minRadius ?? 4 });
+  // Area ∝ value; the largest bubble may use ~a full column width.
+  let radius = areaScale(items.map((i) => i.value), cellW * 0.56, { ref: 'max', floor: l.minRadius ?? 4 });
   const color = l.color ?? pal.ramp[2];
 
-  // Snake positions: row 0 holds `first` items from the left, then rows
-  // alternate direction so consecutive items stay neighbours.
-  const pos: { cx: number; cy: number; r: number }[] = [];
-  items.forEach((it, i) => {
-    let row: number;
-    let col: number;
-    if (i < first) {
-      row = 0;
-      col = i;
-    } else {
-      const k = i - first;
-      row = 1 + Math.floor(k / cols);
-      const c = k % cols;
-      col = row % 2 === 1 ? c : cols - 1 - c;
-    }
-    const r = radius(it.value);
-    // Nudge small bubbles toward the row's baseline so the chain undulates.
-    const jitterY = (rand(i + 3) - 0.5) * cellH * 0.12;
-    pos.push({ cx: box.x + cellW * (col + 0.5), cy: box.y + cellH * (row + 0.5) + jitterY, r });
+  // Grid slots: row 0 holds `first` items from the left, then rows alternate
+  // direction so consecutive items stay neighbours.
+  const slots = items.map((_, i) => {
+    if (i < first) return { row: 0, col: i };
+    const k = i - first;
+    const row = 1 + Math.floor(k / cols);
+    const c = k % cols;
+    return { row, col: row % 2 === 1 ? c : cols - 1 - c };
   });
+  // Rows pack by their biggest bubble instead of an even grid, so the chain
+  // stays tight (no dead bands between rows). Shrink everything if it overflows.
+  const rowGap = cellW * 0.02;
+  const rowHeights = () =>
+    Array.from({ length: rows }, (_, r) => 2 * Math.max(...items.map((it, i) => (slots[i].row === r ? radius(it.value) : 0))) + rowGap);
+  let heights = rowHeights();
+  const total = heights.reduce((a, b) => a + b, 0);
+  if (total > box.h) {
+    const k = box.h / total;
+    const base = radius;
+    radius = (v: number) => base(v) * k;
+    heights = rowHeights();
+  }
+  // Spread leftover height as extra row spacing (necks stretch a little), then center the rest.
+  const spare = box.h - heights.reduce((a, b) => a + b, 0);
+  const extra = rows > 1 ? Math.min(spare / (rows - 1), cellW * 0.12) : 0;
+  const startY = box.y + Math.max(0, (spare - extra * (rows - 1)) / 2);
+  const rowTop: number[] = [];
+  heights.reduce((y, hgt, r) => ((rowTop[r] = y), y + hgt + extra), startY);
+  const pos = items.map((it, i) => ({
+    cx: box.x + cellW * (slots[i].col + 0.5),
+    cy: rowTop[slots[i].row] + heights[slots[i].row] / 2,
+    r: radius(it.value),
+  }));
 
   const parts: string[] = [];
   const connector = l.connector ?? 'metaball';
@@ -122,9 +132,9 @@ function render(l: BubbleChainLayer, box: Box, ctx: Ctx): string {
     parts.push(h('circle', { cx, cy, r, fill }));
     if (it.image) {
       // Slightly oversized and top-anchored so heads fill the circle and shoulders run off the bottom edge.
-      parts.push(h('g', { clipPath: clip }, image(it.image, cx - r * 1.05, cy - r * 0.92, r * 2.1, r * 2.1, { focus: 'top', filter: photoFilter })));
-      // Darken the bottom third so the value reads on any photo.
-      parts.push(h('circle', { cx, cy, r, fill: defs.linear([[0.45, '#000', 0], [1, '#000', 0.55]], 90) }));
+      parts.push(h('g', { clipPath: clip }, image(it.image, cx - r * 1.12, cy - r * 0.98, r * 2.24, r * 2.24, { focus: 'top', filter: photoFilter })));
+      // A light shade at the bottom so the value reads without muddying the color.
+      parts.push(h('circle', { cx, cy, r, fill: defs.linear([[0.55, '#000', 0], [1, '#000', 0.3]], 90) }));
     }
 
     // Value inside, near the bottom.
@@ -137,20 +147,18 @@ function render(l: BubbleChainLayer, box: Box, ctx: Ctx): string {
     const ls: TextStyle = { ...type.label, size: Math.max(14, Math.min(30, r * 0.17)), fill: labelColor, weight: 700 };
     parts.push(arcText(it.label, cx, cy, r + ls.size! * 0.45, 34, ls));
 
-    // Orbiting icons: avoid the label arc (roughly 0°..70°).
-    const icons = it.icons ?? [];
-    if (icons.length) {
-      const count = l.iconCount ?? Math.min(4, Math.max(2, icons.length));
-      const angles = [292, 228, 128, 168, 258];
-      for (let k = 0; k < count; k++) {
-        const ang = ((angles[k % angles.length] + (rand(i * 7 + k) - 0.5) * 24) * Math.PI) / 180;
-        const size = Math.max(22, r * (k === 0 ? 0.4 : 0.27 + rand(i + k * 3) * 0.08));
-        const rr = r * (0.98 + rand(k + i) * 0.12);
-        const ix = cx + rr * Math.sin(ang) - size / 2;
-        const iy = cy - rr * Math.cos(ang) - size / 2;
-        parts.push(icon(icons[k % icons.length], ix, iy, size, iconColor, (rand(i * 13 + k) - 0.5) * 40));
-      }
-    }
+    // Topical icons straddling the rim (half in, half out), clear of the name arc (0°–75°).
+    const icons = (it.icons ?? []).map((ic) => (typeof ic === 'string' ? { icon: ic } : ic));
+    const slotsDeg = [292, 248, 202, 148, 112];
+    icons.slice(0, l.iconCount ?? 5).forEach((ic, k) => {
+      const deg = ic.angle ?? slotsDeg[k % slotsDeg.length] + (rand(i * 7 + k) - 0.5) * 16;
+      const ang = (deg * Math.PI) / 180;
+      const size = Math.max(26, r * (ic.size ?? (k === 0 ? 0.42 : 0.3 + rand(i + k * 3) * 0.06)));
+      const rr = r * (ic.distance ?? 0.98);
+      const ix = cx + rr * Math.sin(ang) - size / 2;
+      const iy = cy - rr * Math.cos(ang) - size / 2;
+      parts.push(icon(ic.icon, ix, iy, size, iconColor, ic.rotate ?? (rand(i * 13 + k) - 0.5) * 36));
+    });
     void mix;
     void capHeight;
   });
