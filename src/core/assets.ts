@@ -45,7 +45,10 @@ const MIME: Record<string, string> = {
 };
 
 export function isAssetRef(s: unknown): s is string {
-  return typeof s === 'string' && /^(cutout:|cutout-object:|commons:|flag:|icon:|wiki:|https?:\/\/|\.{0,2}\/|file:|data:image)/.test(s) && !/\s/.test(s.slice(0, 8));
+  if (typeof s !== 'string') return false;
+  if (/^(cutout:|cutout-object:|commons:|flag:|icon:|wiki:|https?:\/\/|\.{0,2}\/|file:|data:image)/.test(s) && !/\s/.test(s.slice(0, 8))) return true;
+  // Bare relative paths ("img/photo.jpg") used to be skipped silently, leaving an empty image box.
+  return /^[\w-][^\n:]*\.(jpe?g|png|webp|gif|svg|avif)$/i.test(s);
 }
 
 function toDataUri(buf: Buffer, mime: string) {
